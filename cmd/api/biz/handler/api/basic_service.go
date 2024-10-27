@@ -6,8 +6,8 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	api "github.com/wushiling50/aster/cmd/api/biz/model/api"
+	"github.com/wushiling50/aster/cmd/api/biz/pack"
 )
 
 // TalentRank .
@@ -17,13 +17,15 @@ func TalentRank(ctx context.Context, c *app.RequestContext) {
 	var req api.TalentRankRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		pack.SendFailResponse(c, err)
 		return
 	}
 
 	resp := new(api.TalentRankResponse)
 
-	c.JSON(consts.StatusOK, resp)
+	// TODO: invoke service
+
+	pack.SendResponse(c, resp)
 }
 
 // NationGuess .
@@ -33,13 +35,15 @@ func NationGuess(ctx context.Context, c *app.RequestContext) {
 	var req api.NationGuessRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		pack.SendFailResponse(c, err)
 		return
 	}
 
 	resp := new(api.NationGuessResponse)
 
-	c.JSON(consts.StatusOK, resp)
+	// TODO: invoke service
+
+	pack.SendResponse(c, resp)
 }
 
 // Search .
@@ -49,11 +53,13 @@ func Search(ctx context.Context, c *app.RequestContext) {
 	var req api.SearchRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		pack.SendFailResponse(c, err)
 		return
 	}
 
 	resp := new(api.SearchResponse)
 
-	c.JSON(consts.StatusOK, resp)
+	// TODO: invoke service
+
+	pack.SendResponse(c, resp)
 }
