@@ -5,7 +5,7 @@ var (
 	Success = NewErrNo(SuccessCode, "Success")
 
 	// service
-	ServiceError = NewErrNo(ServiceErrorCode, "service is unable to start successfully")
+	ServiceError = NewErrNo(ServiceErrorCode, "service is unable to work successfully")
 
 	// Error
 	ParamError          = NewErrNo(ParamErrorCode, "parameter error")
