@@ -1,9 +1,3 @@
-version: '3.8'
-
-networks:
-    aster:
-        driver: bridge
-
 services:
     mysql:
         container_name: mysql
@@ -99,3 +93,8 @@ services:
             - ./data/kibana:/usr/share/kibana/data
         networks:
             - aster
+
+networks:
+    aster:
+        driver: bridge
+        name: aster
