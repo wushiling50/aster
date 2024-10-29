@@ -3,12 +3,95 @@
 package main
 
 import (
+	"context"
+	"flag"
+
+	sentinel "github.com/alibaba/sentinel-golang/api"
+	"github.com/alibaba/sentinel-golang/core/flow"
+	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
+	hertzSentinel "github.com/hertz-contrib/opensergo/sentinel/adapter"
+	"github.com/wushiling50/aster/cmd/api/biz/middleware/cache"
+	"github.com/wushiling50/aster/cmd/api/biz/middleware/dal"
+	"github.com/wushiling50/aster/cmd/api/biz/middleware/es"
+	"github.com/wushiling50/aster/config"
+	"github.com/wushiling50/aster/pkg/constants"
+	"github.com/wushiling50/aster/pkg/utils"
 )
 
+var (
+	path       *string
+	listenAddr string // listen port
+)
+
+func Init() {
+	// config init
+	path = flag.String("config", "./config", "config path")
+	flag.Parse()
+	config.Init(*path, constants.APIServiceName)
+
+	// middleware init
+	initSentinel()
+
+	// basic facilities init
+	dal.Init()
+	cache.Init()
+	es.Init()
+
+	// set log
+	hlog.SetLevel(hlog.LevelDebug)
+}
+
 func main() {
-	h := server.Default()
+	Init()
+	// get available port from config set
+	listenAddr, err := utils.GetAvailablePort()
+	if err != nil {
+		hlog.Fatalf("Api: get available port failed, err: %v", err)
+	}
+
+	h := server.New(
+		server.WithHostPorts(listenAddr),
+		server.WithHandleMethodNotAllowed(true),
+		server.WithMaxRequestBodySize(1<<31),
+	)
+
+	// Sentinel 流量治理
+	h.Use(hertzSentinel.SentinelServerMiddleware(
+		hertzSentinel.WithServerResourceExtractor(func(c context.Context, ctx *app.RequestContext) string {
+			return "api"
+		}),
+		hertzSentinel.WithServerBlockFallback(func(ctx context.Context, c *app.RequestContext) {
+			hlog.CtxInfof(ctx, "frequent requests have been rejected by the gateway. clientIP: %v\n", c.ClientIP())
+			c.AbortWithStatusJSON(400, hertzUtils.H{
+				"status_msg":  "too many request; the quota used up",
+				"status_code": -1,
+			})
+		}),
+	))
 
 	register(h)
 	h.Spin()
+}
+
+func initSentinel() {
+	err := sentinel.InitDefault()
+	if err != nil {
+		hlog.Fatalf("Unexpected error: %+v", err)
+	}
+	_, err = flow.LoadRules([]*flow.Rule{
+		{
+			Resource:               "api",
+			Threshold:              0.0,
+			TokenCalculateStrategy: flow.Direct,
+			ControlBehavior:        flow.Reject,
+			StatIntervalInMs:       1000,
+		},
+	})
+	if err != nil {
+		hlog.Fatalf("Unexpected error: %+v", err)
+		return
+	}
 }
