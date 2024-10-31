@@ -13,10 +13,10 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
 	hertzSentinel "github.com/hertz-contrib/opensergo/sentinel/adapter"
-	"github.com/wushiling50/aster/cmd/api/biz/middleware/cache"
-	"github.com/wushiling50/aster/cmd/api/biz/middleware/dal"
-	"github.com/wushiling50/aster/cmd/api/biz/middleware/es"
 	"github.com/wushiling50/aster/config"
+	"github.com/wushiling50/aster/pkg/client/cache"
+	"github.com/wushiling50/aster/pkg/client/db"
+	"github.com/wushiling50/aster/pkg/client/es"
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/utils"
 )
@@ -36,7 +36,7 @@ func Init() {
 	initSentinel()
 
 	// basic facilities init
-	dal.Init()
+	db.Init()
 	cache.Init()
 	es.Init()
 

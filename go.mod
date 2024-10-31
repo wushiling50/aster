@@ -11,8 +11,12 @@ require (
 	github.com/elastic/go-elasticsearch v0.0.0
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/hertz-contrib/opensergo v0.0.1
+	github.com/redis/go-redis/v9 v9.7.0
 	github.com/spf13/viper v1.20.0-alpha.6
 	github.com/spf13/viper/remote v1.20.0-alpha.6
+	gorm.io/driver/mysql v1.5.7
+	gorm.io/gorm v1.25.12
+	gorm.io/plugin/opentracing v0.0.0-20211220013347-7d2b2af23560
 )
 
 require (
@@ -35,11 +39,13 @@ require (
 	github.com/cloudwego/netpoll v0.6.2 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.4 // indirect
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.0.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
@@ -59,6 +65,8 @@ require (
 	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/henrylee2cn/ameda v1.4.10 // indirect
 	github.com/henrylee2cn/goutil v0.0.0-20210127050712-89660552f6f8 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.12 // indirect
@@ -73,6 +81,7 @@ require (
 	github.com/nats-io/nkeys v0.4.7 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/nyaruka/phonenumbers v1.0.55 // indirect
+	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.11.1 // indirect
