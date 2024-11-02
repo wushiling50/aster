@@ -3,13 +3,14 @@ package db
 import (
 	"context"
 
-	"github.com/wushiling50/aster/pkg/constants"
-	"github.com/wushiling50/aster/pkg/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	gormopentracing "gorm.io/plugin/opentracing"
+
+	"github.com/wushiling50/aster/pkg/constants"
+	"github.com/wushiling50/aster/pkg/utils"
 )
 
 var (

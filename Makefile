@@ -23,4 +23,4 @@ aster:
 # run ci
 .PHONY: lint
 lint:
-	golangci-lint run
+	golangci-lint run --config=./.golangci.yml
