@@ -20,12 +20,7 @@ aster:
 	cd $(API_PATH) && go run main.go
 	@echo "aster running"
 
-# 检查可能的错误
-.PHONY: vet
-vet:
-	go vet ./...
-
-# 代码格式校验
+# run ci
 .PHONY: lint
 lint:
-	golangci-lint run --config= ./.golangci.yml
+	golangci-lint run
