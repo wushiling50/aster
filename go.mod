@@ -1,8 +1,6 @@
 module github.com/wushiling50/aster
 
-go 1.22.0
-
-toolchain go1.22.8
+go 1.23.1
 
 require (
 	github.com/alibaba/sentinel-golang v1.0.4

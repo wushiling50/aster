@@ -11,7 +11,7 @@ services:
             - MYSQL_PASSWORD=aster
             - TZ=Asia/Shanghai
         volumes:
-            - ./config/sql:/docker-entrypoint-initdb.d/
+            - ../config/sql:/docker-entrypoint-initdb.d/
             - ./data/mysql:/var/lib/mysql
         ports:
             - 3306:3306
@@ -67,7 +67,7 @@ services:
                 soft: -1
                 hard: -1
         volumes:
-            - ./config/elasticsearch:/usr/share/elasticsearch/config
+            - ../config/elasticsearch:/usr/share/elasticsearch/config
             - ./data/elasticsearch:/usr/share/elasticsearch/data
         ports:
             - 9200:9200
@@ -89,7 +89,7 @@ services:
         ports:
             - 5601:5601
         volumes:
-            - ./config/kibana:/usr/share/kibana/config
+            - ../config/kibana:/usr/share/kibana/config
             - ./data/kibana:/usr/share/kibana/data
         networks:
             - aster

@@ -24,8 +24,11 @@ go.work.sum
 # env file
 .env
 
+# output file
+/output
+
 # compose data
-/data
+/docker/data/*
 
 # config file
 config/config.yaml
