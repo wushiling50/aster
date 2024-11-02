@@ -28,24 +28,6 @@ func TalentRank(ctx context.Context, c *app.RequestContext) {
 	pack.SendResponse(c, resp)
 }
 
-// NationGuess .
-// @router /aster/nation/guess [GET]
-func NationGuess(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req api.NationGuessRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		pack.SendFailResponse(c, err)
-		return
-	}
-
-	resp := new(api.NationGuessResponse)
-
-	// TODO: invoke service
-
-	pack.SendResponse(c, resp)
-}
-
 // Search .
 // @router /aster/search [GET]
 func Search(ctx context.Context, c *app.RequestContext) {

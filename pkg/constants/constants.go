@@ -18,4 +18,6 @@ const (
 	// for cache
 	RedisDBScore  = 1
 	RedisDBNation = 2
+
+	PageSize = 15
 )

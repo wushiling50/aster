@@ -9,8 +9,11 @@ import (
 )
 
 type User struct {
-	Name  string  `thrift:"name,1,required" form:"name,required" json:"name,required" query:"name,required"`
-	Score float64 `thrift:"score,2,required" form:"score,required" json:"score,required" query:"score,required"`
+	Name   string  `thrift:"name,1,required" form:"name,required" json:"name,required" query:"name,required"`
+	Score  float64 `thrift:"score,2,required" form:"score,required" json:"score,required" query:"score,required"`
+	Nation string  `thrift:"nation,3,required" form:"nation,required" json:"nation,required" query:"nation,required"`
+	// confidence level
+	Confidence string `thrift:"confidence,4,required" form:"confidence,required" json:"confidence,required" query:"confidence,required"`
 }
 
 func NewUser() *User {
@@ -25,9 +28,19 @@ func (p *User) GetScore() (v float64) {
 	return p.Score
 }
 
+func (p *User) GetNation() (v string) {
+	return p.Nation
+}
+
+func (p *User) GetConfidence() (v string) {
+	return p.Confidence
+}
+
 var fieldIDToName_User = map[int16]string{
 	1: "name",
 	2: "score",
+	3: "nation",
+	4: "confidence",
 }
 
 func (p *User) Read(iprot thrift.TProtocol) (err error) {
@@ -36,6 +49,8 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 	var fieldId int16
 	var issetName bool = false
 	var issetScore bool = false
+	var issetNation bool = false
+	var issetConfidence bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -69,6 +84,24 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetNation = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetConfidence = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -89,6 +122,16 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 
 	if !issetScore {
 		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetNation {
+		fieldId = 3
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetConfidence {
+		fieldId = 4
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -127,6 +170,24 @@ func (p *User) ReadField2(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
+func (p *User) ReadField3(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Nation = v
+	}
+	return nil
+}
+func (p *User) ReadField4(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Confidence = v
+	}
+	return nil
+}
 
 func (p *User) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -140,6 +201,14 @@ func (p *User) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -192,6 +261,40 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *User) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("nation", thrift.STRING, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Nation); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *User) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("confidence", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Confidence); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *User) String() string {
@@ -604,460 +707,12 @@ func (p *TalentRankResponse) String() string {
 
 }
 
-type NationGuessRequest struct {
-	Username string `thrift:"username,1,required" form:"username,required" json:"username,required" query:"username,required"`
-}
-
-func NewNationGuessRequest() *NationGuessRequest {
-	return &NationGuessRequest{}
-}
-
-func (p *NationGuessRequest) GetUsername() (v string) {
-	return p.Username
-}
-
-var fieldIDToName_NationGuessRequest = map[int16]string{
-	1: "username",
-}
-
-func (p *NationGuessRequest) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetUsername bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetUsername = true
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetUsername {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_NationGuessRequest[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_NationGuessRequest[fieldId]))
-}
-
-func (p *NationGuessRequest) ReadField1(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Username = v
-	}
-	return nil
-}
-
-func (p *NationGuessRequest) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("NationGuessRequest"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *NationGuessRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("username", thrift.STRING, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Username); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *NationGuessRequest) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("NationGuessRequest(%+v)", *p)
-
-}
-
-type NationGuessResponse struct {
-	StatusCode int64   `thrift:"status_code,1,required" form:"status_code,required" json:"status_code,required" query:"status_code,required"`
-	StatusMsg  *string `thrift:"status_msg,2,optional" form:"status_msg" json:"status_msg,omitempty" query:"status_msg"`
-	Nation     string  `thrift:"nation,3,required" form:"nation,required" json:"nation,required" query:"nation,required"`
-	// confidence level
-	Confidence string `thrift:"confidence,4,required" form:"confidence,required" json:"confidence,required" query:"confidence,required"`
-}
-
-func NewNationGuessResponse() *NationGuessResponse {
-	return &NationGuessResponse{
-
-		StatusCode: 0,
-	}
-}
-
-func (p *NationGuessResponse) GetStatusCode() (v int64) {
-	return p.StatusCode
-}
-
-var NationGuessResponse_StatusMsg_DEFAULT string
-
-func (p *NationGuessResponse) GetStatusMsg() (v string) {
-	if !p.IsSetStatusMsg() {
-		return NationGuessResponse_StatusMsg_DEFAULT
-	}
-	return *p.StatusMsg
-}
-
-func (p *NationGuessResponse) GetNation() (v string) {
-	return p.Nation
-}
-
-func (p *NationGuessResponse) GetConfidence() (v string) {
-	return p.Confidence
-}
-
-var fieldIDToName_NationGuessResponse = map[int16]string{
-	1: "status_code",
-	2: "status_msg",
-	3: "nation",
-	4: "confidence",
-}
-
-func (p *NationGuessResponse) IsSetStatusMsg() bool {
-	return p.StatusMsg != nil
-}
-
-func (p *NationGuessResponse) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetStatusCode bool = false
-	var issetNation bool = false
-	var issetConfidence bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetStatusCode = true
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 2:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 3:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetNation = true
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 4:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField4(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetConfidence = true
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetStatusCode {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetNation {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetConfidence {
-		fieldId = 4
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_NationGuessResponse[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_NationGuessResponse[fieldId]))
-}
-
-func (p *NationGuessResponse) ReadField1(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.StatusCode = v
-	}
-	return nil
-}
-func (p *NationGuessResponse) ReadField2(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.StatusMsg = &v
-	}
-	return nil
-}
-func (p *NationGuessResponse) ReadField3(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Nation = v
-	}
-	return nil
-}
-func (p *NationGuessResponse) ReadField4(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Confidence = v
-	}
-	return nil
-}
-
-func (p *NationGuessResponse) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("NationGuessResponse"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *NationGuessResponse) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("status_code", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.StatusCode); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *NationGuessResponse) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetStatusMsg() {
-		if err = oprot.WriteFieldBegin("status_msg", thrift.STRING, 2); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.StatusMsg); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *NationGuessResponse) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("nation", thrift.STRING, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Nation); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *NationGuessResponse) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("confidence", thrift.STRING, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Confidence); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
-func (p *NationGuessResponse) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("NationGuessResponse(%+v)", *p)
-
-}
-
 type SearchRequest struct {
 	Keyword string `thrift:"keyword,1,required" form:"keyword,required" json:"keyword,required" query:"keyword,required"`
 	// Differentiate using programming languages
 	DomainList []string `thrift:"domain_list,2,optional" form:"domain_list" json:"domain_list,omitempty" query:"domain_list"`
 	NationList []string `thrift:"nation_list,3,optional" form:"nation_list" json:"nation_list,omitempty" query:"nation_list"`
-	PageSize   *int64   `thrift:"page_size,4,optional" form:"page_size" json:"page_size,omitempty" query:"page_size"`
-	PageNum    *int64   `thrift:"page_num,5,optional" form:"page_num" json:"page_num,omitempty" query:"page_num"`
+	PageNum    *int64   `thrift:"page_num,4,optional" form:"page_num" json:"page_num,omitempty" query:"page_num"`
 }
 
 func NewSearchRequest() *SearchRequest {
@@ -1086,15 +741,6 @@ func (p *SearchRequest) GetNationList() (v []string) {
 	return p.NationList
 }
 
-var SearchRequest_PageSize_DEFAULT int64
-
-func (p *SearchRequest) GetPageSize() (v int64) {
-	if !p.IsSetPageSize() {
-		return SearchRequest_PageSize_DEFAULT
-	}
-	return *p.PageSize
-}
-
 var SearchRequest_PageNum_DEFAULT int64
 
 func (p *SearchRequest) GetPageNum() (v int64) {
@@ -1108,8 +754,7 @@ var fieldIDToName_SearchRequest = map[int16]string{
 	1: "keyword",
 	2: "domain_list",
 	3: "nation_list",
-	4: "page_size",
-	5: "page_num",
+	4: "page_num",
 }
 
 func (p *SearchRequest) IsSetDomainList() bool {
@@ -1118,10 +763,6 @@ func (p *SearchRequest) IsSetDomainList() bool {
 
 func (p *SearchRequest) IsSetNationList() bool {
 	return p.NationList != nil
-}
-
-func (p *SearchRequest) IsSetPageSize() bool {
-	return p.PageSize != nil
 }
 
 func (p *SearchRequest) IsSetPageNum() bool {
@@ -1176,14 +817,6 @@ func (p *SearchRequest) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 5:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1282,15 +915,6 @@ func (p *SearchRequest) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.PageSize = &v
-	}
-	return nil
-}
-func (p *SearchRequest) ReadField5(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
 		p.PageNum = &v
 	}
 	return nil
@@ -1316,10 +940,6 @@ func (p *SearchRequest) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
-			goto WriteFieldError
-		}
-		if err = p.writeField5(oprot); err != nil {
-			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -1412,27 +1032,8 @@ WriteFieldEndError:
 }
 
 func (p *SearchRequest) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetPageSize() {
-		if err = oprot.WriteFieldBegin("page_size", thrift.I64, 4); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.PageSize); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
-func (p *SearchRequest) writeField5(oprot thrift.TProtocol) (err error) {
 	if p.IsSetPageNum() {
-		if err = oprot.WriteFieldBegin("page_num", thrift.I64, 5); err != nil {
+		if err = oprot.WriteFieldBegin("page_num", thrift.I64, 4); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(*p.PageNum); err != nil {
@@ -1444,9 +1045,9 @@ func (p *SearchRequest) writeField5(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *SearchRequest) String() string {
@@ -1730,8 +1331,6 @@ func (p *SearchResponse) String() string {
 type BasicService interface {
 	TalentRank(ctx context.Context, req *TalentRankRequest) (r *TalentRankResponse, err error)
 
-	NationGuess(ctx context.Context, req *NationGuessRequest) (r *NationGuessResponse, err error)
-
 	Search(ctx context.Context, req *SearchRequest) (r *SearchResponse, err error)
 }
 
@@ -1770,15 +1369,6 @@ func (p *BasicServiceClient) TalentRank(ctx context.Context, req *TalentRankRequ
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *BasicServiceClient) NationGuess(ctx context.Context, req *NationGuessRequest) (r *NationGuessResponse, err error) {
-	var _args BasicServiceNationGuessArgs
-	_args.Req = req
-	var _result BasicServiceNationGuessResult
-	if err = p.Client_().Call(ctx, "NationGuess", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
 func (p *BasicServiceClient) Search(ctx context.Context, req *SearchRequest) (r *SearchResponse, err error) {
 	var _args BasicServiceSearchArgs
 	_args.Req = req
@@ -1810,7 +1400,6 @@ func (p *BasicServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunct
 func NewBasicServiceProcessor(handler BasicService) *BasicServiceProcessor {
 	self := &BasicServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
 	self.AddToProcessorMap("TalentRank", &basicServiceProcessorTalentRank{handler: handler})
-	self.AddToProcessorMap("NationGuess", &basicServiceProcessorNationGuess{handler: handler})
 	self.AddToProcessorMap("Search", &basicServiceProcessorSearch{handler: handler})
 	return self
 }
@@ -1863,54 +1452,6 @@ func (p *basicServiceProcessorTalentRank) Process(ctx context.Context, seqId int
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("TalentRank", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 = result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type basicServiceProcessorNationGuess struct {
-	handler BasicService
-}
-
-func (p *basicServiceProcessorNationGuess) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := BasicServiceNationGuessArgs{}
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("NationGuess", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return false, err
-	}
-
-	iprot.ReadMessageEnd()
-	var err2 error
-	result := BasicServiceNationGuessResult{}
-	var retval *NationGuessResponse
-	if retval, err2 = p.handler.NationGuess(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing NationGuess: "+err2.Error())
-		oprot.WriteMessageBegin("NationGuess", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return true, err2
-	} else {
-		result.Success = retval
-	}
-	if err2 = oprot.WriteMessageBegin("NationGuess", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2259,292 +1800,6 @@ func (p *BasicServiceTalentRankResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("BasicServiceTalentRankResult(%+v)", *p)
-
-}
-
-type BasicServiceNationGuessArgs struct {
-	Req *NationGuessRequest `thrift:"req,1"`
-}
-
-func NewBasicServiceNationGuessArgs() *BasicServiceNationGuessArgs {
-	return &BasicServiceNationGuessArgs{}
-}
-
-var BasicServiceNationGuessArgs_Req_DEFAULT *NationGuessRequest
-
-func (p *BasicServiceNationGuessArgs) GetReq() (v *NationGuessRequest) {
-	if !p.IsSetReq() {
-		return BasicServiceNationGuessArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-var fieldIDToName_BasicServiceNationGuessArgs = map[int16]string{
-	1: "req",
-}
-
-func (p *BasicServiceNationGuessArgs) IsSetReq() bool {
-	return p.Req != nil
-}
-
-func (p *BasicServiceNationGuessArgs) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_BasicServiceNationGuessArgs[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *BasicServiceNationGuessArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.Req = NewNationGuessRequest()
-	if err := p.Req.Read(iprot); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (p *BasicServiceNationGuessArgs) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("NationGuess_args"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *BasicServiceNationGuessArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Req.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *BasicServiceNationGuessArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("BasicServiceNationGuessArgs(%+v)", *p)
-
-}
-
-type BasicServiceNationGuessResult struct {
-	Success *NationGuessResponse `thrift:"success,0,optional"`
-}
-
-func NewBasicServiceNationGuessResult() *BasicServiceNationGuessResult {
-	return &BasicServiceNationGuessResult{}
-}
-
-var BasicServiceNationGuessResult_Success_DEFAULT *NationGuessResponse
-
-func (p *BasicServiceNationGuessResult) GetSuccess() (v *NationGuessResponse) {
-	if !p.IsSetSuccess() {
-		return BasicServiceNationGuessResult_Success_DEFAULT
-	}
-	return p.Success
-}
-
-var fieldIDToName_BasicServiceNationGuessResult = map[int16]string{
-	0: "success",
-}
-
-func (p *BasicServiceNationGuessResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *BasicServiceNationGuessResult) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 0:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField0(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_BasicServiceNationGuessResult[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *BasicServiceNationGuessResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewNationGuessResponse()
-	if err := p.Success.Read(iprot); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (p *BasicServiceNationGuessResult) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("NationGuess_result"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField0(oprot); err != nil {
-			fieldId = 0
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *BasicServiceNationGuessResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := p.Success.Write(oprot); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
-}
-
-func (p *BasicServiceNationGuessResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("BasicServiceNationGuessResult(%+v)", *p)
 
 }
 

@@ -21,10 +21,6 @@ func Register(r *server.Hertz) {
 		_aster := root.Group("/aster", _asterMw()...)
 		_aster.GET("/search", append(_searchMw(), api.Search)...)
 		{
-			_nation := _aster.Group("/nation", _nationMw()...)
-			_nation.GET("/guess", append(_nationguessMw(), api.NationGuess)...)
-		}
-		{
 			_talent := _aster.Group("/talent", _talentMw()...)
 			{
 				_rank := _talent.Group("/rank", _rankMw()...)
