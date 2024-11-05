@@ -17,7 +17,8 @@ env-down:
 # TODO: finish build 
 .PHONY: aster
 aster:
-	cd $(API_PATH) && go run main.go
+	mkdir -p output
+	@echo "TODO"
 	@echo "aster running"
 
 # run ci
