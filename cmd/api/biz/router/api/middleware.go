@@ -21,16 +21,6 @@ func _searchMw() []app.HandlerFunc {
 	return nil
 }
 
-func _nationMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _nationguessMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
 func _talentMw() []app.HandlerFunc {
 	// your code...
 	return nil

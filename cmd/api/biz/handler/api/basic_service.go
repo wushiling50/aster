@@ -6,8 +6,10 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	api "github.com/wushiling50/aster/cmd/api/biz/model/api"
 	"github.com/wushiling50/aster/cmd/api/biz/pack"
+	"github.com/wushiling50/aster/cmd/base/service"
 )
 
 // TalentRank .
@@ -23,7 +25,14 @@ func TalentRank(ctx context.Context, c *app.RequestContext) {
 
 	resp := new(api.TalentRankResponse)
 
-	// TODO: invoke service
+	s := service.NewBaseService(ctx)
+	userInfo, err := s.TalentRank(ctx, &req)
+	if err != nil {
+		hlog.Error(err)
+		pack.SendFailResponse(c, err)
+		return
+	}
+	resp.UserInfo = userInfo
 
 	pack.SendResponse(c, resp)
 }
@@ -41,7 +50,15 @@ func Search(ctx context.Context, c *app.RequestContext) {
 
 	resp := new(api.SearchResponse)
 
-	// TODO: invoke service
+	s := service.NewBaseService(ctx)
+	userList, err := s.Search(ctx, &req)
+	if err != nil {
+		hlog.Error(err)
+		pack.SendFailResponse(c, err)
+		return
+	}
+
+	resp.UserList = userList
 
 	pack.SendResponse(c, resp)
 }
