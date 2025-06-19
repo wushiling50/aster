@@ -2,26 +2,22 @@ DIR = $(shell pwd)
 CMD = $(DIR)/cmd
 CONFIG_PATH = $(DIR)/config
 IDL_PATH = $(DIR)/idl
+API_PATH = $(DIR)/api
 OUTPUT_PATH = $(DIR)/output
-API_PATH = $(CMD)/api
 
 .PHONY: env-up
 env-up:
 	sh init.sh
-	@ docker compose -f ./docker/docker-compose.yml up -d
+	docker-compose up -d
 
 .PHONY: env-down
 env-down:
-	@ cd ./docker && docker compose down
+	docker-compose down
 
-# TODO: finish build 
-.PHONY: aster
-aster:
-	mkdir -p output
-	@echo "TODO"
-	@echo "aster running"
+.PHONY: api-format
+api-format:
+	goctl api format --dir ${IDL_PATH}
 
-# run ci
-.PHONY: lint
-lint:
-	golangci-lint run --config=./.golangci.yml
+.PHONY: api-go
+api-go:
+	goctl api go --dir=${API_PATH} --api ${IDL_PATH}/api.api

@@ -1,0 +1,216 @@
+syntax = "v1"
+
+// ----------------------------------------------------------------------------
+// common 通用
+// ----------------------------------------------------------------------------
+type BaseResp {
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
+}
+
+type Developer {
+	Id        int64  `json:"id"`
+	Name      string `json:"name"`
+	Login     string `json:"login"`
+	AvatarUrl string `json:"avatar_url"`
+	Company   string `json:"company"`
+	Location  string `json:"location"`
+	Bio       string `json:"bio"`
+	Blog      string `json:"blog"`
+	Email     string `json:"email"`
+	Followers int64  `json:"followers"`
+	Following int64  `json:"following"`
+	Stars     int64  `json:"stars"`
+	Repos     int64  `json:"repos"`
+	Gists     int64  `json:"gists"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+}
+
+type Score {
+	Id        int64   `json:"id"`
+	Score     float64 `json:"score"`
+	UpdatedAt string  `json:"updated_at"`
+}
+
+type Language {
+	Id    string `json:"id"`
+	Name  string `json:"name"`
+	Color string `json:"color"`
+}
+
+type LanguageWithPercentage {
+	Language   Language `json:"language"`
+	Percentage float64  `json:"percentage"`
+}
+
+type LanguageUsage {
+	Id        int64                    `json:"id"`
+	Languages []LanguageWithPercentage `json:"languages"`
+	UpdatedAt string                   `json:"updated_at"`
+}
+
+type Nation {
+	Id         int64   `json:"id"`
+	Nation     string  `json:"nation"`
+	Confidence float64 `json:"confidence"`
+}
+
+type Summary {
+	Id        int64  `json:"id"`
+	Summary   string `json:"summary"`
+	UpdatedAt string `json:"updated_at"`
+}
+
+// ----------------------------------------------------------------------------
+// rank 排行榜
+// ----------------------------------------------------------------------------
+type DeveloperWithScore {
+	Developer Developer `json:"developer"`
+	Score     Score     `json:"score"`
+}
+
+type GetScoreRankReq {
+	Language string `form:"language,optional"`
+	Nation   string `form:"nation,optional"`
+	Limit    int64  `form:"limit,optional,default=50"`
+	Offset   int64  `form:"offset,optional,default=0"`
+}
+
+type GetScoreRankResp {
+	BaseResp BaseResp              `json:"base"`
+	Rank     []*DeveloperWithScore `json:"rank"`
+	Total    int64                 `json:"total"`
+}
+
+@server (
+	prefix: /api/v1/rank
+	group:  rank
+)
+service Applet {
+	@handler getScoreRank
+	get / (GetScoreRankReq) returns (GetScoreRankResp)
+}
+
+// ----------------------------------------------------------------------------
+// developer 开发者信息
+// ----------------------------------------------------------------------------
+type TaskId {
+	TaskId string `json:"task_id"`
+}
+
+type TaskState {
+	State  string `json:"state"`
+	Reason string `json:"reason"`
+}
+
+type PostTaskReq {
+	Login string `path:"login"`
+}
+
+type PostTaskResp {
+	BaseResp BaseResp `json:"base"`
+	TaskId   TaskId   `json:"task_id"`
+}
+
+type GetDeveloperReq {
+	Login string `path:"login"`
+}
+
+type GetDeveloperResp {
+	BaseResp  BaseResp  `json:"base"`
+	Developer Developer `json:"developer"`
+}
+
+type GetScoreReq {
+	Login  string `path:"login"`
+	TaskId string `form:"task_id"`
+}
+
+type GetScoreResp {
+	BaseResp BaseResp `json:"base"`
+	Score    Score    `json:"score"`
+}
+
+type GetLanguageUsageReq {
+	Login  string `path:"login"`
+	TaskId string `form:"task_id"`
+}
+
+type GetLanguageUsageResp {
+	BaseResp      BaseResp      `json:"base"`
+	LanguageUsage LanguageUsage `json:"language_usage"`
+}
+
+type GetNationReq {
+	Login  string `path:"login"`
+	TaskId string `form:"task_id"`
+}
+
+type GetNationResp {
+	BaseResp BaseResp `json:"base"`
+	Nation   Nation   `json:"nation"`
+}
+
+type GetSummaryReq {
+	Login  string `path:"login"`
+	TaskId string `form:"task_id"`
+}
+
+type GetSummaryResp {
+	BaseResp BaseResp `json:"base"`
+	Summary  Summary  `json:"summary"`
+}
+
+@server (
+	prefix: /api/v1/developers
+	group:  developer
+)
+service Applet {
+	@handler postScoreTask
+	post /:login/score (PostTaskReq) returns (PostTaskResp)
+
+	@handler postLanguageUsageTask
+	post /:login/languages (PostTaskReq) returns (PostTaskResp)
+
+	@handler postNationTask
+	post /:login/nation (PostTaskReq) returns (PostTaskResp)
+
+	@handler postSummaryTask
+	post /:login/summary (PostTaskReq) returns (PostTaskResp)
+
+	@handler getDeveloper
+	get /:login (GetDeveloperReq) returns (GetDeveloperResp)
+
+	@handler getScore
+	get /:login/score (GetScoreReq) returns (GetScoreResp)
+
+	@handler getLanguageUsage
+	get /:login/languages (GetLanguageUsageReq) returns (GetLanguageUsageResp)
+
+	@handler getNation
+	get /:login/nation (GetNationReq) returns (GetNationResp)
+
+	@handler getSummary
+	get /:login/summary (GetSummaryReq) returns (GetSummaryResp)
+}
+
+// ----------------------------------------------------------------------------
+// languages 语言数据，用于排行榜筛选
+// ----------------------------------------------------------------------------
+type GetLanguagesReq {}
+
+type GetLanguagesResp {
+	BaseResp     BaseResp   `json:"base"`
+	LanguageList []Language `json:"language_list"`
+}
+
+@server (
+	prefix: /api/v1/languages
+	group:  languages
+)
+service Applet {
+	@handler getLanguages
+	get / (GetLanguagesReq) returns (GetLanguagesResp)
+}
+
