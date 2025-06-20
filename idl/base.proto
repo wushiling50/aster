@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package base;
+
+option go_package = "github.com/wushiling50/aster/gen/base;base";
+
+// ====== Base ======
+message Base {
+    int64 code = 1;
+    string message = 2;
+}

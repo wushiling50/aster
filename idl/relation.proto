@@ -1,0 +1,385 @@
+syntax = "proto3";
+
+package relation;
+
+option go_package ="github.com/wushiling50/aster/gen/relation;relation";
+
+import "idl/base.proto";
+
+// ====== Relation ======
+
+// ====== CreateRepo ======
+message CreateRepo {
+    int64 dataId = 1; // dataId
+    int64 developerId = 2; // developerId
+    int64 repoId = 3; // repoId
+}
+
+message AddCreateRepoReq {
+    int64 developerId = 1; // developerId
+    int64 repoId = 2; // repoId
+}
+
+message AddCreateRepoResp {
+    base.Base base = 1;
+}
+
+message DelCreateRepoReq {
+    int64 repoId = 1; // repoId
+}
+
+message DelCreateRepoResp {
+    base.Base base = 1;
+}
+
+message DelAllCreatedRepoReq {
+    int64 developerId = 1; // developerId
+}
+
+message DelAllCreatedRepoResp {
+    base.Base base = 1;
+}
+
+message GetCreatorIdReq {
+    int64 repoId = 1; // repoId
+}
+
+message GetCreatorIdResp {
+    base.Base base = 1;
+    int64 developerId = 2; // developerId
+}
+
+message SearchCreatedRepoReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    int64 developerId = 3; // developerId
+}
+
+message SearchCreatedRepoResp {
+    base.Base base = 1;
+    repeated int64 repoIds = 2; // repoId
+}
+
+message UpdateCreateRepoReq {
+    int64 developerId = 1;
+}
+
+message UpdateCreateRepoResp {
+    base.Base base = 1;
+}
+
+message GetCreatedRepoUpdatedAtReq {
+    int64 developerId = 1;
+}
+
+message GetCreatedRepoUpdatedAtResp {
+    base.Base base = 1;
+    int64 updatedAt = 2;
+}
+
+// ====== Follow ======
+message Follow {
+    int64 dataId = 1; // dataId
+    int64 followerId = 2; // followerId
+    int64 followingId = 3; // followingId
+}
+
+message AddFollowReq {
+    int64 followerId = 1; // followerId
+    int64 followingId = 2; // followingId
+}
+
+message AddFollowResp {
+    base.Base base = 1;
+}
+
+message DelFollowReq {
+    int64 followerId = 1; // followerId
+    int64 followingId = 2; // followingId
+}
+
+message DelFollowResp {
+    base.Base base = 1;
+}
+
+message DelAllFollowerReq {
+    int64 developerId = 1; // developerId
+}
+
+message DelAllFollowerResp {
+    base.Base base = 1;
+}
+
+message DelAllFollowingReq {
+    int64 developerId = 1; // developerId
+}
+
+message DelAllFollowingResp {
+    base.Base base = 1;
+}
+
+message CheckIfFollowReq {
+    int64 followerId = 1; // followerId
+    int64 followingId = 2; // followingId
+}
+
+message CheckFollowResp {
+    base.Base base = 1;
+    bool isFollow = 2; // isFollow
+}
+
+message SearchFollowingByDeveloperIdReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    int64 developerId = 3; // followerId
+}
+
+message SearchFollowingByDeveloperIdResp {
+    base.Base base = 1;
+    repeated int64 followingIds = 2; // followingId
+}
+
+message SearchFollowerByDeveloperIdReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    int64 developerId = 3; // followingId
+}
+
+message SearchFollowerByDeveloperIdResp {
+    base.Base base = 1;
+    repeated int64 followerIds = 2; // followerId
+}
+
+message UpdateFollowingReq {
+    int64 developerId = 1;
+}
+
+message UpdateFollowingResp {
+    base.Base base = 1;
+}
+
+message UpdateFollowerReq {
+    int64 developerId = 1;
+}
+
+message UpdateFollowerResp {
+    base.Base base = 1;
+}
+
+message GetFollowingUpdatedAtReq {
+    int64 developerId = 1;
+}
+
+message GetFollowingUpdatedAtResp {
+    base.Base base = 1;
+    int64 updatedAt = 2;
+}
+
+message GetFollowerUpdatedAtReq {
+    int64 developerId = 1;
+}
+
+message GetFollowerUpdatedAtResp {
+    base.Base base = 1;
+    int64 updatedAt = 2;
+}
+
+// ====== Fork ======
+message Fork {
+    int64 dataId = 1; // dataId
+    int64 originalRepoId = 2; // originalRepoId
+    int64 forkRepoId = 3; // forkRepoId
+}
+
+message AddForkReq {
+    int64 originalRepoId = 1; // originalRepoId
+    int64 forkRepoId = 2; // forkRepoId
+}
+
+message AddForkResp {
+    base.Base base = 1;
+}
+
+message DelForkReq {
+    int64 forkRepoId = 1; // forkRepoId
+}
+
+message DelForkResp {
+    base.Base base = 1;
+}
+
+message DelAllForkReq {
+    int64 originalRepoId = 1; // originalRepoId
+}
+
+message DelAllForkResp {
+    base.Base base = 1;
+}
+
+message GetOriginReq {
+    int64 forkRepoId = 1; // forkRepoId
+}
+
+message GetOriginResp {
+    base.Base base = 1;
+    int64 originalRepoId = 2; // originalRepoId
+}
+
+message SearchForkReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    int64 originalRepoId = 3; // originalRepoId
+}
+
+message SearchForkResp {
+    base.Base base = 1;
+    repeated int64 forkRepoIds = 2; // forkRepoId
+}
+
+message UpdateForkReq {
+    int64 originalRepoId = 1;
+}
+
+message UpdateForkResp {
+    base.Base base = 1;
+}
+
+message GetForkUpdatedAtReq {
+    int64 originalRepoId = 1;
+}
+
+message GetForkUpdatedAtResp {
+    base.Base base = 1;
+    int64 updatedAt = 2;
+}
+
+// ====== Star ======
+message Star {
+    int64 dataId = 1; // dataId
+    int64 developerId = 2; // developerId
+    int64 repoId = 3; // repoId
+}
+
+message AddStarReq {
+    int64 developerId = 1; // developerId
+    int64 repoId = 2; // repoId
+}
+
+message AddStarResp {
+    base.Base base = 1;
+}
+
+message DelStarReq {
+    int64 developerId = 1; // developerId
+    int64 repoId = 2; // repoId
+}
+
+message DelStarResp {
+    base.Base base = 1;
+}
+
+message DelAllStarredRepoReq {
+    int64 developerId = 1; // developerId
+}
+
+message DelAllStarredRepoResp {
+    base.Base base = 1;
+}
+
+message DelAllStaringDevReq {
+    int64 repoId = 1; // repoId
+}
+
+message DelAllStaringDevResp {
+    base.Base base = 1;
+}
+
+message CheckIfStarReq {
+    int64 developerId = 1; // developerId
+    int64 repoId = 2; // repoId
+}
+
+message CheckIfStarResp {
+    base.Base base = 1;
+    bool isStar = 2; // isStar
+}
+
+message SearchStarredRepoReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    int64 developerId = 3; // developerId
+}
+
+message SearchStarredRepoResp {
+    base.Base base = 1;
+    repeated int64 repoIds = 2; // repoId
+}
+
+message SearchStaringDevReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    int64 repoId = 3; // repoId
+}
+
+message SearchStaringDevResp {
+    base.Base base = 1;
+    repeated int64 developerIds = 2; // developerId
+}
+
+message UpdateStarredRepoReq {
+    int64 developerId = 1;
+}
+
+message UpdateStarredRepoResp {
+    base.Base base = 1;
+}
+
+message GetStarredRepoUpdatedAtReq {
+    int64 developerId = 1;
+}
+
+message GetStarredRepoUpdatedAtResp {
+    base.Base base = 1;
+    int64 updatedAt = 2;
+}
+
+service relation{ 
+    //-----------------------CreateRepo-----------------------
+    rpc AddCreateRepo(AddCreateRepoReq) returns (AddCreateRepoResp);
+    rpc DelCreateRepo(DelCreateRepoReq) returns (DelCreateRepoResp);
+    rpc DelAllCreatedRepo(DelAllCreatedRepoReq) returns (DelAllCreatedRepoResp);
+    rpc GetCreatorId(GetCreatorIdReq) returns (GetCreatorIdResp);
+    rpc SearchCreatedRepo(SearchCreatedRepoReq) returns (SearchCreatedRepoResp);
+    rpc UpdateCreateRepo(UpdateCreateRepoReq) returns (UpdateCreateRepoResp);
+    rpc GetCreatedRepoUpdatedAt(GetCreatedRepoUpdatedAtReq) returns (GetCreatedRepoUpdatedAtResp);
+    //-----------------------Follow-----------------------
+    rpc AddFollow(AddFollowReq) returns (AddFollowResp);
+    rpc DelFollow(DelFollowReq) returns (DelFollowResp);
+    rpc DelAllFollower(DelAllFollowerReq) returns (DelAllFollowerResp);
+    rpc DelAllFollowing(DelAllFollowingReq) returns (DelAllFollowingResp);
+    rpc CheckIfFollow(CheckIfFollowReq) returns (CheckFollowResp);
+    rpc SearchFollowingByDeveloperId(SearchFollowingByDeveloperIdReq) returns (SearchFollowingByDeveloperIdResp);
+    rpc SearchFollowerByDeveloperId(SearchFollowerByDeveloperIdReq) returns (SearchFollowerByDeveloperIdResp);
+    rpc UpdateFollowing(UpdateFollowingReq) returns (UpdateFollowingResp);
+    rpc UpdateFollower(UpdateFollowerReq) returns (UpdateFollowerResp);
+    rpc GetFollowingUpdatedAt(GetFollowingUpdatedAtReq) returns (GetFollowingUpdatedAtResp);
+    rpc GetFollowerUpdatedAt(GetFollowerUpdatedAtReq) returns (GetFollowerUpdatedAtResp);
+    //-----------------------Fork-----------------------
+    rpc AddFork(AddForkReq) returns (AddForkResp);
+    rpc DelFork(DelForkReq) returns (DelForkResp);
+    rpc DelAllFork(DelAllForkReq) returns (DelAllForkResp);
+    rpc GetOrigin(GetOriginReq) returns (GetOriginResp);
+    rpc SearchFork(SearchForkReq) returns (SearchForkResp);
+    rpc UpdateFork(UpdateForkReq) returns (UpdateForkResp);
+    rpc GetForkUpdatedAt(GetForkUpdatedAtReq) returns (GetForkUpdatedAtResp);
+    //-----------------------Star-----------------------
+    rpc AddStar(AddStarReq) returns (AddStarResp);
+    rpc DelStar(DelStarReq) returns (DelStarResp);
+    rpc DelAllStarredRepo(DelAllStarredRepoReq) returns (DelAllStarredRepoResp);
+    rpc DelAllStaringDev(DelAllStaringDevReq) returns (DelAllStaringDevResp);
+    rpc CheckIfStar(CheckIfStarReq) returns (CheckIfStarResp);
+    rpc SearchStarredRepo(SearchStarredRepoReq) returns (SearchStarredRepoResp);
+    rpc SearchStaringDev(SearchStaringDevReq) returns (SearchStaringDevResp);
+    rpc UpdateStarredRepo(UpdateStarredRepoReq) returns (UpdateStarredRepoResp);
+    rpc GetStarredRepoUpdatedAt(GetStarredRepoUpdatedAtReq) returns (GetStarredRepoUpdatedAtResp);
+}

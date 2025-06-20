@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package id_generator;
+
+option go_package ="github.com/wushiling50/aster/gen/id_generator;id_generator";
+
+import "idl/base.proto";
+
+// ====== ID_Generator ======
+
+message GetIdReq {
+
+}
+
+message GetIdResp {
+    base.Base base = 1;
+    string id = 2;
+}
+
+service IdGenerator {
+    rpc GetId(GetIdReq) returns (GetIdResp);
+}

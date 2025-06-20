@@ -1,0 +1,182 @@
+syntax = "proto3";
+
+package contribution;
+
+option go_package ="github.com/wushiling50/aster/gen/contribution;contribution";
+
+import "idl/base.proto";
+
+// ====== Contribution ======
+message Contribution {
+    int64 dataId = 1; // dataId
+    int64 dataCreatedAt = 2; // dataCreatedAt
+    int64 dataUpdatedAt = 3; // dataUpdatedAt
+    int64 userId = 4; // userId
+    int64 repoId = 5; // repoId
+    string category = 6; // category
+    string content = 7; // content
+    int64 createdAt = 8; // createdAt
+    int64 updatedAt = 9; // updatedAt
+    int64 contributionId = 10; // contributionId
+}
+  
+message AddContributionReq {
+    int64 userId = 1; // userId
+    int64 repoId = 2; // repoId
+    string category = 3; // category
+    string content = 4; // content
+    int64 createdAt = 5; // createdAt
+    int64 updatedAt = 6; // updatedAt
+    int64 contributionId = 7; // contributionId
+}
+  
+message AddContributionResp {
+    base.Base base = 1;
+}
+  
+message UpdateContributionOfUserReq {
+    int64 userId = 1;
+    string updateAfter = 2;
+    int64 searchLimit = 3;
+}
+  
+message UpdateContributionOfUserResp {
+    base.Base base = 1;
+}
+  
+message UpdateIssuePROfUserReq {
+    int64 userId = 1;
+    string updateAfter = 2;
+    int64 searchLimit = 3;
+}
+  
+message UpdateIssuePROfUserResp {
+    base.Base base = 1;
+}
+  
+message UpdateCommentOfUserReq {
+    int64 userId = 1;
+    string updateAfter = 2;
+    int64 searchLimit = 3;
+}
+  
+message UpdateCommentOfUserResp {
+    base.Base base = 1;
+}
+  
+message UpdateReviewOfUserReq {
+    int64 userId = 1;
+    string updateAfter = 2;
+    int64 searchLimit = 3;
+}
+  
+message UpdateReviewOfUserResp {
+    base.Base base = 1;
+}
+  
+message DelContributionReq {
+    int64 repoId = 1; // repoId
+    string category = 2; // category
+    int64 contributionId = 3; // contributionId
+}
+  
+message DelContributionResp {
+    base.Base base = 1;
+}
+  
+message DelAllContributionInCategoryByUserIdReq {
+    string category = 1; // category
+    int64 userId = 2; // userId
+}
+  
+message DelAllContributionInCategoryByUserIdResp {
+    base.Base base = 1;
+}
+  
+message GetContributionReq {
+    int64 repoId = 1; // repoId
+    string category = 2; // category
+    int64 contributionId = 3; // contributionId
+}
+  
+message GetContributionResp {
+    base.Base base = 1;
+    Contribution contribution = 2; // contribution
+}
+  
+message SearchByCategoryReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    string category = 3; // category
+}
+  
+message SearchByCategoryResp {
+    base.Base base = 1;
+    repeated Contribution contributions = 2; // contributions
+}
+  
+message SearchByUserIdReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    int64 userId = 3; // userId
+}
+  
+message SearchByUserIdResp {
+    base.Base base = 1;
+    repeated Contribution contributions = 2; // contributions
+}
+  
+message SearchByRepoIdReq {
+    int64 page = 1; // page
+    int64 limit = 2; // limit
+    int64 repoId = 3; // repoId
+}
+  
+message SearchByRepoIdResp {
+    base.Base base = 1;
+    repeated Contribution contributions = 2; // contributions
+}
+  
+message GetIssuePROfUserUpdatedAtReq {
+    int64 userId = 1;
+}
+  
+message GetIssuePROfUserUpdatedAtResp {
+    base.Base base = 1;
+    int64 updatedAt = 2;
+}
+  
+message GetCommentOfUserUpdatedAtReq {
+    int64 userId = 1;
+}
+  
+message GetCommentOfUserUpdatedAtResp {
+    base.Base base = 1;
+    int64 updatedAt = 2;
+}
+  
+message GetReviewOfUserUpdatedAtReq {
+    int64 userId = 1;
+}
+  
+message GetReviewOfUserUpdatedAtResp {
+    base.Base base = 1;
+    int64 updatedAt = 2;
+}
+  
+service contribution{ 
+    rpc AddContribution(AddContributionReq) returns (AddContributionResp);
+    rpc DelContribution(DelContributionReq) returns (DelContributionResp);
+    rpc DelAllContributionInCategoryByUserId(DelAllContributionInCategoryByUserIdReq) returns (DelAllContributionInCategoryByUserIdResp);
+    rpc GetContribution(GetContributionReq) returns (GetContributionResp);
+    rpc SearchByCategory(SearchByCategoryReq) returns (SearchByCategoryResp);
+    rpc SearchByUserId(SearchByUserIdReq) returns (SearchByUserIdResp);
+    rpc SearchByRepoId(SearchByRepoIdReq) returns (SearchByRepoIdResp);
+    rpc UpdateContributionOfUser(UpdateContributionOfUserReq) returns (UpdateContributionOfUserResp);
+    rpc UpdateIssuePROfUser(UpdateIssuePROfUserReq) returns (UpdateIssuePROfUserResp);
+    rpc UpdateCommentOfUser(UpdateCommentOfUserReq) returns (UpdateCommentOfUserResp);
+    rpc UpdateReviewOfUser(UpdateReviewOfUserReq) returns (UpdateReviewOfUserResp);
+    rpc GetIssuePROfUserUpdatedAt(GetIssuePROfUserUpdatedAtReq) returns (GetIssuePROfUserUpdatedAtResp);
+    rpc GetCommentOfUserUpdatedAt(GetCommentOfUserUpdatedAtReq) returns (GetCommentOfUserUpdatedAtResp);
+    rpc GetReviewOfUserUpdatedAt(GetReviewOfUserUpdatedAtReq) returns (GetReviewOfUserUpdatedAtResp);
+}

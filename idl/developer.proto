@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package developer;
+
+option go_package ="github.com/wushiling50/aster/gen/developer;developer";
+
+import "idl/base.proto";
+
+// ====== Developer ======
+message Developer {
+    int64 dataId = 1; // Generated primary key, MUST NOT be changed.
+    int64 dataCreatedAt = 2; // dataCreatedAt
+    int64 dataUpdatedAt = 3; // dataUpdatedAt
+    int64 id = 4; // Unique id of GitHub user.
+    string name = 5; // name
+    string login = 6; // login
+    string avatarUrl = 7; // avatarUrl
+    string company = 8; // company
+    string location = 9; // location
+    string bio = 10; // bio
+    string blog = 11; // blog
+    string email = 12; // email
+    string twitterUsername = 13; // twitterUsername
+    int64 repos = 14; // repo_count
+    int64 following = 15; // following_count
+    int64 followers = 16; // followers_count
+    int64 stars = 17; // star_count
+    int64 gists = 18; // gists_count
+    int64 createdAt = 19; // createdAt
+    int64 updatedAt = 20; // updatedAt
+}
+
+message AddDeveloperReq {
+    int64 id = 1; // Unique id of GitHub user.
+    string name = 2; // name
+    string login = 3; // login
+    string avatarUrl = 4; // avatarUrl
+    string company = 5; // company
+    string location = 6; // location
+    string bio = 7; // bio
+    string blog = 8; // blog
+    string email = 9; // email
+    string twitterUsername = 10; // twitterUsername
+    int64 repos = 11; // repo_count
+    int64 following = 12; // following_count
+    int64 followers = 13; // followers_count
+    int64 stars = 14; // star_count
+    int64 gists = 15; // gists_c
+    int64 createdAt = 16; // createdAt
+    int64 updatedAt = 17; // updatedAt
+}
+
+message AddDeveloperResp {
+    base.Base base = 1;
+}
+
+message UpdateDeveloperReq {
+    int64 id = 1;
+}
+
+message UpdateDeveloperResp {
+    base.Base base = 1;
+}
+
+message DelDeveloperByIdReq {
+    int64 id = 1; // id
+}
+
+message DelDeveloperByIdResp {
+    base.Base base = 1;
+}
+
+message DelDeveloperByLoginReq {
+    string login = 1; // login
+}
+
+message DelDeveloperByLoginResp {
+    base.Base base = 1;
+}
+
+message GetDeveloperByIdReq {
+    int64 id = 1; // id
+}
+
+message GetDeveloperByIdResp {
+    base.Base base = 1;
+    Developer developer = 2; // developer
+}
+
+message GetDeveloperByLoginReq {
+    string login = 1; //login
+}
+
+message GetDeveloperByLoginResp {
+    base.Base base = 1;
+    Developer developer = 2; // developer
+}
+
+service developer{
+    rpc AddDeveloper(AddDeveloperReq) returns (AddDeveloperResp);
+    rpc UpdateDeveloper(UpdateDeveloperReq) returns (UpdateDeveloperResp);
+    rpc DelDeveloperById(DelDeveloperByIdReq) returns (DelDeveloperByIdResp);
+    rpc DelDeveloperByLogin(DelDeveloperByLoginReq) returns (DelDeveloperByLoginResp);
+    rpc GetDeveloperById(GetDeveloperByIdReq) returns (GetDeveloperByIdResp);
+    rpc GetDeveloperByLogin(GetDeveloperByLoginReq) returns (GetDeveloperByLoginResp);
+}

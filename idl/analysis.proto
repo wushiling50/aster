@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package analysis;
+
+option go_package ="github.com/wushiling50/aster/gen/analysis;analysis";
+
+import "idl/base.proto";
+
+// ====== Analysis ======
+message Languages {
+    int64 dataId = 1; // dataId
+    int64 dataCreatedAt = 2; // dataCreatedAt
+    int64 dataUpdatedAt = 3; // dataUpdatedAt
+    string languages = 4; // languages
+}
+
+message Nation {
+    int64 dataId = 1; // dataId
+    int64 dataCreatedAt = 2; // dataCreatedAt
+    int64 dataUpdatedAt = 3; // dataUpdatedAt
+    string nation = 4; // nation
+    double confidence = 5; // confidence
+}
+
+message Score {
+    int64 dataId = 1; // dataId
+    int64 dataCreatedAt = 2; // dataCreatedAt
+    int64 dataUpdatedAt = 3; // dataUpdatedAt
+    double score = 4; // score
+}
+
+message Summary {
+    int64 dataId = 1; //dataId
+    int64 dataCreatedAt = 2; //dataCreatedAt
+    int64 dataUpdatedAt = 3; //dataUpdatedAt
+    string summary = 4; //summary
+}
+
+message DelAnalysisReq {
+    int64 developerId = 1; //developerId
+}
+
+message DelAnalysisResp {
+    base.Base base = 1;
+}
+
+message GetAnalysisReq {
+    int64 developerId = 1; //developerId
+}
+
+message GetLanguagesResp {
+    base.Base base = 1;
+    Languages languages = 2; //languages
+}
+
+message GetNationResp {
+    base.Base base = 1;
+    Nation nation = 2; // nation
+}
+
+message GetScoreResp {
+    base.Base base = 1;
+    Score score = 2; // score
+}
+
+message GetSummaryResp {
+    base.Base base = 1;
+    Summary summary = 2; //summary
+}
+
+message UpdateAnalysisReq {
+    int64 developerId = 1; //developerId
+}
+
+message UpdateAnalysisResp {
+    base.Base base = 1;
+}
+
+service analysis{
+    rpc DelLanguage(DelAnalysisReq) returns (DelAnalysisResp);
+    rpc DelNation(DelAnalysisReq) returns (DelAnalysisResp);
+    rpc DelScore(DelAnalysisReq) returns (DelAnalysisResp);
+    rpc DelSummary(DelAnalysisReq) returns (DelAnalysisResp);
+    rpc UpdateLanguage(UpdateAnalysisReq) returns (UpdateAnalysisResp);
+    rpc UpdateNation(UpdateAnalysisReq) returns (UpdateAnalysisResp);
+    rpc UpdateScore(UpdateAnalysisReq) returns (UpdateAnalysisResp);
+    rpc UpdateSummary(UpdateAnalysisReq) returns (UpdateAnalysisResp);
+    rpc GetLanguages(GetAnalysisReq) returns (GetLanguagesResp);
+    rpc GetNation(GetAnalysisReq) returns (GetNationResp);
+    rpc GetScore(GetAnalysisReq) returns (GetScoreResp);
+    rpc GetSummary(GetAnalysisReq) returns (GetSummaryResp);
+}

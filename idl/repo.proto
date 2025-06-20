@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package repo;
+
+option go_package ="github.com/wushiling50/aster/gen/repo;repo";
+
+import "idl/base.proto";
+
+// ====== Repo ======
+message Repo {
+    int64 dataId = 1; // dataId
+    int64 dataCreatedAt = 2; // dataCreatedAt
+    int64 dataUpdatedAt = 3; // dataUpdatedAt
+    int64 id = 4; // id
+    string name = 5; //n ame
+    int64 starCount = 6; // starCount
+    int64 forkCount = 7; // forkCount
+    int64 issueCount = 8; // issueCount
+    int64 commitCount = 9; // commitCount
+    int64 prCount = 10; // prCount
+    string language = 11; // language
+    string description = 12; // description
+    int64 lastFetchForkAt = 13; // lastFetchForkAt
+    int64 lastFetchContributionAt = 14; // lastFetchContributionAt
+    int64 mergedPrCount = 15; // mergedPrCount
+    int64 openPrCount = 16; // openPrCount
+    int64 commentCount = 17; // commentCount
+    int64 reviewCount = 18; // reviewCount
+}
+
+message AddRepoReq {
+    int64 id = 1; // id
+    string name = 2; // name
+    int64 starCount = 3; // starCount
+    int64 forkCount = 4; // forkCount
+    int64 issueCount = 5; // issueCount
+    int64 commitCount = 6; // commitCount
+    int64 prCount = 7; // prCount
+    string language = 8; // language
+    string description = 9; // description
+    int64 lastFetchForkAt = 10; // lastFetchForkAt
+    int64 lastFetchContributionAt = 11; // lastFetchContributionAt
+    int64 mergedPrCount = 12; // mergedPrCount
+    int64 openPrCount = 13; // openPrCount
+    int64 commentCount = 14; // commentCount
+    int64 reviewCount = 15; // reviewCount
+}
+
+message AddRepoResp {
+    base.Base base = 1;
+}
+
+message UpdateRepoReq {
+    int64 id = 1;
+}
+
+message UpdateRepoResp {
+    base.Base base = 1;
+}
+
+message DelRepoByIdReq {
+    int64 id = 1; // id
+}
+
+message DelRepoByIdResp {
+    base.Base base = 1;
+}
+
+message GetRepoByIdReq {
+    int64 id = 1; // id
+}
+
+message GetRepoByIdResp {
+    base.Base base = 1;
+    Repo repo = 2; // repo
+}
+
+service repo{ 
+    rpc AddRepo(AddRepoReq) returns (AddRepoResp); 
+    rpc UpdateRepo(UpdateRepoReq) returns (UpdateRepoResp); 
+    rpc DelRepoById(DelRepoByIdReq) returns (DelRepoByIdResp);
+    rpc GetRepoById(GetRepoByIdReq) returns (GetRepoByIdResp);
+}
