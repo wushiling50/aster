@@ -23,8 +23,8 @@ func NewDelContributionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *D
 	}
 }
 
-func (l *DelContributionLogic) DelContribution(in *contribution_contribution.DelContributionReq) (*contribution_contribution.DelContributionResp, error) {
+func (l *DelContributionLogic) DelContribution(in *contribution.DelContributionReq) (*contribution.DelContributionResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.DelContributionResp{}, nil
+	return &contribution.DelContributionResp{}, nil
 }

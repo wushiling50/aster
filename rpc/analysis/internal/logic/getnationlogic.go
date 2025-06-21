@@ -23,8 +23,8 @@ func NewGetNationLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetNati
 	}
 }
 
-func (l *GetNationLogic) GetNation(in *analysis_analysis.GetAnalysisReq) (*analysis_analysis.GetNationResp, error) {
+func (l *GetNationLogic) GetNation(in *analysis.GetAnalysisReq) (*analysis.GetNationResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &analysis_analysis.GetNationResp{}, nil
+	return &analysis.GetNationResp{}, nil
 }

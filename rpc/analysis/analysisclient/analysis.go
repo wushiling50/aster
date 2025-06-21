@@ -2,7 +2,7 @@
 // goctl 1.7.3
 // Source: analysis.proto
 
-package analysis
+package analysisclient
 
 import (
 	"context"
@@ -14,19 +14,19 @@ import (
 )
 
 type (
-	DelAnalysisReq     = analysis_analysis.DelAnalysisReq
-	DelAnalysisResp    = analysis_analysis.DelAnalysisResp
-	GetAnalysisReq     = analysis_analysis.GetAnalysisReq
-	GetLanguagesResp   = analysis_analysis.GetLanguagesResp
-	GetNationResp      = analysis_analysis.GetNationResp
-	GetScoreResp       = analysis_analysis.GetScoreResp
-	GetSummaryResp     = analysis_analysis.GetSummaryResp
-	Languages          = analysis_analysis.Languages
-	Nation             = analysis_analysis.Nation
-	Score              = analysis_analysis.Score
-	Summary            = analysis_analysis.Summary
-	UpdateAnalysisReq  = analysis_analysis.UpdateAnalysisReq
-	UpdateAnalysisResp = analysis_analysis.UpdateAnalysisResp
+	DelAnalysisReq     = analysis.DelAnalysisReq
+	DelAnalysisResp    = analysis.DelAnalysisResp
+	GetAnalysisReq     = analysis.GetAnalysisReq
+	GetLanguagesResp   = analysis.GetLanguagesResp
+	GetNationResp      = analysis.GetNationResp
+	GetScoreResp       = analysis.GetScoreResp
+	GetSummaryResp     = analysis.GetSummaryResp
+	Languages          = analysis.Languages
+	Nation             = analysis.Nation
+	Score              = analysis.Score
+	Summary            = analysis.Summary
+	UpdateAnalysisReq  = analysis.UpdateAnalysisReq
+	UpdateAnalysisResp = analysis.UpdateAnalysisResp
 
 	Analysis interface {
 		DelLanguage(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
@@ -55,61 +55,61 @@ func NewAnalysis(cli zrpc.Client) Analysis {
 }
 
 func (m *defaultAnalysis) DelLanguage(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.DelLanguage(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) DelNation(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.DelNation(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) DelScore(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.DelScore(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) DelSummary(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.DelSummary(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) UpdateLanguage(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.UpdateLanguage(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) UpdateNation(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.UpdateNation(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) UpdateScore(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.UpdateScore(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) UpdateSummary(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.UpdateSummary(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) GetLanguages(ctx context.Context, in *GetAnalysisReq, opts ...grpc.CallOption) (*GetLanguagesResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.GetLanguages(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) GetNation(ctx context.Context, in *GetAnalysisReq, opts ...grpc.CallOption) (*GetNationResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.GetNation(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) GetScore(ctx context.Context, in *GetAnalysisReq, opts ...grpc.CallOption) (*GetScoreResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.GetScore(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) GetSummary(ctx context.Context, in *GetAnalysisReq, opts ...grpc.CallOption) (*GetSummaryResp, error) {
-	client := analysis_analysis.NewAnalysisClient(m.cli.Conn())
+	client := analysis.NewAnalysisClient(m.cli.Conn())
 	return client.GetSummary(ctx, in, opts...)
 }

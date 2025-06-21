@@ -23,8 +23,8 @@ func NewGetDeveloperByLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
-func (l *GetDeveloperByLoginLogic) GetDeveloperByLogin(in *developer_developer.GetDeveloperByLoginReq) (*developer_developer.GetDeveloperByLoginResp, error) {
+func (l *GetDeveloperByLoginLogic) GetDeveloperByLogin(in *developer.GetDeveloperByLoginReq) (*developer.GetDeveloperByLoginResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &developer_developer.GetDeveloperByLoginResp{}, nil
+	return &developer.GetDeveloperByLoginResp{}, nil
 }

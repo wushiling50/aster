@@ -23,8 +23,8 @@ func NewUpdateFollowerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Up
 	}
 }
 
-func (l *UpdateFollowerLogic) UpdateFollower(in *relation_relation.UpdateFollowerReq) (*relation_relation.UpdateFollowerResp, error) {
+func (l *UpdateFollowerLogic) UpdateFollower(in *relation.UpdateFollowerReq) (*relation.UpdateFollowerResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.UpdateFollowerResp{}, nil
+	return &relation.UpdateFollowerResp{}, nil
 }

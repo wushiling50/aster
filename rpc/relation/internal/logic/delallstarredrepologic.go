@@ -23,8 +23,8 @@ func NewDelAllStarredRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-func (l *DelAllStarredRepoLogic) DelAllStarredRepo(in *relation_relation.DelAllStarredRepoReq) (*relation_relation.DelAllStarredRepoResp, error) {
+func (l *DelAllStarredRepoLogic) DelAllStarredRepo(in *relation.DelAllStarredRepoReq) (*relation.DelAllStarredRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.DelAllStarredRepoResp{}, nil
+	return &relation.DelAllStarredRepoResp{}, nil
 }

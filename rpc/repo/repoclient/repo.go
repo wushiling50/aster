@@ -2,7 +2,7 @@
 // goctl 1.7.3
 // Source: repo.proto
 
-package repo
+package repoclient
 
 import (
 	"context"
@@ -14,15 +14,15 @@ import (
 )
 
 type (
-	AddRepoReq      = repo_repo.AddRepoReq
-	AddRepoResp     = repo_repo.AddRepoResp
-	DelRepoByIdReq  = repo_repo.DelRepoByIdReq
-	DelRepoByIdResp = repo_repo.DelRepoByIdResp
-	GetRepoByIdReq  = repo_repo.GetRepoByIdReq
-	GetRepoByIdResp = repo_repo.GetRepoByIdResp
-	Repo            = repo_repo.Repo
-	UpdateRepoReq   = repo_repo.UpdateRepoReq
-	UpdateRepoResp  = repo_repo.UpdateRepoResp
+	AddRepoReq      = repo.AddRepoReq
+	AddRepoResp     = repo.AddRepoResp
+	DelRepoByIdReq  = repo.DelRepoByIdReq
+	DelRepoByIdResp = repo.DelRepoByIdResp
+	GetRepoByIdReq  = repo.GetRepoByIdReq
+	GetRepoByIdResp = repo.GetRepoByIdResp
+	Repo            = repo.Repo
+	UpdateRepoReq   = repo.UpdateRepoReq
+	UpdateRepoResp  = repo.UpdateRepoResp
 
 	RepoZrpcClient interface {
 		AddRepo(ctx context.Context, in *AddRepoReq, opts ...grpc.CallOption) (*AddRepoResp, error)
@@ -43,21 +43,21 @@ func NewRepoZrpcClient(cli zrpc.Client) RepoZrpcClient {
 }
 
 func (m *defaultRepoZrpcClient) AddRepo(ctx context.Context, in *AddRepoReq, opts ...grpc.CallOption) (*AddRepoResp, error) {
-	client := repo_repo.NewRepoClient(m.cli.Conn())
+	client := repo.NewRepoClient(m.cli.Conn())
 	return client.AddRepo(ctx, in, opts...)
 }
 
 func (m *defaultRepoZrpcClient) UpdateRepo(ctx context.Context, in *UpdateRepoReq, opts ...grpc.CallOption) (*UpdateRepoResp, error) {
-	client := repo_repo.NewRepoClient(m.cli.Conn())
+	client := repo.NewRepoClient(m.cli.Conn())
 	return client.UpdateRepo(ctx, in, opts...)
 }
 
 func (m *defaultRepoZrpcClient) DelRepoById(ctx context.Context, in *DelRepoByIdReq, opts ...grpc.CallOption) (*DelRepoByIdResp, error) {
-	client := repo_repo.NewRepoClient(m.cli.Conn())
+	client := repo.NewRepoClient(m.cli.Conn())
 	return client.DelRepoById(ctx, in, opts...)
 }
 
 func (m *defaultRepoZrpcClient) GetRepoById(ctx context.Context, in *GetRepoByIdReq, opts ...grpc.CallOption) (*GetRepoByIdResp, error) {
-	client := repo_repo.NewRepoClient(m.cli.Conn())
+	client := repo.NewRepoClient(m.cli.Conn())
 	return client.GetRepoById(ctx, in, opts...)
 }

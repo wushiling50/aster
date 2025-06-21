@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package id_generator;
 
-option go_package ="github.com/wushiling50/aster/gen/id_generator;id_generator";
+option go_package ="github.com/wushiling50/aster/gen/id_generator";
 
 import "idl/base.proto";
 

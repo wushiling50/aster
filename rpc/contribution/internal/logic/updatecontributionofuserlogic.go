@@ -23,8 +23,8 @@ func NewUpdateContributionOfUserLogic(ctx context.Context, svcCtx *svc.ServiceCo
 	}
 }
 
-func (l *UpdateContributionOfUserLogic) UpdateContributionOfUser(in *contribution_contribution.UpdateContributionOfUserReq) (*contribution_contribution.UpdateContributionOfUserResp, error) {
+func (l *UpdateContributionOfUserLogic) UpdateContributionOfUser(in *contribution.UpdateContributionOfUserReq) (*contribution.UpdateContributionOfUserResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.UpdateContributionOfUserResp{}, nil
+	return &contribution.UpdateContributionOfUserResp{}, nil
 }

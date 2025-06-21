@@ -23,8 +23,8 @@ func NewDelDeveloperByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *DelDeveloperByIdLogic) DelDeveloperById(in *developer_developer.DelDeveloperByIdReq) (*developer_developer.DelDeveloperByIdResp, error) {
+func (l *DelDeveloperByIdLogic) DelDeveloperById(in *developer.DelDeveloperByIdReq) (*developer.DelDeveloperByIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &developer_developer.DelDeveloperByIdResp{}, nil
+	return &developer.DelDeveloperByIdResp{}, nil
 }

@@ -23,8 +23,8 @@ func NewGetIssuePROfUserUpdatedAtLogic(ctx context.Context, svcCtx *svc.ServiceC
 	}
 }
 
-func (l *GetIssuePROfUserUpdatedAtLogic) GetIssuePROfUserUpdatedAt(in *contribution_contribution.GetIssuePROfUserUpdatedAtReq) (*contribution_contribution.GetIssuePROfUserUpdatedAtResp, error) {
+func (l *GetIssuePROfUserUpdatedAtLogic) GetIssuePROfUserUpdatedAt(in *contribution.GetIssuePROfUserUpdatedAtReq) (*contribution.GetIssuePROfUserUpdatedAtResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.GetIssuePROfUserUpdatedAtResp{}, nil
+	return &contribution.GetIssuePROfUserUpdatedAtResp{}, nil
 }

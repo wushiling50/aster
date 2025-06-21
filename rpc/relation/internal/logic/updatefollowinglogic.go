@@ -23,8 +23,8 @@ func NewUpdateFollowingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *U
 	}
 }
 
-func (l *UpdateFollowingLogic) UpdateFollowing(in *relation_relation.UpdateFollowingReq) (*relation_relation.UpdateFollowingResp, error) {
+func (l *UpdateFollowingLogic) UpdateFollowing(in *relation.UpdateFollowingReq) (*relation.UpdateFollowingResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.UpdateFollowingResp{}, nil
+	return &relation.UpdateFollowingResp{}, nil
 }

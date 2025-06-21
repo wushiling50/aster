@@ -23,8 +23,8 @@ func NewSearchStarredRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-func (l *SearchStarredRepoLogic) SearchStarredRepo(in *relation_relation.SearchStarredRepoReq) (*relation_relation.SearchStarredRepoResp, error) {
+func (l *SearchStarredRepoLogic) SearchStarredRepo(in *relation.SearchStarredRepoReq) (*relation.SearchStarredRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.SearchStarredRepoResp{}, nil
+	return &relation.SearchStarredRepoResp{}, nil
 }

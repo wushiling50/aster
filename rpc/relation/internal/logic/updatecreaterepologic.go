@@ -23,8 +23,8 @@ func NewUpdateCreateRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *UpdateCreateRepoLogic) UpdateCreateRepo(in *relation_relation.UpdateCreateRepoReq) (*relation_relation.UpdateCreateRepoResp, error) {
+func (l *UpdateCreateRepoLogic) UpdateCreateRepo(in *relation.UpdateCreateRepoReq) (*relation.UpdateCreateRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.UpdateCreateRepoResp{}, nil
+	return &relation.UpdateCreateRepoResp{}, nil
 }

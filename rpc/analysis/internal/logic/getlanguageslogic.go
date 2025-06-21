@@ -23,8 +23,8 @@ func NewGetLanguagesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetL
 	}
 }
 
-func (l *GetLanguagesLogic) GetLanguages(in *analysis_analysis.GetAnalysisReq) (*analysis_analysis.GetLanguagesResp, error) {
+func (l *GetLanguagesLogic) GetLanguages(in *analysis.GetAnalysisReq) (*analysis.GetLanguagesResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &analysis_analysis.GetLanguagesResp{}, nil
+	return &analysis.GetLanguagesResp{}, nil
 }

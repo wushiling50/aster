@@ -14,7 +14,7 @@ import (
 
 type AnalysisServer struct {
 	svcCtx *svc.ServiceContext
-	analysis_analysis.UnimplementedAnalysisServer
+	analysis.UnimplementedAnalysisServer
 }
 
 func NewAnalysisServer(svcCtx *svc.ServiceContext) *AnalysisServer {
@@ -23,62 +23,62 @@ func NewAnalysisServer(svcCtx *svc.ServiceContext) *AnalysisServer {
 	}
 }
 
-func (s *AnalysisServer) DelLanguage(ctx context.Context, in *analysis_analysis.DelAnalysisReq) (*analysis_analysis.DelAnalysisResp, error) {
+func (s *AnalysisServer) DelLanguage(ctx context.Context, in *analysis.DelAnalysisReq) (*analysis.DelAnalysisResp, error) {
 	l := logic.NewDelLanguageLogic(ctx, s.svcCtx)
 	return l.DelLanguage(in)
 }
 
-func (s *AnalysisServer) DelNation(ctx context.Context, in *analysis_analysis.DelAnalysisReq) (*analysis_analysis.DelAnalysisResp, error) {
+func (s *AnalysisServer) DelNation(ctx context.Context, in *analysis.DelAnalysisReq) (*analysis.DelAnalysisResp, error) {
 	l := logic.NewDelNationLogic(ctx, s.svcCtx)
 	return l.DelNation(in)
 }
 
-func (s *AnalysisServer) DelScore(ctx context.Context, in *analysis_analysis.DelAnalysisReq) (*analysis_analysis.DelAnalysisResp, error) {
+func (s *AnalysisServer) DelScore(ctx context.Context, in *analysis.DelAnalysisReq) (*analysis.DelAnalysisResp, error) {
 	l := logic.NewDelScoreLogic(ctx, s.svcCtx)
 	return l.DelScore(in)
 }
 
-func (s *AnalysisServer) DelSummary(ctx context.Context, in *analysis_analysis.DelAnalysisReq) (*analysis_analysis.DelAnalysisResp, error) {
+func (s *AnalysisServer) DelSummary(ctx context.Context, in *analysis.DelAnalysisReq) (*analysis.DelAnalysisResp, error) {
 	l := logic.NewDelSummaryLogic(ctx, s.svcCtx)
 	return l.DelSummary(in)
 }
 
-func (s *AnalysisServer) UpdateLanguage(ctx context.Context, in *analysis_analysis.UpdateAnalysisReq) (*analysis_analysis.UpdateAnalysisResp, error) {
+func (s *AnalysisServer) UpdateLanguage(ctx context.Context, in *analysis.UpdateAnalysisReq) (*analysis.UpdateAnalysisResp, error) {
 	l := logic.NewUpdateLanguageLogic(ctx, s.svcCtx)
 	return l.UpdateLanguage(in)
 }
 
-func (s *AnalysisServer) UpdateNation(ctx context.Context, in *analysis_analysis.UpdateAnalysisReq) (*analysis_analysis.UpdateAnalysisResp, error) {
+func (s *AnalysisServer) UpdateNation(ctx context.Context, in *analysis.UpdateAnalysisReq) (*analysis.UpdateAnalysisResp, error) {
 	l := logic.NewUpdateNationLogic(ctx, s.svcCtx)
 	return l.UpdateNation(in)
 }
 
-func (s *AnalysisServer) UpdateScore(ctx context.Context, in *analysis_analysis.UpdateAnalysisReq) (*analysis_analysis.UpdateAnalysisResp, error) {
+func (s *AnalysisServer) UpdateScore(ctx context.Context, in *analysis.UpdateAnalysisReq) (*analysis.UpdateAnalysisResp, error) {
 	l := logic.NewUpdateScoreLogic(ctx, s.svcCtx)
 	return l.UpdateScore(in)
 }
 
-func (s *AnalysisServer) UpdateSummary(ctx context.Context, in *analysis_analysis.UpdateAnalysisReq) (*analysis_analysis.UpdateAnalysisResp, error) {
+func (s *AnalysisServer) UpdateSummary(ctx context.Context, in *analysis.UpdateAnalysisReq) (*analysis.UpdateAnalysisResp, error) {
 	l := logic.NewUpdateSummaryLogic(ctx, s.svcCtx)
 	return l.UpdateSummary(in)
 }
 
-func (s *AnalysisServer) GetLanguages(ctx context.Context, in *analysis_analysis.GetAnalysisReq) (*analysis_analysis.GetLanguagesResp, error) {
+func (s *AnalysisServer) GetLanguages(ctx context.Context, in *analysis.GetAnalysisReq) (*analysis.GetLanguagesResp, error) {
 	l := logic.NewGetLanguagesLogic(ctx, s.svcCtx)
 	return l.GetLanguages(in)
 }
 
-func (s *AnalysisServer) GetNation(ctx context.Context, in *analysis_analysis.GetAnalysisReq) (*analysis_analysis.GetNationResp, error) {
+func (s *AnalysisServer) GetNation(ctx context.Context, in *analysis.GetAnalysisReq) (*analysis.GetNationResp, error) {
 	l := logic.NewGetNationLogic(ctx, s.svcCtx)
 	return l.GetNation(in)
 }
 
-func (s *AnalysisServer) GetScore(ctx context.Context, in *analysis_analysis.GetAnalysisReq) (*analysis_analysis.GetScoreResp, error) {
+func (s *AnalysisServer) GetScore(ctx context.Context, in *analysis.GetAnalysisReq) (*analysis.GetScoreResp, error) {
 	l := logic.NewGetScoreLogic(ctx, s.svcCtx)
 	return l.GetScore(in)
 }
 
-func (s *AnalysisServer) GetSummary(ctx context.Context, in *analysis_analysis.GetAnalysisReq) (*analysis_analysis.GetSummaryResp, error) {
+func (s *AnalysisServer) GetSummary(ctx context.Context, in *analysis.GetAnalysisReq) (*analysis.GetSummaryResp, error) {
 	l := logic.NewGetSummaryLogic(ctx, s.svcCtx)
 	return l.GetSummary(in)
 }

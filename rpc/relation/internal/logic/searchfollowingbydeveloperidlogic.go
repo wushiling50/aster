@@ -23,8 +23,8 @@ func NewSearchFollowingByDeveloperIdLogic(ctx context.Context, svcCtx *svc.Servi
 	}
 }
 
-func (l *SearchFollowingByDeveloperIdLogic) SearchFollowingByDeveloperId(in *relation_relation.SearchFollowingByDeveloperIdReq) (*relation_relation.SearchFollowingByDeveloperIdResp, error) {
+func (l *SearchFollowingByDeveloperIdLogic) SearchFollowingByDeveloperId(in *relation.SearchFollowingByDeveloperIdReq) (*relation.SearchFollowingByDeveloperIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.SearchFollowingByDeveloperIdResp{}, nil
+	return &relation.SearchFollowingByDeveloperIdResp{}, nil
 }

@@ -18,3 +18,9 @@ mkdir rpc/relation
 mkdir rpc/repo
 mkdir rpc/api_processor
 mkdir rpc/fetcher
+
+# create pkg folder
+mkdir pkg/constants
+mkdir pkg/errno
+mkdir pkg/base
+mkdir pkg/github

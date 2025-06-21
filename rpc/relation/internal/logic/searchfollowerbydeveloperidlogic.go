@@ -23,8 +23,8 @@ func NewSearchFollowerByDeveloperIdLogic(ctx context.Context, svcCtx *svc.Servic
 	}
 }
 
-func (l *SearchFollowerByDeveloperIdLogic) SearchFollowerByDeveloperId(in *relation_relation.SearchFollowerByDeveloperIdReq) (*relation_relation.SearchFollowerByDeveloperIdResp, error) {
+func (l *SearchFollowerByDeveloperIdLogic) SearchFollowerByDeveloperId(in *relation.SearchFollowerByDeveloperIdReq) (*relation.SearchFollowerByDeveloperIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.SearchFollowerByDeveloperIdResp{}, nil
+	return &relation.SearchFollowerByDeveloperIdResp{}, nil
 }

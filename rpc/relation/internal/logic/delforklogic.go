@@ -23,8 +23,8 @@ func NewDelForkLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelForkLo
 	}
 }
 
-func (l *DelForkLogic) DelFork(in *relation_relation.DelForkReq) (*relation_relation.DelForkResp, error) {
+func (l *DelForkLogic) DelFork(in *relation.DelForkReq) (*relation.DelForkResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.DelForkResp{}, nil
+	return &relation.DelForkResp{}, nil
 }

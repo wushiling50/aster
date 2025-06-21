@@ -23,8 +23,8 @@ func NewSearchByRepoIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Se
 	}
 }
 
-func (l *SearchByRepoIdLogic) SearchByRepoId(in *contribution_contribution.SearchByRepoIdReq) (*contribution_contribution.SearchByRepoIdResp, error) {
+func (l *SearchByRepoIdLogic) SearchByRepoId(in *contribution.SearchByRepoIdReq) (*contribution.SearchByRepoIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.SearchByRepoIdResp{}, nil
+	return &contribution.SearchByRepoIdResp{}, nil
 }

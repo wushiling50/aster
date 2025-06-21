@@ -14,8 +14,8 @@ import (
 )
 
 type (
-	GetIdReq  = id_generator_id_generator.GetIdReq
-	GetIdResp = id_generator_id_generator.GetIdResp
+	GetIdReq  = id_generator.GetIdReq
+	GetIdResp = id_generator.GetIdResp
 
 	IdGenerator interface {
 		GetId(ctx context.Context, in *GetIdReq, opts ...grpc.CallOption) (*GetIdResp, error)
@@ -33,6 +33,6 @@ func NewIdGenerator(cli zrpc.Client) IdGenerator {
 }
 
 func (m *defaultIdGenerator) GetId(ctx context.Context, in *GetIdReq, opts ...grpc.CallOption) (*GetIdResp, error) {
-	client := id_generator_id_generator.NewIdGeneratorClient(m.cli.Conn())
+	client := id_generator.NewIdGeneratorClient(m.cli.Conn())
 	return client.GetId(ctx, in, opts...)
 }

@@ -23,8 +23,8 @@ func NewGetRepoByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetRe
 	}
 }
 
-func (l *GetRepoByIdLogic) GetRepoById(in *repo_repo.GetRepoByIdReq) (*repo_repo.GetRepoByIdResp, error) {
+func (l *GetRepoByIdLogic) GetRepoById(in *repo.GetRepoByIdReq) (*repo.GetRepoByIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &repo_repo.GetRepoByIdResp{}, nil
+	return &repo.GetRepoByIdResp{}, nil
 }

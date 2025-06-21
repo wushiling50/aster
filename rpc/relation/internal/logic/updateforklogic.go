@@ -23,8 +23,8 @@ func NewUpdateForkLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 	}
 }
 
-func (l *UpdateForkLogic) UpdateFork(in *relation_relation.UpdateForkReq) (*relation_relation.UpdateForkResp, error) {
+func (l *UpdateForkLogic) UpdateFork(in *relation.UpdateForkReq) (*relation.UpdateForkResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.UpdateForkResp{}, nil
+	return &relation.UpdateForkResp{}, nil
 }

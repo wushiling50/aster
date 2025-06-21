@@ -23,8 +23,8 @@ func NewGetScoreLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetScore
 	}
 }
 
-func (l *GetScoreLogic) GetScore(in *analysis_analysis.GetAnalysisReq) (*analysis_analysis.GetScoreResp, error) {
+func (l *GetScoreLogic) GetScore(in *analysis.GetAnalysisReq) (*analysis.GetScoreResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &analysis_analysis.GetScoreResp{}, nil
+	return &analysis.GetScoreResp{}, nil
 }

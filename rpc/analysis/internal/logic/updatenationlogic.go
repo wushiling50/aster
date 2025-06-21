@@ -23,8 +23,8 @@ func NewUpdateNationLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upda
 	}
 }
 
-func (l *UpdateNationLogic) UpdateNation(in *analysis_analysis.UpdateAnalysisReq) (*analysis_analysis.UpdateAnalysisResp, error) {
+func (l *UpdateNationLogic) UpdateNation(in *analysis.UpdateAnalysisReq) (*analysis.UpdateAnalysisResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &analysis_analysis.UpdateAnalysisResp{}, nil
+	return &analysis.UpdateAnalysisResp{}, nil
 }

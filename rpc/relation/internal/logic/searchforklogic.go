@@ -23,8 +23,8 @@ func NewSearchForkLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Search
 	}
 }
 
-func (l *SearchForkLogic) SearchFork(in *relation_relation.SearchForkReq) (*relation_relation.SearchForkResp, error) {
+func (l *SearchForkLogic) SearchFork(in *relation.SearchForkReq) (*relation.SearchForkResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.SearchForkResp{}, nil
+	return &relation.SearchForkResp{}, nil
 }

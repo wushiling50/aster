@@ -14,7 +14,7 @@ import (
 
 type ContributionServer struct {
 	svcCtx *svc.ServiceContext
-	contribution_contribution.UnimplementedContributionServer
+	contribution.UnimplementedContributionServer
 }
 
 func NewContributionServer(svcCtx *svc.ServiceContext) *ContributionServer {
@@ -23,72 +23,72 @@ func NewContributionServer(svcCtx *svc.ServiceContext) *ContributionServer {
 	}
 }
 
-func (s *ContributionServer) AddContribution(ctx context.Context, in *contribution_contribution.AddContributionReq) (*contribution_contribution.AddContributionResp, error) {
+func (s *ContributionServer) AddContribution(ctx context.Context, in *contribution.AddContributionReq) (*contribution.AddContributionResp, error) {
 	l := logic.NewAddContributionLogic(ctx, s.svcCtx)
 	return l.AddContribution(in)
 }
 
-func (s *ContributionServer) DelContribution(ctx context.Context, in *contribution_contribution.DelContributionReq) (*contribution_contribution.DelContributionResp, error) {
+func (s *ContributionServer) DelContribution(ctx context.Context, in *contribution.DelContributionReq) (*contribution.DelContributionResp, error) {
 	l := logic.NewDelContributionLogic(ctx, s.svcCtx)
 	return l.DelContribution(in)
 }
 
-func (s *ContributionServer) DelAllContributionInCategoryByUserId(ctx context.Context, in *contribution_contribution.DelAllContributionInCategoryByUserIdReq) (*contribution_contribution.DelAllContributionInCategoryByUserIdResp, error) {
-	l := logic.NewDelAllContributionInCategoryByUserIdLogic(ctx, s.svcCtx)
-	return l.DelAllContributionInCategoryByUserId(in)
+func (s *ContributionServer) DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *contribution.DelAllContributionInCategoryByDeveloperIdReq) (*contribution.DelAllContributionInCategoryByDeveloperIdResp, error) {
+	l := logic.NewDelAllContributionInCategoryByDeveloperIdLogic(ctx, s.svcCtx)
+	return l.DelAllContributionInCategoryByDeveloperId(in)
 }
 
-func (s *ContributionServer) GetContribution(ctx context.Context, in *contribution_contribution.GetContributionReq) (*contribution_contribution.GetContributionResp, error) {
+func (s *ContributionServer) GetContribution(ctx context.Context, in *contribution.GetContributionReq) (*contribution.GetContributionResp, error) {
 	l := logic.NewGetContributionLogic(ctx, s.svcCtx)
 	return l.GetContribution(in)
 }
 
-func (s *ContributionServer) SearchByCategory(ctx context.Context, in *contribution_contribution.SearchByCategoryReq) (*contribution_contribution.SearchByCategoryResp, error) {
+func (s *ContributionServer) SearchByCategory(ctx context.Context, in *contribution.SearchByCategoryReq) (*contribution.SearchByCategoryResp, error) {
 	l := logic.NewSearchByCategoryLogic(ctx, s.svcCtx)
 	return l.SearchByCategory(in)
 }
 
-func (s *ContributionServer) SearchByUserId(ctx context.Context, in *contribution_contribution.SearchByUserIdReq) (*contribution_contribution.SearchByUserIdResp, error) {
-	l := logic.NewSearchByUserIdLogic(ctx, s.svcCtx)
-	return l.SearchByUserId(in)
+func (s *ContributionServer) SearchByDeveloperId(ctx context.Context, in *contribution.SearchByDeveloperIdReq) (*contribution.SearchByDeveloperIdResp, error) {
+	l := logic.NewSearchByDeveloperIdLogic(ctx, s.svcCtx)
+	return l.SearchByDeveloperId(in)
 }
 
-func (s *ContributionServer) SearchByRepoId(ctx context.Context, in *contribution_contribution.SearchByRepoIdReq) (*contribution_contribution.SearchByRepoIdResp, error) {
+func (s *ContributionServer) SearchByRepoId(ctx context.Context, in *contribution.SearchByRepoIdReq) (*contribution.SearchByRepoIdResp, error) {
 	l := logic.NewSearchByRepoIdLogic(ctx, s.svcCtx)
 	return l.SearchByRepoId(in)
 }
 
-func (s *ContributionServer) UpdateContributionOfUser(ctx context.Context, in *contribution_contribution.UpdateContributionOfUserReq) (*contribution_contribution.UpdateContributionOfUserResp, error) {
+func (s *ContributionServer) UpdateContributionOfUser(ctx context.Context, in *contribution.UpdateContributionOfUserReq) (*contribution.UpdateContributionOfUserResp, error) {
 	l := logic.NewUpdateContributionOfUserLogic(ctx, s.svcCtx)
 	return l.UpdateContributionOfUser(in)
 }
 
-func (s *ContributionServer) UpdateIssuePROfUser(ctx context.Context, in *contribution_contribution.UpdateIssuePROfUserReq) (*contribution_contribution.UpdateIssuePROfUserResp, error) {
+func (s *ContributionServer) UpdateIssuePROfUser(ctx context.Context, in *contribution.UpdateIssuePROfUserReq) (*contribution.UpdateIssuePROfUserResp, error) {
 	l := logic.NewUpdateIssuePROfUserLogic(ctx, s.svcCtx)
 	return l.UpdateIssuePROfUser(in)
 }
 
-func (s *ContributionServer) UpdateCommentOfUser(ctx context.Context, in *contribution_contribution.UpdateCommentOfUserReq) (*contribution_contribution.UpdateCommentOfUserResp, error) {
+func (s *ContributionServer) UpdateCommentOfUser(ctx context.Context, in *contribution.UpdateCommentOfUserReq) (*contribution.UpdateCommentOfUserResp, error) {
 	l := logic.NewUpdateCommentOfUserLogic(ctx, s.svcCtx)
 	return l.UpdateCommentOfUser(in)
 }
 
-func (s *ContributionServer) UpdateReviewOfUser(ctx context.Context, in *contribution_contribution.UpdateReviewOfUserReq) (*contribution_contribution.UpdateReviewOfUserResp, error) {
+func (s *ContributionServer) UpdateReviewOfUser(ctx context.Context, in *contribution.UpdateReviewOfUserReq) (*contribution.UpdateReviewOfUserResp, error) {
 	l := logic.NewUpdateReviewOfUserLogic(ctx, s.svcCtx)
 	return l.UpdateReviewOfUser(in)
 }
 
-func (s *ContributionServer) GetIssuePROfUserUpdatedAt(ctx context.Context, in *contribution_contribution.GetIssuePROfUserUpdatedAtReq) (*contribution_contribution.GetIssuePROfUserUpdatedAtResp, error) {
+func (s *ContributionServer) GetIssuePROfUserUpdatedAt(ctx context.Context, in *contribution.GetIssuePROfUserUpdatedAtReq) (*contribution.GetIssuePROfUserUpdatedAtResp, error) {
 	l := logic.NewGetIssuePROfUserUpdatedAtLogic(ctx, s.svcCtx)
 	return l.GetIssuePROfUserUpdatedAt(in)
 }
 
-func (s *ContributionServer) GetCommentOfUserUpdatedAt(ctx context.Context, in *contribution_contribution.GetCommentOfUserUpdatedAtReq) (*contribution_contribution.GetCommentOfUserUpdatedAtResp, error) {
+func (s *ContributionServer) GetCommentOfUserUpdatedAt(ctx context.Context, in *contribution.GetCommentOfUserUpdatedAtReq) (*contribution.GetCommentOfUserUpdatedAtResp, error) {
 	l := logic.NewGetCommentOfUserUpdatedAtLogic(ctx, s.svcCtx)
 	return l.GetCommentOfUserUpdatedAt(in)
 }
 
-func (s *ContributionServer) GetReviewOfUserUpdatedAt(ctx context.Context, in *contribution_contribution.GetReviewOfUserUpdatedAtReq) (*contribution_contribution.GetReviewOfUserUpdatedAtResp, error) {
+func (s *ContributionServer) GetReviewOfUserUpdatedAt(ctx context.Context, in *contribution.GetReviewOfUserUpdatedAtReq) (*contribution.GetReviewOfUserUpdatedAtResp, error) {
 	l := logic.NewGetReviewOfUserUpdatedAtLogic(ctx, s.svcCtx)
 	return l.GetReviewOfUserUpdatedAt(in)
 }

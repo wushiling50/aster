@@ -23,8 +23,8 @@ func NewSearchByCategoryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *SearchByCategoryLogic) SearchByCategory(in *contribution_contribution.SearchByCategoryReq) (*contribution_contribution.SearchByCategoryResp, error) {
+func (l *SearchByCategoryLogic) SearchByCategory(in *contribution.SearchByCategoryReq) (*contribution.SearchByCategoryResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.SearchByCategoryResp{}, nil
+	return &contribution.SearchByCategoryResp{}, nil
 }

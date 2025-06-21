@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		relation_relation.RegisterRelationServer(grpcServer, server.NewRelationServer(ctx))
+		relation.RegisterRelationServer(grpcServer, server.NewRelationServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

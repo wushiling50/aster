@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package contribution;
 
-option go_package ="github.com/wushiling50/aster/gen/contribution;contribution";
+option go_package ="github.com/wushiling50/aster/gen/contribution";
 
 import "idl/base.proto";
 
@@ -11,7 +11,7 @@ message Contribution {
     int64 dataId = 1; // dataId
     int64 dataCreatedAt = 2; // dataCreatedAt
     int64 dataUpdatedAt = 3; // dataUpdatedAt
-    int64 userId = 4; // userId
+    int64 developerId = 4; // developerId
     int64 repoId = 5; // repoId
     string category = 6; // category
     string content = 7; // content
@@ -21,7 +21,7 @@ message Contribution {
 }
   
 message AddContributionReq {
-    int64 userId = 1; // userId
+    int64 developerId = 1; // developerId
     int64 repoId = 2; // repoId
     string category = 3; // category
     string content = 4; // content
@@ -35,7 +35,7 @@ message AddContributionResp {
 }
   
 message UpdateContributionOfUserReq {
-    int64 userId = 1;
+    int64 developerId = 1;
     string updateAfter = 2;
     int64 searchLimit = 3;
 }
@@ -45,7 +45,7 @@ message UpdateContributionOfUserResp {
 }
   
 message UpdateIssuePROfUserReq {
-    int64 userId = 1;
+    int64 developerId = 1;
     string updateAfter = 2;
     int64 searchLimit = 3;
 }
@@ -55,7 +55,7 @@ message UpdateIssuePROfUserResp {
 }
   
 message UpdateCommentOfUserReq {
-    int64 userId = 1;
+    int64 developerId = 1;
     string updateAfter = 2;
     int64 searchLimit = 3;
 }
@@ -65,7 +65,7 @@ message UpdateCommentOfUserResp {
 }
   
 message UpdateReviewOfUserReq {
-    int64 userId = 1;
+    int64 developerId = 1;
     string updateAfter = 2;
     int64 searchLimit = 3;
 }
@@ -84,12 +84,12 @@ message DelContributionResp {
     base.Base base = 1;
 }
   
-message DelAllContributionInCategoryByUserIdReq {
+message DelAllContributionInCategoryByDeveloperIdReq {
     string category = 1; // category
-    int64 userId = 2; // userId
+    int64 developerId = 2; // developerId
 }
   
-message DelAllContributionInCategoryByUserIdResp {
+message DelAllContributionInCategoryByDeveloperIdResp {
     base.Base base = 1;
 }
   
@@ -115,13 +115,13 @@ message SearchByCategoryResp {
     repeated Contribution contributions = 2; // contributions
 }
   
-message SearchByUserIdReq {
+message SearchByDeveloperIdReq {
     int64 page = 1; // page
     int64 limit = 2; // limit
-    int64 userId = 3; // userId
+    int64 developerId = 3; // developerId
 }
   
-message SearchByUserIdResp {
+message SearchByDeveloperIdResp {
     base.Base base = 1;
     repeated Contribution contributions = 2; // contributions
 }
@@ -138,7 +138,7 @@ message SearchByRepoIdResp {
 }
   
 message GetIssuePROfUserUpdatedAtReq {
-    int64 userId = 1;
+    int64 developerId = 1;
 }
   
 message GetIssuePROfUserUpdatedAtResp {
@@ -147,7 +147,7 @@ message GetIssuePROfUserUpdatedAtResp {
 }
   
 message GetCommentOfUserUpdatedAtReq {
-    int64 userId = 1;
+    int64 developerId = 1;
 }
   
 message GetCommentOfUserUpdatedAtResp {
@@ -156,7 +156,7 @@ message GetCommentOfUserUpdatedAtResp {
 }
   
 message GetReviewOfUserUpdatedAtReq {
-    int64 userId = 1;
+    int64 developerId = 1;
 }
   
 message GetReviewOfUserUpdatedAtResp {
@@ -167,10 +167,10 @@ message GetReviewOfUserUpdatedAtResp {
 service contribution{ 
     rpc AddContribution(AddContributionReq) returns (AddContributionResp);
     rpc DelContribution(DelContributionReq) returns (DelContributionResp);
-    rpc DelAllContributionInCategoryByUserId(DelAllContributionInCategoryByUserIdReq) returns (DelAllContributionInCategoryByUserIdResp);
+    rpc DelAllContributionInCategoryByDeveloperId(DelAllContributionInCategoryByDeveloperIdReq) returns (DelAllContributionInCategoryByDeveloperIdResp);
     rpc GetContribution(GetContributionReq) returns (GetContributionResp);
     rpc SearchByCategory(SearchByCategoryReq) returns (SearchByCategoryResp);
-    rpc SearchByUserId(SearchByUserIdReq) returns (SearchByUserIdResp);
+    rpc SearchByDeveloperId(SearchByDeveloperIdReq) returns (SearchByDeveloperIdResp);
     rpc SearchByRepoId(SearchByRepoIdReq) returns (SearchByRepoIdResp);
     rpc UpdateContributionOfUser(UpdateContributionOfUserReq) returns (UpdateContributionOfUserResp);
     rpc UpdateIssuePROfUser(UpdateIssuePROfUserReq) returns (UpdateIssuePROfUserResp);

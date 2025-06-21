@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package repo;
 
-option go_package ="github.com/wushiling50/aster/gen/repo;repo";
+option go_package ="github.com/wushiling50/aster/gen/repo";
 
 import "idl/base.proto";
 
@@ -12,7 +12,7 @@ message Repo {
     int64 dataCreatedAt = 2; // dataCreatedAt
     int64 dataUpdatedAt = 3; // dataUpdatedAt
     int64 id = 4; // id
-    string name = 5; //n ame
+    string name = 5; // name
     int64 starCount = 6; // starCount
     int64 forkCount = 7; // forkCount
     int64 issueCount = 8; // issueCount

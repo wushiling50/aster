@@ -23,8 +23,8 @@ func NewUpdateRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 	}
 }
 
-func (l *UpdateRepoLogic) UpdateRepo(in *repo_repo.UpdateRepoReq) (*repo_repo.UpdateRepoResp, error) {
+func (l *UpdateRepoLogic) UpdateRepo(in *repo.UpdateRepoReq) (*repo.UpdateRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &repo_repo.UpdateRepoResp{}, nil
+	return &repo.UpdateRepoResp{}, nil
 }

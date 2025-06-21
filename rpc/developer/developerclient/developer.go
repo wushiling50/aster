@@ -2,7 +2,7 @@
 // goctl 1.7.3
 // Source: developer.proto
 
-package developer
+package developerclient
 
 import (
 	"context"
@@ -14,19 +14,19 @@ import (
 )
 
 type (
-	AddDeveloperReq         = developer_developer.AddDeveloperReq
-	AddDeveloperResp        = developer_developer.AddDeveloperResp
-	DelDeveloperByIdReq     = developer_developer.DelDeveloperByIdReq
-	DelDeveloperByIdResp    = developer_developer.DelDeveloperByIdResp
-	DelDeveloperByLoginReq  = developer_developer.DelDeveloperByLoginReq
-	DelDeveloperByLoginResp = developer_developer.DelDeveloperByLoginResp
-	Developer               = developer_developer.Developer
-	GetDeveloperByIdReq     = developer_developer.GetDeveloperByIdReq
-	GetDeveloperByIdResp    = developer_developer.GetDeveloperByIdResp
-	GetDeveloperByLoginReq  = developer_developer.GetDeveloperByLoginReq
-	GetDeveloperByLoginResp = developer_developer.GetDeveloperByLoginResp
-	UpdateDeveloperReq      = developer_developer.UpdateDeveloperReq
-	UpdateDeveloperResp     = developer_developer.UpdateDeveloperResp
+	AddDeveloperReq         = developer.AddDeveloperReq
+	AddDeveloperResp        = developer.AddDeveloperResp
+	DelDeveloperByIdReq     = developer.DelDeveloperByIdReq
+	DelDeveloperByIdResp    = developer.DelDeveloperByIdResp
+	DelDeveloperByLoginReq  = developer.DelDeveloperByLoginReq
+	DelDeveloperByLoginResp = developer.DelDeveloperByLoginResp
+	Developer               = developer.Developer
+	GetDeveloperByIdReq     = developer.GetDeveloperByIdReq
+	GetDeveloperByIdResp    = developer.GetDeveloperByIdResp
+	GetDeveloperByLoginReq  = developer.GetDeveloperByLoginReq
+	GetDeveloperByLoginResp = developer.GetDeveloperByLoginResp
+	UpdateDeveloperReq      = developer.UpdateDeveloperReq
+	UpdateDeveloperResp     = developer.UpdateDeveloperResp
 
 	DeveloperZrpcClient interface {
 		AddDeveloper(ctx context.Context, in *AddDeveloperReq, opts ...grpc.CallOption) (*AddDeveloperResp, error)
@@ -49,31 +49,31 @@ func NewDeveloperZrpcClient(cli zrpc.Client) DeveloperZrpcClient {
 }
 
 func (m *defaultDeveloperZrpcClient) AddDeveloper(ctx context.Context, in *AddDeveloperReq, opts ...grpc.CallOption) (*AddDeveloperResp, error) {
-	client := developer_developer.NewDeveloperClient(m.cli.Conn())
+	client := developer.NewDeveloperClient(m.cli.Conn())
 	return client.AddDeveloper(ctx, in, opts...)
 }
 
 func (m *defaultDeveloperZrpcClient) UpdateDeveloper(ctx context.Context, in *UpdateDeveloperReq, opts ...grpc.CallOption) (*UpdateDeveloperResp, error) {
-	client := developer_developer.NewDeveloperClient(m.cli.Conn())
+	client := developer.NewDeveloperClient(m.cli.Conn())
 	return client.UpdateDeveloper(ctx, in, opts...)
 }
 
 func (m *defaultDeveloperZrpcClient) DelDeveloperById(ctx context.Context, in *DelDeveloperByIdReq, opts ...grpc.CallOption) (*DelDeveloperByIdResp, error) {
-	client := developer_developer.NewDeveloperClient(m.cli.Conn())
+	client := developer.NewDeveloperClient(m.cli.Conn())
 	return client.DelDeveloperById(ctx, in, opts...)
 }
 
 func (m *defaultDeveloperZrpcClient) DelDeveloperByLogin(ctx context.Context, in *DelDeveloperByLoginReq, opts ...grpc.CallOption) (*DelDeveloperByLoginResp, error) {
-	client := developer_developer.NewDeveloperClient(m.cli.Conn())
+	client := developer.NewDeveloperClient(m.cli.Conn())
 	return client.DelDeveloperByLogin(ctx, in, opts...)
 }
 
 func (m *defaultDeveloperZrpcClient) GetDeveloperById(ctx context.Context, in *GetDeveloperByIdReq, opts ...grpc.CallOption) (*GetDeveloperByIdResp, error) {
-	client := developer_developer.NewDeveloperClient(m.cli.Conn())
+	client := developer.NewDeveloperClient(m.cli.Conn())
 	return client.GetDeveloperById(ctx, in, opts...)
 }
 
 func (m *defaultDeveloperZrpcClient) GetDeveloperByLogin(ctx context.Context, in *GetDeveloperByLoginReq, opts ...grpc.CallOption) (*GetDeveloperByLoginResp, error) {
-	client := developer_developer.NewDeveloperClient(m.cli.Conn())
+	client := developer.NewDeveloperClient(m.cli.Conn())
 	return client.GetDeveloperByLogin(ctx, in, opts...)
 }

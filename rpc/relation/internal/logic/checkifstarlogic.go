@@ -23,8 +23,8 @@ func NewCheckIfStarLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Check
 	}
 }
 
-func (l *CheckIfStarLogic) CheckIfStar(in *relation_relation.CheckIfStarReq) (*relation_relation.CheckIfStarResp, error) {
+func (l *CheckIfStarLogic) CheckIfStar(in *relation.CheckIfStarReq) (*relation.CheckIfStarResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.CheckIfStarResp{}, nil
+	return &relation.CheckIfStarResp{}, nil
 }

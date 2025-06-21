@@ -23,8 +23,8 @@ func NewDelCreateRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 	}
 }
 
-func (l *DelCreateRepoLogic) DelCreateRepo(in *relation_relation.DelCreateRepoReq) (*relation_relation.DelCreateRepoResp, error) {
+func (l *DelCreateRepoLogic) DelCreateRepo(in *relation.DelCreateRepoReq) (*relation.DelCreateRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.DelCreateRepoResp{}, nil
+	return &relation.DelCreateRepoResp{}, nil
 }

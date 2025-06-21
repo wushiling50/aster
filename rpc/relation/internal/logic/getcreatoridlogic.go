@@ -23,8 +23,8 @@ func NewGetCreatorIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetC
 	}
 }
 
-func (l *GetCreatorIdLogic) GetCreatorId(in *relation_relation.GetCreatorIdReq) (*relation_relation.GetCreatorIdResp, error) {
+func (l *GetCreatorIdLogic) GetCreatorId(in *relation.GetCreatorIdReq) (*relation.GetCreatorIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.GetCreatorIdResp{}, nil
+	return &relation.GetCreatorIdResp{}, nil
 }

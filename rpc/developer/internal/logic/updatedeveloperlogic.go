@@ -23,8 +23,8 @@ func NewUpdateDeveloperLogic(ctx context.Context, svcCtx *svc.ServiceContext) *U
 	}
 }
 
-func (l *UpdateDeveloperLogic) UpdateDeveloper(in *developer_developer.UpdateDeveloperReq) (*developer_developer.UpdateDeveloperResp, error) {
+func (l *UpdateDeveloperLogic) UpdateDeveloper(in *developer.UpdateDeveloperReq) (*developer.UpdateDeveloperResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &developer_developer.UpdateDeveloperResp{}, nil
+	return &developer.UpdateDeveloperResp{}, nil
 }

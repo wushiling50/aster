@@ -23,8 +23,8 @@ func NewDelAllFollowerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *De
 	}
 }
 
-func (l *DelAllFollowerLogic) DelAllFollower(in *relation_relation.DelAllFollowerReq) (*relation_relation.DelAllFollowerResp, error) {
+func (l *DelAllFollowerLogic) DelAllFollower(in *relation.DelAllFollowerReq) (*relation.DelAllFollowerResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.DelAllFollowerResp{}, nil
+	return &relation.DelAllFollowerResp{}, nil
 }

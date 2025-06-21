@@ -24,8 +24,8 @@ func NewAddCreateRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Add
 }
 
 // -----------------------CreateRepo-----------------------
-func (l *AddCreateRepoLogic) AddCreateRepo(in *relation_relation.AddCreateRepoReq) (*relation_relation.AddCreateRepoResp, error) {
+func (l *AddCreateRepoLogic) AddCreateRepo(in *relation.AddCreateRepoReq) (*relation.AddCreateRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.AddCreateRepoResp{}, nil
+	return &relation.AddCreateRepoResp{}, nil
 }

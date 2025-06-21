@@ -23,8 +23,8 @@ func NewDelRepoByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelRe
 	}
 }
 
-func (l *DelRepoByIdLogic) DelRepoById(in *repo_repo.DelRepoByIdReq) (*repo_repo.DelRepoByIdResp, error) {
+func (l *DelRepoByIdLogic) DelRepoById(in *repo.DelRepoByIdReq) (*repo.DelRepoByIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &repo_repo.DelRepoByIdResp{}, nil
+	return &repo.DelRepoByIdResp{}, nil
 }

@@ -2,7 +2,7 @@
 // goctl 1.7.3
 // Source: contribution.proto
 
-package contribution
+package contributionclient
 
 import (
 	"context"
@@ -14,43 +14,43 @@ import (
 )
 
 type (
-	AddContributionReq                       = contribution_contribution.AddContributionReq
-	AddContributionResp                      = contribution_contribution.AddContributionResp
-	Contribution                             = contribution_contribution.Contribution
-	DelAllContributionInCategoryByUserIdReq  = contribution_contribution.DelAllContributionInCategoryByUserIdReq
-	DelAllContributionInCategoryByUserIdResp = contribution_contribution.DelAllContributionInCategoryByUserIdResp
-	DelContributionReq                       = contribution_contribution.DelContributionReq
-	DelContributionResp                      = contribution_contribution.DelContributionResp
-	GetCommentOfUserUpdatedAtReq             = contribution_contribution.GetCommentOfUserUpdatedAtReq
-	GetCommentOfUserUpdatedAtResp            = contribution_contribution.GetCommentOfUserUpdatedAtResp
-	GetContributionReq                       = contribution_contribution.GetContributionReq
-	GetContributionResp                      = contribution_contribution.GetContributionResp
-	GetIssuePROfUserUpdatedAtReq             = contribution_contribution.GetIssuePROfUserUpdatedAtReq
-	GetIssuePROfUserUpdatedAtResp            = contribution_contribution.GetIssuePROfUserUpdatedAtResp
-	GetReviewOfUserUpdatedAtReq              = contribution_contribution.GetReviewOfUserUpdatedAtReq
-	GetReviewOfUserUpdatedAtResp             = contribution_contribution.GetReviewOfUserUpdatedAtResp
-	SearchByCategoryReq                      = contribution_contribution.SearchByCategoryReq
-	SearchByCategoryResp                     = contribution_contribution.SearchByCategoryResp
-	SearchByRepoIdReq                        = contribution_contribution.SearchByRepoIdReq
-	SearchByRepoIdResp                       = contribution_contribution.SearchByRepoIdResp
-	SearchByUserIdReq                        = contribution_contribution.SearchByUserIdReq
-	SearchByUserIdResp                       = contribution_contribution.SearchByUserIdResp
-	UpdateCommentOfUserReq                   = contribution_contribution.UpdateCommentOfUserReq
-	UpdateCommentOfUserResp                  = contribution_contribution.UpdateCommentOfUserResp
-	UpdateContributionOfUserReq              = contribution_contribution.UpdateContributionOfUserReq
-	UpdateContributionOfUserResp             = contribution_contribution.UpdateContributionOfUserResp
-	UpdateIssuePROfUserReq                   = contribution_contribution.UpdateIssuePROfUserReq
-	UpdateIssuePROfUserResp                  = contribution_contribution.UpdateIssuePROfUserResp
-	UpdateReviewOfUserReq                    = contribution_contribution.UpdateReviewOfUserReq
-	UpdateReviewOfUserResp                   = contribution_contribution.UpdateReviewOfUserResp
+	AddContributionReq                            = contribution.AddContributionReq
+	AddContributionResp                           = contribution.AddContributionResp
+	Contribution                                  = contribution.Contribution
+	DelAllContributionInCategoryByDeveloperIdReq  = contribution.DelAllContributionInCategoryByDeveloperIdReq
+	DelAllContributionInCategoryByDeveloperIdResp = contribution.DelAllContributionInCategoryByDeveloperIdResp
+	DelContributionReq                            = contribution.DelContributionReq
+	DelContributionResp                           = contribution.DelContributionResp
+	GetCommentOfUserUpdatedAtReq                  = contribution.GetCommentOfUserUpdatedAtReq
+	GetCommentOfUserUpdatedAtResp                 = contribution.GetCommentOfUserUpdatedAtResp
+	GetContributionReq                            = contribution.GetContributionReq
+	GetContributionResp                           = contribution.GetContributionResp
+	GetIssuePROfUserUpdatedAtReq                  = contribution.GetIssuePROfUserUpdatedAtReq
+	GetIssuePROfUserUpdatedAtResp                 = contribution.GetIssuePROfUserUpdatedAtResp
+	GetReviewOfUserUpdatedAtReq                   = contribution.GetReviewOfUserUpdatedAtReq
+	GetReviewOfUserUpdatedAtResp                  = contribution.GetReviewOfUserUpdatedAtResp
+	SearchByCategoryReq                           = contribution.SearchByCategoryReq
+	SearchByCategoryResp                          = contribution.SearchByCategoryResp
+	SearchByDeveloperIdReq                        = contribution.SearchByDeveloperIdReq
+	SearchByDeveloperIdResp                       = contribution.SearchByDeveloperIdResp
+	SearchByRepoIdReq                             = contribution.SearchByRepoIdReq
+	SearchByRepoIdResp                            = contribution.SearchByRepoIdResp
+	UpdateCommentOfUserReq                        = contribution.UpdateCommentOfUserReq
+	UpdateCommentOfUserResp                       = contribution.UpdateCommentOfUserResp
+	UpdateContributionOfUserReq                   = contribution.UpdateContributionOfUserReq
+	UpdateContributionOfUserResp                  = contribution.UpdateContributionOfUserResp
+	UpdateIssuePROfUserReq                        = contribution.UpdateIssuePROfUserReq
+	UpdateIssuePROfUserResp                       = contribution.UpdateIssuePROfUserResp
+	UpdateReviewOfUserReq                         = contribution.UpdateReviewOfUserReq
+	UpdateReviewOfUserResp                        = contribution.UpdateReviewOfUserResp
 
 	ContributionZrpcClient interface {
 		AddContribution(ctx context.Context, in *AddContributionReq, opts ...grpc.CallOption) (*AddContributionResp, error)
 		DelContribution(ctx context.Context, in *DelContributionReq, opts ...grpc.CallOption) (*DelContributionResp, error)
-		DelAllContributionInCategoryByUserId(ctx context.Context, in *DelAllContributionInCategoryByUserIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByUserIdResp, error)
+		DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *DelAllContributionInCategoryByDeveloperIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByDeveloperIdResp, error)
 		GetContribution(ctx context.Context, in *GetContributionReq, opts ...grpc.CallOption) (*GetContributionResp, error)
 		SearchByCategory(ctx context.Context, in *SearchByCategoryReq, opts ...grpc.CallOption) (*SearchByCategoryResp, error)
-		SearchByUserId(ctx context.Context, in *SearchByUserIdReq, opts ...grpc.CallOption) (*SearchByUserIdResp, error)
+		SearchByDeveloperId(ctx context.Context, in *SearchByDeveloperIdReq, opts ...grpc.CallOption) (*SearchByDeveloperIdResp, error)
 		SearchByRepoId(ctx context.Context, in *SearchByRepoIdReq, opts ...grpc.CallOption) (*SearchByRepoIdResp, error)
 		UpdateContributionOfUser(ctx context.Context, in *UpdateContributionOfUserReq, opts ...grpc.CallOption) (*UpdateContributionOfUserResp, error)
 		UpdateIssuePROfUser(ctx context.Context, in *UpdateIssuePROfUserReq, opts ...grpc.CallOption) (*UpdateIssuePROfUserResp, error)
@@ -73,71 +73,71 @@ func NewContributionZrpcClient(cli zrpc.Client) ContributionZrpcClient {
 }
 
 func (m *defaultContributionZrpcClient) AddContribution(ctx context.Context, in *AddContributionReq, opts ...grpc.CallOption) (*AddContributionResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.AddContribution(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) DelContribution(ctx context.Context, in *DelContributionReq, opts ...grpc.CallOption) (*DelContributionResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.DelContribution(ctx, in, opts...)
 }
 
-func (m *defaultContributionZrpcClient) DelAllContributionInCategoryByUserId(ctx context.Context, in *DelAllContributionInCategoryByUserIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByUserIdResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
-	return client.DelAllContributionInCategoryByUserId(ctx, in, opts...)
+func (m *defaultContributionZrpcClient) DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *DelAllContributionInCategoryByDeveloperIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByDeveloperIdResp, error) {
+	client := contribution.NewContributionClient(m.cli.Conn())
+	return client.DelAllContributionInCategoryByDeveloperId(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) GetContribution(ctx context.Context, in *GetContributionReq, opts ...grpc.CallOption) (*GetContributionResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.GetContribution(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) SearchByCategory(ctx context.Context, in *SearchByCategoryReq, opts ...grpc.CallOption) (*SearchByCategoryResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.SearchByCategory(ctx, in, opts...)
 }
 
-func (m *defaultContributionZrpcClient) SearchByUserId(ctx context.Context, in *SearchByUserIdReq, opts ...grpc.CallOption) (*SearchByUserIdResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
-	return client.SearchByUserId(ctx, in, opts...)
+func (m *defaultContributionZrpcClient) SearchByDeveloperId(ctx context.Context, in *SearchByDeveloperIdReq, opts ...grpc.CallOption) (*SearchByDeveloperIdResp, error) {
+	client := contribution.NewContributionClient(m.cli.Conn())
+	return client.SearchByDeveloperId(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) SearchByRepoId(ctx context.Context, in *SearchByRepoIdReq, opts ...grpc.CallOption) (*SearchByRepoIdResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.SearchByRepoId(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) UpdateContributionOfUser(ctx context.Context, in *UpdateContributionOfUserReq, opts ...grpc.CallOption) (*UpdateContributionOfUserResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.UpdateContributionOfUser(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) UpdateIssuePROfUser(ctx context.Context, in *UpdateIssuePROfUserReq, opts ...grpc.CallOption) (*UpdateIssuePROfUserResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.UpdateIssuePROfUser(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) UpdateCommentOfUser(ctx context.Context, in *UpdateCommentOfUserReq, opts ...grpc.CallOption) (*UpdateCommentOfUserResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.UpdateCommentOfUser(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) UpdateReviewOfUser(ctx context.Context, in *UpdateReviewOfUserReq, opts ...grpc.CallOption) (*UpdateReviewOfUserResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.UpdateReviewOfUser(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) GetIssuePROfUserUpdatedAt(ctx context.Context, in *GetIssuePROfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetIssuePROfUserUpdatedAtResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.GetIssuePROfUserUpdatedAt(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) GetCommentOfUserUpdatedAt(ctx context.Context, in *GetCommentOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetCommentOfUserUpdatedAtResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.GetCommentOfUserUpdatedAt(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) GetReviewOfUserUpdatedAt(ctx context.Context, in *GetReviewOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetReviewOfUserUpdatedAtResp, error) {
-	client := contribution_contribution.NewContributionClient(m.cli.Conn())
+	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.GetReviewOfUserUpdatedAt(ctx, in, opts...)
 }

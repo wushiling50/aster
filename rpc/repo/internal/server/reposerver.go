@@ -14,7 +14,7 @@ import (
 
 type RepoServer struct {
 	svcCtx *svc.ServiceContext
-	repo_repo.UnimplementedRepoServer
+	repo.UnimplementedRepoServer
 }
 
 func NewRepoServer(svcCtx *svc.ServiceContext) *RepoServer {
@@ -23,22 +23,22 @@ func NewRepoServer(svcCtx *svc.ServiceContext) *RepoServer {
 	}
 }
 
-func (s *RepoServer) AddRepo(ctx context.Context, in *repo_repo.AddRepoReq) (*repo_repo.AddRepoResp, error) {
+func (s *RepoServer) AddRepo(ctx context.Context, in *repo.AddRepoReq) (*repo.AddRepoResp, error) {
 	l := logic.NewAddRepoLogic(ctx, s.svcCtx)
 	return l.AddRepo(in)
 }
 
-func (s *RepoServer) UpdateRepo(ctx context.Context, in *repo_repo.UpdateRepoReq) (*repo_repo.UpdateRepoResp, error) {
+func (s *RepoServer) UpdateRepo(ctx context.Context, in *repo.UpdateRepoReq) (*repo.UpdateRepoResp, error) {
 	l := logic.NewUpdateRepoLogic(ctx, s.svcCtx)
 	return l.UpdateRepo(in)
 }
 
-func (s *RepoServer) DelRepoById(ctx context.Context, in *repo_repo.DelRepoByIdReq) (*repo_repo.DelRepoByIdResp, error) {
+func (s *RepoServer) DelRepoById(ctx context.Context, in *repo.DelRepoByIdReq) (*repo.DelRepoByIdResp, error) {
 	l := logic.NewDelRepoByIdLogic(ctx, s.svcCtx)
 	return l.DelRepoById(in)
 }
 
-func (s *RepoServer) GetRepoById(ctx context.Context, in *repo_repo.GetRepoByIdReq) (*repo_repo.GetRepoByIdResp, error) {
+func (s *RepoServer) GetRepoById(ctx context.Context, in *repo.GetRepoByIdReq) (*repo.GetRepoByIdResp, error) {
 	l := logic.NewGetRepoByIdLogic(ctx, s.svcCtx)
 	return l.GetRepoById(in)
 }

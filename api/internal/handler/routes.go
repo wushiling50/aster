@@ -63,7 +63,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: developer.GetSummaryHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/api/v1/developers"),
+		rest.WithPrefix("/api/v1/developer"),
 	)
 
 	server.AddRoutes(

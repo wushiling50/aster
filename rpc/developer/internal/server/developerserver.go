@@ -14,7 +14,7 @@ import (
 
 type DeveloperServer struct {
 	svcCtx *svc.ServiceContext
-	developer_developer.UnimplementedDeveloperServer
+	developer.UnimplementedDeveloperServer
 }
 
 func NewDeveloperServer(svcCtx *svc.ServiceContext) *DeveloperServer {
@@ -23,32 +23,32 @@ func NewDeveloperServer(svcCtx *svc.ServiceContext) *DeveloperServer {
 	}
 }
 
-func (s *DeveloperServer) AddDeveloper(ctx context.Context, in *developer_developer.AddDeveloperReq) (*developer_developer.AddDeveloperResp, error) {
+func (s *DeveloperServer) AddDeveloper(ctx context.Context, in *developer.AddDeveloperReq) (*developer.AddDeveloperResp, error) {
 	l := logic.NewAddDeveloperLogic(ctx, s.svcCtx)
 	return l.AddDeveloper(in)
 }
 
-func (s *DeveloperServer) UpdateDeveloper(ctx context.Context, in *developer_developer.UpdateDeveloperReq) (*developer_developer.UpdateDeveloperResp, error) {
+func (s *DeveloperServer) UpdateDeveloper(ctx context.Context, in *developer.UpdateDeveloperReq) (*developer.UpdateDeveloperResp, error) {
 	l := logic.NewUpdateDeveloperLogic(ctx, s.svcCtx)
 	return l.UpdateDeveloper(in)
 }
 
-func (s *DeveloperServer) DelDeveloperById(ctx context.Context, in *developer_developer.DelDeveloperByIdReq) (*developer_developer.DelDeveloperByIdResp, error) {
+func (s *DeveloperServer) DelDeveloperById(ctx context.Context, in *developer.DelDeveloperByIdReq) (*developer.DelDeveloperByIdResp, error) {
 	l := logic.NewDelDeveloperByIdLogic(ctx, s.svcCtx)
 	return l.DelDeveloperById(in)
 }
 
-func (s *DeveloperServer) DelDeveloperByLogin(ctx context.Context, in *developer_developer.DelDeveloperByLoginReq) (*developer_developer.DelDeveloperByLoginResp, error) {
+func (s *DeveloperServer) DelDeveloperByLogin(ctx context.Context, in *developer.DelDeveloperByLoginReq) (*developer.DelDeveloperByLoginResp, error) {
 	l := logic.NewDelDeveloperByLoginLogic(ctx, s.svcCtx)
 	return l.DelDeveloperByLogin(in)
 }
 
-func (s *DeveloperServer) GetDeveloperById(ctx context.Context, in *developer_developer.GetDeveloperByIdReq) (*developer_developer.GetDeveloperByIdResp, error) {
+func (s *DeveloperServer) GetDeveloperById(ctx context.Context, in *developer.GetDeveloperByIdReq) (*developer.GetDeveloperByIdResp, error) {
 	l := logic.NewGetDeveloperByIdLogic(ctx, s.svcCtx)
 	return l.GetDeveloperById(in)
 }
 
-func (s *DeveloperServer) GetDeveloperByLogin(ctx context.Context, in *developer_developer.GetDeveloperByLoginReq) (*developer_developer.GetDeveloperByLoginResp, error) {
+func (s *DeveloperServer) GetDeveloperByLogin(ctx context.Context, in *developer.GetDeveloperByLoginReq) (*developer.GetDeveloperByLoginResp, error) {
 	l := logic.NewGetDeveloperByLoginLogic(ctx, s.svcCtx)
 	return l.GetDeveloperByLogin(in)
 }

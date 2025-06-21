@@ -23,8 +23,8 @@ func NewDelDeveloperByLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
-func (l *DelDeveloperByLoginLogic) DelDeveloperByLogin(in *developer_developer.DelDeveloperByLoginReq) (*developer_developer.DelDeveloperByLoginResp, error) {
+func (l *DelDeveloperByLoginLogic) DelDeveloperByLogin(in *developer.DelDeveloperByLoginReq) (*developer.DelDeveloperByLoginResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &developer_developer.DelDeveloperByLoginResp{}, nil
+	return &developer.DelDeveloperByLoginResp{}, nil
 }

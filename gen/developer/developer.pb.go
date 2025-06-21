@@ -27,26 +27,26 @@ type Developer struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DataId          int64  `protobuf:"varint,1,opt,name=dataId,proto3" json:"dataId,omitempty"`                   //Generated primary key, MUST NOT be changed.
-	DataCreatedAt   int64  `protobuf:"varint,2,opt,name=dataCreatedAt,proto3" json:"dataCreatedAt,omitempty"`     //dataCreatedAt
-	DataUpdatedAt   int64  `protobuf:"varint,3,opt,name=dataUpdatedAt,proto3" json:"dataUpdatedAt,omitempty"`     //dataUpdatedAt
-	Id              int64  `protobuf:"varint,4,opt,name=id,proto3" json:"id,omitempty"`                           //Unique id of GitHub user.
-	Name            string `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`                        //name
-	Login           string `protobuf:"bytes,6,opt,name=login,proto3" json:"login,omitempty"`                      //login
-	AvatarUrl       string `protobuf:"bytes,7,opt,name=avatarUrl,proto3" json:"avatarUrl,omitempty"`              //avatarUrl
-	Company         string `protobuf:"bytes,8,opt,name=company,proto3" json:"company,omitempty"`                  //company
-	Location        string `protobuf:"bytes,9,opt,name=location,proto3" json:"location,omitempty"`                //location
-	Bio             string `protobuf:"bytes,10,opt,name=bio,proto3" json:"bio,omitempty"`                         //bio
-	Blog            string `protobuf:"bytes,11,opt,name=blog,proto3" json:"blog,omitempty"`                       //blog
-	Email           string `protobuf:"bytes,12,opt,name=email,proto3" json:"email,omitempty"`                     //email
-	TwitterUsername string `protobuf:"bytes,13,opt,name=twitterUsername,proto3" json:"twitterUsername,omitempty"` //twitterUsername
-	Repos           int64  `protobuf:"varint,14,opt,name=repos,proto3" json:"repos,omitempty"`                    //repo_count
-	Following       int64  `protobuf:"varint,15,opt,name=following,proto3" json:"following,omitempty"`            //following_count
-	Followers       int64  `protobuf:"varint,16,opt,name=followers,proto3" json:"followers,omitempty"`            //followers_count
-	Stars           int64  `protobuf:"varint,17,opt,name=stars,proto3" json:"stars,omitempty"`                    //star_count
-	Gists           int64  `protobuf:"varint,18,opt,name=gists,proto3" json:"gists,omitempty"`                    //gists_count
-	CreatedAt       int64  `protobuf:"varint,19,opt,name=createdAt,proto3" json:"createdAt,omitempty"`            //createdAt
-	UpdatedAt       int64  `protobuf:"varint,20,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`            //updatedAt
+	DataId          int64  `protobuf:"varint,1,opt,name=dataId,proto3" json:"dataId,omitempty"`                   // Generated primary key, MUST NOT be changed.
+	DataCreatedAt   int64  `protobuf:"varint,2,opt,name=dataCreatedAt,proto3" json:"dataCreatedAt,omitempty"`     // dataCreatedAt
+	DataUpdatedAt   int64  `protobuf:"varint,3,opt,name=dataUpdatedAt,proto3" json:"dataUpdatedAt,omitempty"`     // dataUpdatedAt
+	Id              int64  `protobuf:"varint,4,opt,name=id,proto3" json:"id,omitempty"`                           // Unique id of GitHub user.
+	Name            string `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`                        // name
+	Login           string `protobuf:"bytes,6,opt,name=login,proto3" json:"login,omitempty"`                      // login
+	AvatarUrl       string `protobuf:"bytes,7,opt,name=avatarUrl,proto3" json:"avatarUrl,omitempty"`              // avatarUrl
+	Company         string `protobuf:"bytes,8,opt,name=company,proto3" json:"company,omitempty"`                  // company
+	Location        string `protobuf:"bytes,9,opt,name=location,proto3" json:"location,omitempty"`                // location
+	Bio             string `protobuf:"bytes,10,opt,name=bio,proto3" json:"bio,omitempty"`                         // bio
+	Blog            string `protobuf:"bytes,11,opt,name=blog,proto3" json:"blog,omitempty"`                       // blog
+	Email           string `protobuf:"bytes,12,opt,name=email,proto3" json:"email,omitempty"`                     // email
+	TwitterUsername string `protobuf:"bytes,13,opt,name=twitterUsername,proto3" json:"twitterUsername,omitempty"` // twitterUsername
+	Repos           int64  `protobuf:"varint,14,opt,name=repos,proto3" json:"repos,omitempty"`                    // repo_count
+	Following       int64  `protobuf:"varint,15,opt,name=following,proto3" json:"following,omitempty"`            // following_count
+	Followers       int64  `protobuf:"varint,16,opt,name=followers,proto3" json:"followers,omitempty"`            // followers_count
+	Stars           int64  `protobuf:"varint,17,opt,name=stars,proto3" json:"stars,omitempty"`                    // star_count
+	Gists           int64  `protobuf:"varint,18,opt,name=gists,proto3" json:"gists,omitempty"`                    // gists_count
+	CreatedAt       int64  `protobuf:"varint,19,opt,name=createdAt,proto3" json:"createdAt,omitempty"`            // createdAt
+	UpdatedAt       int64  `protobuf:"varint,20,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`            // updatedAt
 }
 
 func (x *Developer) Reset() {
@@ -226,23 +226,23 @@ type AddDeveloperReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id              int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                           //Unique id of GitHub user.
-	Name            string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                        //name
-	Login           string `protobuf:"bytes,3,opt,name=login,proto3" json:"login,omitempty"`                      //login
-	AvatarUrl       string `protobuf:"bytes,4,opt,name=avatarUrl,proto3" json:"avatarUrl,omitempty"`              //avatarUrl
-	Company         string `protobuf:"bytes,5,opt,name=company,proto3" json:"company,omitempty"`                  //company
-	Location        string `protobuf:"bytes,6,opt,name=location,proto3" json:"location,omitempty"`                //location
-	Bio             string `protobuf:"bytes,7,opt,name=bio,proto3" json:"bio,omitempty"`                          //bio
-	Blog            string `protobuf:"bytes,8,opt,name=blog,proto3" json:"blog,omitempty"`                        //blog
-	Email           string `protobuf:"bytes,9,opt,name=email,proto3" json:"email,omitempty"`                      //email
-	TwitterUsername string `protobuf:"bytes,10,opt,name=twitterUsername,proto3" json:"twitterUsername,omitempty"` //twitterUsername
-	Repos           int64  `protobuf:"varint,11,opt,name=repos,proto3" json:"repos,omitempty"`                    //repo_count
-	Following       int64  `protobuf:"varint,12,opt,name=following,proto3" json:"following,omitempty"`            //following_count
-	Followers       int64  `protobuf:"varint,13,opt,name=followers,proto3" json:"followers,omitempty"`            //followers_count
-	Stars           int64  `protobuf:"varint,14,opt,name=stars,proto3" json:"stars,omitempty"`                    //star_count
-	Gists           int64  `protobuf:"varint,15,opt,name=gists,proto3" json:"gists,omitempty"`                    //gists_c
-	CreatedAt       int64  `protobuf:"varint,16,opt,name=createdAt,proto3" json:"createdAt,omitempty"`            //createdAt
-	UpdatedAt       int64  `protobuf:"varint,17,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`            //updatedAt
+	Id              int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                           // Unique id of GitHub user.
+	Name            string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                        // name
+	Login           string `protobuf:"bytes,3,opt,name=login,proto3" json:"login,omitempty"`                      // login
+	AvatarUrl       string `protobuf:"bytes,4,opt,name=avatarUrl,proto3" json:"avatarUrl,omitempty"`              // avatarUrl
+	Company         string `protobuf:"bytes,5,opt,name=company,proto3" json:"company,omitempty"`                  // company
+	Location        string `protobuf:"bytes,6,opt,name=location,proto3" json:"location,omitempty"`                // location
+	Bio             string `protobuf:"bytes,7,opt,name=bio,proto3" json:"bio,omitempty"`                          // bio
+	Blog            string `protobuf:"bytes,8,opt,name=blog,proto3" json:"blog,omitempty"`                        // blog
+	Email           string `protobuf:"bytes,9,opt,name=email,proto3" json:"email,omitempty"`                      // email
+	TwitterUsername string `protobuf:"bytes,10,opt,name=twitterUsername,proto3" json:"twitterUsername,omitempty"` // twitterUsername
+	Repos           int64  `protobuf:"varint,11,opt,name=repos,proto3" json:"repos,omitempty"`                    // repo_count
+	Following       int64  `protobuf:"varint,12,opt,name=following,proto3" json:"following,omitempty"`            // following_count
+	Followers       int64  `protobuf:"varint,13,opt,name=followers,proto3" json:"followers,omitempty"`            // followers_count
+	Stars           int64  `protobuf:"varint,14,opt,name=stars,proto3" json:"stars,omitempty"`                    // star_count
+	Gists           int64  `protobuf:"varint,15,opt,name=gists,proto3" json:"gists,omitempty"`                    // gists_c
+	CreatedAt       int64  `protobuf:"varint,16,opt,name=createdAt,proto3" json:"createdAt,omitempty"`            // createdAt
+	UpdatedAt       int64  `protobuf:"varint,17,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`            // updatedAt
 }
 
 func (x *AddDeveloperReq) Reset() {
@@ -542,7 +542,7 @@ type DelDeveloperByIdReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //id
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // id
 }
 
 func (x *DelDeveloperByIdReq) Reset() {
@@ -636,7 +636,7 @@ type DelDeveloperByLoginReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Login string `protobuf:"bytes,1,opt,name=login,proto3" json:"login,omitempty"` //login
+	Login string `protobuf:"bytes,1,opt,name=login,proto3" json:"login,omitempty"` // login
 }
 
 func (x *DelDeveloperByLoginReq) Reset() {
@@ -730,7 +730,7 @@ type GetDeveloperByIdReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //id
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // id
 }
 
 func (x *GetDeveloperByIdReq) Reset() {
@@ -778,7 +778,7 @@ type GetDeveloperByIdResp struct {
 	unknownFields protoimpl.UnknownFields
 
 	Base      *base.Base `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Developer *Developer `protobuf:"bytes,2,opt,name=developer,proto3" json:"developer,omitempty"` //developer
+	Developer *Developer `protobuf:"bytes,2,opt,name=developer,proto3" json:"developer,omitempty"` // developer
 }
 
 func (x *GetDeveloperByIdResp) Reset() {
@@ -880,7 +880,7 @@ type GetDeveloperByLoginResp struct {
 	unknownFields protoimpl.UnknownFields
 
 	Base      *base.Base `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Developer *Developer `protobuf:"bytes,2,opt,name=developer,proto3" json:"developer,omitempty"` //developer
+	Developer *Developer `protobuf:"bytes,2,opt,name=developer,proto3" json:"developer,omitempty"` // developer
 }
 
 func (x *GetDeveloperByLoginResp) Reset() {
@@ -1070,11 +1070,11 @@ var file_idl_developer_proto_rawDesc = []byte{
 	0x70, 0x65, 0x72, 0x2e, 0x47, 0x65, 0x74, 0x44, 0x65, 0x76, 0x65, 0x6c, 0x6f, 0x70, 0x65, 0x72,
 	0x42, 0x79, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x1a, 0x22, 0x2e, 0x64, 0x65, 0x76,
 	0x65, 0x6c, 0x6f, 0x70, 0x65, 0x72, 0x2e, 0x47, 0x65, 0x74, 0x44, 0x65, 0x76, 0x65, 0x6c, 0x6f,
-	0x70, 0x65, 0x72, 0x42, 0x79, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x42, 0x36,
-	0x5a, 0x34, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x77, 0x75, 0x73,
+	0x70, 0x65, 0x72, 0x42, 0x79, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x42, 0x2c,
+	0x5a, 0x2a, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x77, 0x75, 0x73,
 	0x68, 0x69, 0x6c, 0x69, 0x6e, 0x67, 0x35, 0x30, 0x2f, 0x61, 0x73, 0x74, 0x65, 0x72, 0x2f, 0x67,
-	0x65, 0x6e, 0x2f, 0x64, 0x65, 0x76, 0x65, 0x6c, 0x6f, 0x70, 0x65, 0x72, 0x3b, 0x64, 0x65, 0x76,
-	0x65, 0x6c, 0x6f, 0x70, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x6e, 0x2f, 0x64, 0x65, 0x76, 0x65, 0x6c, 0x6f, 0x70, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

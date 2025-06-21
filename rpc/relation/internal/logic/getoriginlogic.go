@@ -23,8 +23,8 @@ func NewGetOriginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetOrig
 	}
 }
 
-func (l *GetOriginLogic) GetOrigin(in *relation_relation.GetOriginReq) (*relation_relation.GetOriginResp, error) {
+func (l *GetOriginLogic) GetOrigin(in *relation.GetOriginReq) (*relation.GetOriginResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.GetOriginResp{}, nil
+	return &relation.GetOriginResp{}, nil
 }

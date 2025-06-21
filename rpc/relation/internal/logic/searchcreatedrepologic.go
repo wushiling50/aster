@@ -23,8 +23,8 @@ func NewSearchCreatedRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-func (l *SearchCreatedRepoLogic) SearchCreatedRepo(in *relation_relation.SearchCreatedRepoReq) (*relation_relation.SearchCreatedRepoResp, error) {
+func (l *SearchCreatedRepoLogic) SearchCreatedRepo(in *relation.SearchCreatedRepoReq) (*relation.SearchCreatedRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.SearchCreatedRepoResp{}, nil
+	return &relation.SearchCreatedRepoResp{}, nil
 }

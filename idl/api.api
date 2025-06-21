@@ -163,7 +163,7 @@ type GetSummaryResp {
 }
 
 @server (
-	prefix: /api/v1/developers
+	prefix: /api/v1/developer
 	group:  developer
 )
 service Applet {

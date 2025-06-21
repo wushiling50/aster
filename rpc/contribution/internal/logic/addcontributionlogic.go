@@ -23,8 +23,8 @@ func NewAddContributionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *A
 	}
 }
 
-func (l *AddContributionLogic) AddContribution(in *contribution_contribution.AddContributionReq) (*contribution_contribution.AddContributionResp, error) {
+func (l *AddContributionLogic) AddContribution(in *contribution.AddContributionReq) (*contribution.AddContributionResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.AddContributionResp{}, nil
+	return &contribution.AddContributionResp{}, nil
 }

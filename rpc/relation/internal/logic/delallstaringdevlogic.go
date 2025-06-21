@@ -23,8 +23,8 @@ func NewDelAllStaringDevLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *DelAllStaringDevLogic) DelAllStaringDev(in *relation_relation.DelAllStaringDevReq) (*relation_relation.DelAllStaringDevResp, error) {
+func (l *DelAllStaringDevLogic) DelAllStaringDev(in *relation.DelAllStaringDevReq) (*relation.DelAllStaringDevResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.DelAllStaringDevResp{}, nil
+	return &relation.DelAllStaringDevResp{}, nil
 }

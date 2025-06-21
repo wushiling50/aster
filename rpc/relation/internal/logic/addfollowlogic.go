@@ -24,8 +24,8 @@ func NewAddFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddFoll
 }
 
 // -----------------------Follow-----------------------
-func (l *AddFollowLogic) AddFollow(in *relation_relation.AddFollowReq) (*relation_relation.AddFollowResp, error) {
+func (l *AddFollowLogic) AddFollow(in *relation.AddFollowReq) (*relation.AddFollowResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.AddFollowResp{}, nil
+	return &relation.AddFollowResp{}, nil
 }

@@ -23,8 +23,8 @@ func NewUpdateStarredRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-func (l *UpdateStarredRepoLogic) UpdateStarredRepo(in *relation_relation.UpdateStarredRepoReq) (*relation_relation.UpdateStarredRepoResp, error) {
+func (l *UpdateStarredRepoLogic) UpdateStarredRepo(in *relation.UpdateStarredRepoReq) (*relation.UpdateStarredRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.UpdateStarredRepoResp{}, nil
+	return &relation.UpdateStarredRepoResp{}, nil
 }

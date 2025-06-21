@@ -23,8 +23,8 @@ func NewAddRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddRepoLo
 	}
 }
 
-func (l *AddRepoLogic) AddRepo(in *repo_repo.AddRepoReq) (*repo_repo.AddRepoResp, error) {
+func (l *AddRepoLogic) AddRepo(in *repo.AddRepoReq) (*repo.AddRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &repo_repo.AddRepoResp{}, nil
+	return &repo.AddRepoResp{}, nil
 }

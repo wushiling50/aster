@@ -23,8 +23,8 @@ func NewCheckIfFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Che
 	}
 }
 
-func (l *CheckIfFollowLogic) CheckIfFollow(in *relation_relation.CheckIfFollowReq) (*relation_relation.CheckFollowResp, error) {
+func (l *CheckIfFollowLogic) CheckIfFollow(in *relation.CheckIfFollowReq) (*relation.CheckFollowResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.CheckFollowResp{}, nil
+	return &relation.CheckFollowResp{}, nil
 }

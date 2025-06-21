@@ -23,8 +23,8 @@ func NewGetReviewOfUserUpdatedAtLogic(ctx context.Context, svcCtx *svc.ServiceCo
 	}
 }
 
-func (l *GetReviewOfUserUpdatedAtLogic) GetReviewOfUserUpdatedAt(in *contribution_contribution.GetReviewOfUserUpdatedAtReq) (*contribution_contribution.GetReviewOfUserUpdatedAtResp, error) {
+func (l *GetReviewOfUserUpdatedAtLogic) GetReviewOfUserUpdatedAt(in *contribution.GetReviewOfUserUpdatedAtReq) (*contribution.GetReviewOfUserUpdatedAtResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.GetReviewOfUserUpdatedAtResp{}, nil
+	return &contribution.GetReviewOfUserUpdatedAtResp{}, nil
 }

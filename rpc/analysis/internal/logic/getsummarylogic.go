@@ -23,8 +23,8 @@ func NewGetSummaryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetSum
 	}
 }
 
-func (l *GetSummaryLogic) GetSummary(in *analysis_analysis.GetAnalysisReq) (*analysis_analysis.GetSummaryResp, error) {
+func (l *GetSummaryLogic) GetSummary(in *analysis.GetAnalysisReq) (*analysis.GetSummaryResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &analysis_analysis.GetSummaryResp{}, nil
+	return &analysis.GetSummaryResp{}, nil
 }

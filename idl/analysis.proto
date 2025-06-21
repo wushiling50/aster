@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package analysis;
 
-option go_package ="github.com/wushiling50/aster/gen/analysis;analysis";
+option go_package ="github.com/wushiling50/aster/gen/analysis";
 
 import "idl/base.proto";
 

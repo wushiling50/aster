@@ -23,8 +23,8 @@ func NewGetForkUpdatedAtLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *GetForkUpdatedAtLogic) GetForkUpdatedAt(in *relation_relation.GetForkUpdatedAtReq) (*relation_relation.GetForkUpdatedAtResp, error) {
+func (l *GetForkUpdatedAtLogic) GetForkUpdatedAt(in *relation.GetForkUpdatedAtReq) (*relation.GetForkUpdatedAtResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.GetForkUpdatedAtResp{}, nil
+	return &relation.GetForkUpdatedAtResp{}, nil
 }

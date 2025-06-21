@@ -24,8 +24,8 @@ func NewAddStarLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddStarLo
 }
 
 // -----------------------Star-----------------------
-func (l *AddStarLogic) AddStar(in *relation_relation.AddStarReq) (*relation_relation.AddStarResp, error) {
+func (l *AddStarLogic) AddStar(in *relation.AddStarReq) (*relation.AddStarResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.AddStarResp{}, nil
+	return &relation.AddStarResp{}, nil
 }

@@ -23,8 +23,8 @@ func NewGetCommentOfUserUpdatedAtLogic(ctx context.Context, svcCtx *svc.ServiceC
 	}
 }
 
-func (l *GetCommentOfUserUpdatedAtLogic) GetCommentOfUserUpdatedAt(in *contribution_contribution.GetCommentOfUserUpdatedAtReq) (*contribution_contribution.GetCommentOfUserUpdatedAtResp, error) {
+func (l *GetCommentOfUserUpdatedAtLogic) GetCommentOfUserUpdatedAt(in *contribution.GetCommentOfUserUpdatedAtReq) (*contribution.GetCommentOfUserUpdatedAtResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.GetCommentOfUserUpdatedAtResp{}, nil
+	return &contribution.GetCommentOfUserUpdatedAtResp{}, nil
 }

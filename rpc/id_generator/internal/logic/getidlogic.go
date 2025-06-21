@@ -23,8 +23,8 @@ func NewGetIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetIdLogic 
 	}
 }
 
-func (l *GetIdLogic) GetId(in *id_generator_id_generator.GetIdReq) (*id_generator_id_generator.GetIdResp, error) {
+func (l *GetIdLogic) GetId(in *id_generator.GetIdReq) (*id_generator.GetIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &id_generator_id_generator.GetIdResp{}, nil
+	return &id_generator.GetIdResp{}, nil
 }

@@ -23,9 +23,8 @@ func NewAddDeveloperLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddD
 	}
 }
 
-// -----------------------developer-----------------------
-func (l *AddDeveloperLogic) AddDeveloper(in *developer_developer.AddDeveloperReq) (*developer_developer.AddDeveloperResp, error) {
+func (l *AddDeveloperLogic) AddDeveloper(in *developer.AddDeveloperReq) (*developer.AddDeveloperResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &developer_developer.AddDeveloperResp{}, nil
+	return &developer.AddDeveloperResp{}, nil
 }

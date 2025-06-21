@@ -9,6 +9,7 @@ GO_MODULE := github.com/wushiling50/aster
 
 # 服务名
 SERVICES := analysis contribution developer id_generator relation repo
+NO_DB_SERVICES := id_generator
 
 .PHONY: init
 init:
@@ -40,7 +41,17 @@ $(SERVICES):
 		--go_opt=module=$(GO_MODULE) \
 		--go-grpc_out=. \
 		--go-grpc_opt=module=$(GO_MODULE) \
-		--zrpc_out=$(RPC_PATH)/$@
+		--zrpc_out=$(RPC_PATH)/$@; 
+	
+	if echo '$(NO_DB_SERVICES)' | grep -wq '$@'; then \
+		echo "Skipping database model generation for $@"; \
+	else \
+		echo "Generating database model for $@"; \
+		goctl model mysql ddl \
+			--dir ./pkg/model/$@ \
+			--cache true  \
+			--src ./config/sql/$@.sql; \
+	fi
 
 .PHONY: gen-base
 gen-base:

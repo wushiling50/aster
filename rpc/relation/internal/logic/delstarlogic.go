@@ -23,8 +23,8 @@ func NewDelStarLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelStarLo
 	}
 }
 
-func (l *DelStarLogic) DelStar(in *relation_relation.DelStarReq) (*relation_relation.DelStarResp, error) {
+func (l *DelStarLogic) DelStar(in *relation.DelStarReq) (*relation.DelStarResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.DelStarResp{}, nil
+	return &relation.DelStarResp{}, nil
 }

@@ -23,8 +23,8 @@ func NewUpdateScoreLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Updat
 	}
 }
 
-func (l *UpdateScoreLogic) UpdateScore(in *analysis_analysis.UpdateAnalysisReq) (*analysis_analysis.UpdateAnalysisResp, error) {
+func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysis.UpdateAnalysisResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &analysis_analysis.UpdateAnalysisResp{}, nil
+	return &analysis.UpdateAnalysisResp{}, nil
 }

@@ -23,8 +23,8 @@ func NewGetDeveloperByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *GetDeveloperByIdLogic) GetDeveloperById(in *developer_developer.GetDeveloperByIdReq) (*developer_developer.GetDeveloperByIdResp, error) {
+func (l *GetDeveloperByIdLogic) GetDeveloperById(in *developer.GetDeveloperByIdReq) (*developer.GetDeveloperByIdResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &developer_developer.GetDeveloperByIdResp{}, nil
+	return &developer.GetDeveloperByIdResp{}, nil
 }

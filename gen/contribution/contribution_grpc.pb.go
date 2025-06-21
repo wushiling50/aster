@@ -19,20 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Contribution_AddContribution_FullMethodName                      = "/contribution.contribution/AddContribution"
-	Contribution_DelContribution_FullMethodName                      = "/contribution.contribution/DelContribution"
-	Contribution_DelAllContributionInCategoryByUserId_FullMethodName = "/contribution.contribution/DelAllContributionInCategoryByUserId"
-	Contribution_GetContribution_FullMethodName                      = "/contribution.contribution/GetContribution"
-	Contribution_SearchByCategory_FullMethodName                     = "/contribution.contribution/SearchByCategory"
-	Contribution_SearchByUserId_FullMethodName                       = "/contribution.contribution/SearchByUserId"
-	Contribution_SearchByRepoId_FullMethodName                       = "/contribution.contribution/SearchByRepoId"
-	Contribution_UpdateContributionOfUser_FullMethodName             = "/contribution.contribution/UpdateContributionOfUser"
-	Contribution_UpdateIssuePROfUser_FullMethodName                  = "/contribution.contribution/UpdateIssuePROfUser"
-	Contribution_UpdateCommentOfUser_FullMethodName                  = "/contribution.contribution/UpdateCommentOfUser"
-	Contribution_UpdateReviewOfUser_FullMethodName                   = "/contribution.contribution/UpdateReviewOfUser"
-	Contribution_GetIssuePROfUserUpdatedAt_FullMethodName            = "/contribution.contribution/GetIssuePROfUserUpdatedAt"
-	Contribution_GetCommentOfUserUpdatedAt_FullMethodName            = "/contribution.contribution/GetCommentOfUserUpdatedAt"
-	Contribution_GetReviewOfUserUpdatedAt_FullMethodName             = "/contribution.contribution/GetReviewOfUserUpdatedAt"
+	Contribution_AddContribution_FullMethodName                           = "/contribution.contribution/AddContribution"
+	Contribution_DelContribution_FullMethodName                           = "/contribution.contribution/DelContribution"
+	Contribution_DelAllContributionInCategoryByDeveloperId_FullMethodName = "/contribution.contribution/DelAllContributionInCategoryByDeveloperId"
+	Contribution_GetContribution_FullMethodName                           = "/contribution.contribution/GetContribution"
+	Contribution_SearchByCategory_FullMethodName                          = "/contribution.contribution/SearchByCategory"
+	Contribution_SearchByDeveloperId_FullMethodName                       = "/contribution.contribution/SearchByDeveloperId"
+	Contribution_SearchByRepoId_FullMethodName                            = "/contribution.contribution/SearchByRepoId"
+	Contribution_UpdateContributionOfUser_FullMethodName                  = "/contribution.contribution/UpdateContributionOfUser"
+	Contribution_UpdateIssuePROfUser_FullMethodName                       = "/contribution.contribution/UpdateIssuePROfUser"
+	Contribution_UpdateCommentOfUser_FullMethodName                       = "/contribution.contribution/UpdateCommentOfUser"
+	Contribution_UpdateReviewOfUser_FullMethodName                        = "/contribution.contribution/UpdateReviewOfUser"
+	Contribution_GetIssuePROfUserUpdatedAt_FullMethodName                 = "/contribution.contribution/GetIssuePROfUserUpdatedAt"
+	Contribution_GetCommentOfUserUpdatedAt_FullMethodName                 = "/contribution.contribution/GetCommentOfUserUpdatedAt"
+	Contribution_GetReviewOfUserUpdatedAt_FullMethodName                  = "/contribution.contribution/GetReviewOfUserUpdatedAt"
 )
 
 // ContributionClient is the client API for Contribution service.
@@ -41,10 +41,10 @@ const (
 type ContributionClient interface {
 	AddContribution(ctx context.Context, in *AddContributionReq, opts ...grpc.CallOption) (*AddContributionResp, error)
 	DelContribution(ctx context.Context, in *DelContributionReq, opts ...grpc.CallOption) (*DelContributionResp, error)
-	DelAllContributionInCategoryByUserId(ctx context.Context, in *DelAllContributionInCategoryByUserIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByUserIdResp, error)
+	DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *DelAllContributionInCategoryByDeveloperIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByDeveloperIdResp, error)
 	GetContribution(ctx context.Context, in *GetContributionReq, opts ...grpc.CallOption) (*GetContributionResp, error)
 	SearchByCategory(ctx context.Context, in *SearchByCategoryReq, opts ...grpc.CallOption) (*SearchByCategoryResp, error)
-	SearchByUserId(ctx context.Context, in *SearchByUserIdReq, opts ...grpc.CallOption) (*SearchByUserIdResp, error)
+	SearchByDeveloperId(ctx context.Context, in *SearchByDeveloperIdReq, opts ...grpc.CallOption) (*SearchByDeveloperIdResp, error)
 	SearchByRepoId(ctx context.Context, in *SearchByRepoIdReq, opts ...grpc.CallOption) (*SearchByRepoIdResp, error)
 	UpdateContributionOfUser(ctx context.Context, in *UpdateContributionOfUserReq, opts ...grpc.CallOption) (*UpdateContributionOfUserResp, error)
 	UpdateIssuePROfUser(ctx context.Context, in *UpdateIssuePROfUserReq, opts ...grpc.CallOption) (*UpdateIssuePROfUserResp, error)
@@ -81,9 +81,9 @@ func (c *contributionClient) DelContribution(ctx context.Context, in *DelContrib
 	return out, nil
 }
 
-func (c *contributionClient) DelAllContributionInCategoryByUserId(ctx context.Context, in *DelAllContributionInCategoryByUserIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByUserIdResp, error) {
-	out := new(DelAllContributionInCategoryByUserIdResp)
-	err := c.cc.Invoke(ctx, Contribution_DelAllContributionInCategoryByUserId_FullMethodName, in, out, opts...)
+func (c *contributionClient) DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *DelAllContributionInCategoryByDeveloperIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByDeveloperIdResp, error) {
+	out := new(DelAllContributionInCategoryByDeveloperIdResp)
+	err := c.cc.Invoke(ctx, Contribution_DelAllContributionInCategoryByDeveloperId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,9 +108,9 @@ func (c *contributionClient) SearchByCategory(ctx context.Context, in *SearchByC
 	return out, nil
 }
 
-func (c *contributionClient) SearchByUserId(ctx context.Context, in *SearchByUserIdReq, opts ...grpc.CallOption) (*SearchByUserIdResp, error) {
-	out := new(SearchByUserIdResp)
-	err := c.cc.Invoke(ctx, Contribution_SearchByUserId_FullMethodName, in, out, opts...)
+func (c *contributionClient) SearchByDeveloperId(ctx context.Context, in *SearchByDeveloperIdReq, opts ...grpc.CallOption) (*SearchByDeveloperIdResp, error) {
+	out := new(SearchByDeveloperIdResp)
+	err := c.cc.Invoke(ctx, Contribution_SearchByDeveloperId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -195,10 +195,10 @@ func (c *contributionClient) GetReviewOfUserUpdatedAt(ctx context.Context, in *G
 type ContributionServer interface {
 	AddContribution(context.Context, *AddContributionReq) (*AddContributionResp, error)
 	DelContribution(context.Context, *DelContributionReq) (*DelContributionResp, error)
-	DelAllContributionInCategoryByUserId(context.Context, *DelAllContributionInCategoryByUserIdReq) (*DelAllContributionInCategoryByUserIdResp, error)
+	DelAllContributionInCategoryByDeveloperId(context.Context, *DelAllContributionInCategoryByDeveloperIdReq) (*DelAllContributionInCategoryByDeveloperIdResp, error)
 	GetContribution(context.Context, *GetContributionReq) (*GetContributionResp, error)
 	SearchByCategory(context.Context, *SearchByCategoryReq) (*SearchByCategoryResp, error)
-	SearchByUserId(context.Context, *SearchByUserIdReq) (*SearchByUserIdResp, error)
+	SearchByDeveloperId(context.Context, *SearchByDeveloperIdReq) (*SearchByDeveloperIdResp, error)
 	SearchByRepoId(context.Context, *SearchByRepoIdReq) (*SearchByRepoIdResp, error)
 	UpdateContributionOfUser(context.Context, *UpdateContributionOfUserReq) (*UpdateContributionOfUserResp, error)
 	UpdateIssuePROfUser(context.Context, *UpdateIssuePROfUserReq) (*UpdateIssuePROfUserResp, error)
@@ -220,8 +220,8 @@ func (UnimplementedContributionServer) AddContribution(context.Context, *AddCont
 func (UnimplementedContributionServer) DelContribution(context.Context, *DelContributionReq) (*DelContributionResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelContribution not implemented")
 }
-func (UnimplementedContributionServer) DelAllContributionInCategoryByUserId(context.Context, *DelAllContributionInCategoryByUserIdReq) (*DelAllContributionInCategoryByUserIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelAllContributionInCategoryByUserId not implemented")
+func (UnimplementedContributionServer) DelAllContributionInCategoryByDeveloperId(context.Context, *DelAllContributionInCategoryByDeveloperIdReq) (*DelAllContributionInCategoryByDeveloperIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelAllContributionInCategoryByDeveloperId not implemented")
 }
 func (UnimplementedContributionServer) GetContribution(context.Context, *GetContributionReq) (*GetContributionResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetContribution not implemented")
@@ -229,8 +229,8 @@ func (UnimplementedContributionServer) GetContribution(context.Context, *GetCont
 func (UnimplementedContributionServer) SearchByCategory(context.Context, *SearchByCategoryReq) (*SearchByCategoryResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchByCategory not implemented")
 }
-func (UnimplementedContributionServer) SearchByUserId(context.Context, *SearchByUserIdReq) (*SearchByUserIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SearchByUserId not implemented")
+func (UnimplementedContributionServer) SearchByDeveloperId(context.Context, *SearchByDeveloperIdReq) (*SearchByDeveloperIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchByDeveloperId not implemented")
 }
 func (UnimplementedContributionServer) SearchByRepoId(context.Context, *SearchByRepoIdReq) (*SearchByRepoIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchByRepoId not implemented")
@@ -305,20 +305,20 @@ func _Contribution_DelContribution_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Contribution_DelAllContributionInCategoryByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAllContributionInCategoryByUserIdReq)
+func _Contribution_DelAllContributionInCategoryByDeveloperId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelAllContributionInCategoryByDeveloperIdReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContributionServer).DelAllContributionInCategoryByUserId(ctx, in)
+		return srv.(ContributionServer).DelAllContributionInCategoryByDeveloperId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Contribution_DelAllContributionInCategoryByUserId_FullMethodName,
+		FullMethod: Contribution_DelAllContributionInCategoryByDeveloperId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).DelAllContributionInCategoryByUserId(ctx, req.(*DelAllContributionInCategoryByUserIdReq))
+		return srv.(ContributionServer).DelAllContributionInCategoryByDeveloperId(ctx, req.(*DelAllContributionInCategoryByDeveloperIdReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -359,20 +359,20 @@ func _Contribution_SearchByCategory_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Contribution_SearchByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SearchByUserIdReq)
+func _Contribution_SearchByDeveloperId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchByDeveloperIdReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContributionServer).SearchByUserId(ctx, in)
+		return srv.(ContributionServer).SearchByDeveloperId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Contribution_SearchByUserId_FullMethodName,
+		FullMethod: Contribution_SearchByDeveloperId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).SearchByUserId(ctx, req.(*SearchByUserIdReq))
+		return srv.(ContributionServer).SearchByDeveloperId(ctx, req.(*SearchByDeveloperIdReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -537,8 +537,8 @@ var Contribution_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Contribution_DelContribution_Handler,
 		},
 		{
-			MethodName: "DelAllContributionInCategoryByUserId",
-			Handler:    _Contribution_DelAllContributionInCategoryByUserId_Handler,
+			MethodName: "DelAllContributionInCategoryByDeveloperId",
+			Handler:    _Contribution_DelAllContributionInCategoryByDeveloperId_Handler,
 		},
 		{
 			MethodName: "GetContribution",
@@ -549,8 +549,8 @@ var Contribution_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Contribution_SearchByCategory_Handler,
 		},
 		{
-			MethodName: "SearchByUserId",
-			Handler:    _Contribution_SearchByUserId_Handler,
+			MethodName: "SearchByDeveloperId",
+			Handler:    _Contribution_SearchByDeveloperId_Handler,
 		},
 		{
 			MethodName: "SearchByRepoId",

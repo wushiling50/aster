@@ -14,7 +14,7 @@ import (
 
 type IdGeneratorServer struct {
 	svcCtx *svc.ServiceContext
-	id_generator_id_generator.UnimplementedIdGeneratorServer
+	id_generator.UnimplementedIdGeneratorServer
 }
 
 func NewIdGeneratorServer(svcCtx *svc.ServiceContext) *IdGeneratorServer {
@@ -23,7 +23,7 @@ func NewIdGeneratorServer(svcCtx *svc.ServiceContext) *IdGeneratorServer {
 	}
 }
 
-func (s *IdGeneratorServer) GetId(ctx context.Context, in *id_generator_id_generator.GetIdReq) (*id_generator_id_generator.GetIdResp, error) {
+func (s *IdGeneratorServer) GetId(ctx context.Context, in *id_generator.GetIdReq) (*id_generator.GetIdResp, error) {
 	l := logic.NewGetIdLogic(ctx, s.svcCtx)
 	return l.GetId(in)
 }

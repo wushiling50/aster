@@ -23,8 +23,8 @@ func NewGetCreatedRepoUpdatedAtLogic(ctx context.Context, svcCtx *svc.ServiceCon
 	}
 }
 
-func (l *GetCreatedRepoUpdatedAtLogic) GetCreatedRepoUpdatedAt(in *relation_relation.GetCreatedRepoUpdatedAtReq) (*relation_relation.GetCreatedRepoUpdatedAtResp, error) {
+func (l *GetCreatedRepoUpdatedAtLogic) GetCreatedRepoUpdatedAt(in *relation.GetCreatedRepoUpdatedAtReq) (*relation.GetCreatedRepoUpdatedAtResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.GetCreatedRepoUpdatedAtResp{}, nil
+	return &relation.GetCreatedRepoUpdatedAtResp{}, nil
 }

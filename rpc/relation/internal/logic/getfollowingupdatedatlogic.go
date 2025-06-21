@@ -23,8 +23,8 @@ func NewGetFollowingUpdatedAtLogic(ctx context.Context, svcCtx *svc.ServiceConte
 	}
 }
 
-func (l *GetFollowingUpdatedAtLogic) GetFollowingUpdatedAt(in *relation_relation.GetFollowingUpdatedAtReq) (*relation_relation.GetFollowingUpdatedAtResp, error) {
+func (l *GetFollowingUpdatedAtLogic) GetFollowingUpdatedAt(in *relation.GetFollowingUpdatedAtReq) (*relation.GetFollowingUpdatedAtResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.GetFollowingUpdatedAtResp{}, nil
+	return &relation.GetFollowingUpdatedAtResp{}, nil
 }

@@ -23,8 +23,8 @@ func NewSearchStaringDevLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *SearchStaringDevLogic) SearchStaringDev(in *relation_relation.SearchStaringDevReq) (*relation_relation.SearchStaringDevResp, error) {
+func (l *SearchStaringDevLogic) SearchStaringDev(in *relation.SearchStaringDevReq) (*relation.SearchStaringDevResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.SearchStaringDevResp{}, nil
+	return &relation.SearchStaringDevResp{}, nil
 }

@@ -23,8 +23,8 @@ func NewGetStarredRepoUpdatedAtLogic(ctx context.Context, svcCtx *svc.ServiceCon
 	}
 }
 
-func (l *GetStarredRepoUpdatedAtLogic) GetStarredRepoUpdatedAt(in *relation_relation.GetStarredRepoUpdatedAtReq) (*relation_relation.GetStarredRepoUpdatedAtResp, error) {
+func (l *GetStarredRepoUpdatedAtLogic) GetStarredRepoUpdatedAt(in *relation.GetStarredRepoUpdatedAtReq) (*relation.GetStarredRepoUpdatedAtResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.GetStarredRepoUpdatedAtResp{}, nil
+	return &relation.GetStarredRepoUpdatedAtResp{}, nil
 }

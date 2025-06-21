@@ -14,7 +14,7 @@ import (
 
 type RelationServer struct {
 	svcCtx *svc.ServiceContext
-	relation_relation.UnimplementedRelationServer
+	relation.UnimplementedRelationServer
 }
 
 func NewRelationServer(svcCtx *svc.ServiceContext) *RelationServer {
@@ -24,175 +24,175 @@ func NewRelationServer(svcCtx *svc.ServiceContext) *RelationServer {
 }
 
 // -----------------------CreateRepo-----------------------
-func (s *RelationServer) AddCreateRepo(ctx context.Context, in *relation_relation.AddCreateRepoReq) (*relation_relation.AddCreateRepoResp, error) {
+func (s *RelationServer) AddCreateRepo(ctx context.Context, in *relation.AddCreateRepoReq) (*relation.AddCreateRepoResp, error) {
 	l := logic.NewAddCreateRepoLogic(ctx, s.svcCtx)
 	return l.AddCreateRepo(in)
 }
 
-func (s *RelationServer) DelCreateRepo(ctx context.Context, in *relation_relation.DelCreateRepoReq) (*relation_relation.DelCreateRepoResp, error) {
+func (s *RelationServer) DelCreateRepo(ctx context.Context, in *relation.DelCreateRepoReq) (*relation.DelCreateRepoResp, error) {
 	l := logic.NewDelCreateRepoLogic(ctx, s.svcCtx)
 	return l.DelCreateRepo(in)
 }
 
-func (s *RelationServer) DelAllCreatedRepo(ctx context.Context, in *relation_relation.DelAllCreatedRepoReq) (*relation_relation.DelAllCreatedRepoResp, error) {
+func (s *RelationServer) DelAllCreatedRepo(ctx context.Context, in *relation.DelAllCreatedRepoReq) (*relation.DelAllCreatedRepoResp, error) {
 	l := logic.NewDelAllCreatedRepoLogic(ctx, s.svcCtx)
 	return l.DelAllCreatedRepo(in)
 }
 
-func (s *RelationServer) GetCreatorId(ctx context.Context, in *relation_relation.GetCreatorIdReq) (*relation_relation.GetCreatorIdResp, error) {
+func (s *RelationServer) GetCreatorId(ctx context.Context, in *relation.GetCreatorIdReq) (*relation.GetCreatorIdResp, error) {
 	l := logic.NewGetCreatorIdLogic(ctx, s.svcCtx)
 	return l.GetCreatorId(in)
 }
 
-func (s *RelationServer) SearchCreatedRepo(ctx context.Context, in *relation_relation.SearchCreatedRepoReq) (*relation_relation.SearchCreatedRepoResp, error) {
+func (s *RelationServer) SearchCreatedRepo(ctx context.Context, in *relation.SearchCreatedRepoReq) (*relation.SearchCreatedRepoResp, error) {
 	l := logic.NewSearchCreatedRepoLogic(ctx, s.svcCtx)
 	return l.SearchCreatedRepo(in)
 }
 
-func (s *RelationServer) UpdateCreateRepo(ctx context.Context, in *relation_relation.UpdateCreateRepoReq) (*relation_relation.UpdateCreateRepoResp, error) {
+func (s *RelationServer) UpdateCreateRepo(ctx context.Context, in *relation.UpdateCreateRepoReq) (*relation.UpdateCreateRepoResp, error) {
 	l := logic.NewUpdateCreateRepoLogic(ctx, s.svcCtx)
 	return l.UpdateCreateRepo(in)
 }
 
-func (s *RelationServer) GetCreatedRepoUpdatedAt(ctx context.Context, in *relation_relation.GetCreatedRepoUpdatedAtReq) (*relation_relation.GetCreatedRepoUpdatedAtResp, error) {
+func (s *RelationServer) GetCreatedRepoUpdatedAt(ctx context.Context, in *relation.GetCreatedRepoUpdatedAtReq) (*relation.GetCreatedRepoUpdatedAtResp, error) {
 	l := logic.NewGetCreatedRepoUpdatedAtLogic(ctx, s.svcCtx)
 	return l.GetCreatedRepoUpdatedAt(in)
 }
 
 // -----------------------Follow-----------------------
-func (s *RelationServer) AddFollow(ctx context.Context, in *relation_relation.AddFollowReq) (*relation_relation.AddFollowResp, error) {
+func (s *RelationServer) AddFollow(ctx context.Context, in *relation.AddFollowReq) (*relation.AddFollowResp, error) {
 	l := logic.NewAddFollowLogic(ctx, s.svcCtx)
 	return l.AddFollow(in)
 }
 
-func (s *RelationServer) DelFollow(ctx context.Context, in *relation_relation.DelFollowReq) (*relation_relation.DelFollowResp, error) {
+func (s *RelationServer) DelFollow(ctx context.Context, in *relation.DelFollowReq) (*relation.DelFollowResp, error) {
 	l := logic.NewDelFollowLogic(ctx, s.svcCtx)
 	return l.DelFollow(in)
 }
 
-func (s *RelationServer) DelAllFollower(ctx context.Context, in *relation_relation.DelAllFollowerReq) (*relation_relation.DelAllFollowerResp, error) {
+func (s *RelationServer) DelAllFollower(ctx context.Context, in *relation.DelAllFollowerReq) (*relation.DelAllFollowerResp, error) {
 	l := logic.NewDelAllFollowerLogic(ctx, s.svcCtx)
 	return l.DelAllFollower(in)
 }
 
-func (s *RelationServer) DelAllFollowing(ctx context.Context, in *relation_relation.DelAllFollowingReq) (*relation_relation.DelAllFollowingResp, error) {
+func (s *RelationServer) DelAllFollowing(ctx context.Context, in *relation.DelAllFollowingReq) (*relation.DelAllFollowingResp, error) {
 	l := logic.NewDelAllFollowingLogic(ctx, s.svcCtx)
 	return l.DelAllFollowing(in)
 }
 
-func (s *RelationServer) CheckIfFollow(ctx context.Context, in *relation_relation.CheckIfFollowReq) (*relation_relation.CheckFollowResp, error) {
+func (s *RelationServer) CheckIfFollow(ctx context.Context, in *relation.CheckIfFollowReq) (*relation.CheckFollowResp, error) {
 	l := logic.NewCheckIfFollowLogic(ctx, s.svcCtx)
 	return l.CheckIfFollow(in)
 }
 
-func (s *RelationServer) SearchFollowingByDeveloperId(ctx context.Context, in *relation_relation.SearchFollowingByDeveloperIdReq) (*relation_relation.SearchFollowingByDeveloperIdResp, error) {
+func (s *RelationServer) SearchFollowingByDeveloperId(ctx context.Context, in *relation.SearchFollowingByDeveloperIdReq) (*relation.SearchFollowingByDeveloperIdResp, error) {
 	l := logic.NewSearchFollowingByDeveloperIdLogic(ctx, s.svcCtx)
 	return l.SearchFollowingByDeveloperId(in)
 }
 
-func (s *RelationServer) SearchFollowerByDeveloperId(ctx context.Context, in *relation_relation.SearchFollowerByDeveloperIdReq) (*relation_relation.SearchFollowerByDeveloperIdResp, error) {
+func (s *RelationServer) SearchFollowerByDeveloperId(ctx context.Context, in *relation.SearchFollowerByDeveloperIdReq) (*relation.SearchFollowerByDeveloperIdResp, error) {
 	l := logic.NewSearchFollowerByDeveloperIdLogic(ctx, s.svcCtx)
 	return l.SearchFollowerByDeveloperId(in)
 }
 
-func (s *RelationServer) UpdateFollowing(ctx context.Context, in *relation_relation.UpdateFollowingReq) (*relation_relation.UpdateFollowingResp, error) {
+func (s *RelationServer) UpdateFollowing(ctx context.Context, in *relation.UpdateFollowingReq) (*relation.UpdateFollowingResp, error) {
 	l := logic.NewUpdateFollowingLogic(ctx, s.svcCtx)
 	return l.UpdateFollowing(in)
 }
 
-func (s *RelationServer) UpdateFollower(ctx context.Context, in *relation_relation.UpdateFollowerReq) (*relation_relation.UpdateFollowerResp, error) {
+func (s *RelationServer) UpdateFollower(ctx context.Context, in *relation.UpdateFollowerReq) (*relation.UpdateFollowerResp, error) {
 	l := logic.NewUpdateFollowerLogic(ctx, s.svcCtx)
 	return l.UpdateFollower(in)
 }
 
-func (s *RelationServer) GetFollowingUpdatedAt(ctx context.Context, in *relation_relation.GetFollowingUpdatedAtReq) (*relation_relation.GetFollowingUpdatedAtResp, error) {
+func (s *RelationServer) GetFollowingUpdatedAt(ctx context.Context, in *relation.GetFollowingUpdatedAtReq) (*relation.GetFollowingUpdatedAtResp, error) {
 	l := logic.NewGetFollowingUpdatedAtLogic(ctx, s.svcCtx)
 	return l.GetFollowingUpdatedAt(in)
 }
 
-func (s *RelationServer) GetFollowerUpdatedAt(ctx context.Context, in *relation_relation.GetFollowerUpdatedAtReq) (*relation_relation.GetFollowerUpdatedAtResp, error) {
+func (s *RelationServer) GetFollowerUpdatedAt(ctx context.Context, in *relation.GetFollowerUpdatedAtReq) (*relation.GetFollowerUpdatedAtResp, error) {
 	l := logic.NewGetFollowerUpdatedAtLogic(ctx, s.svcCtx)
 	return l.GetFollowerUpdatedAt(in)
 }
 
 // -----------------------Fork-----------------------
-func (s *RelationServer) AddFork(ctx context.Context, in *relation_relation.AddForkReq) (*relation_relation.AddForkResp, error) {
+func (s *RelationServer) AddFork(ctx context.Context, in *relation.AddForkReq) (*relation.AddForkResp, error) {
 	l := logic.NewAddForkLogic(ctx, s.svcCtx)
 	return l.AddFork(in)
 }
 
-func (s *RelationServer) DelFork(ctx context.Context, in *relation_relation.DelForkReq) (*relation_relation.DelForkResp, error) {
+func (s *RelationServer) DelFork(ctx context.Context, in *relation.DelForkReq) (*relation.DelForkResp, error) {
 	l := logic.NewDelForkLogic(ctx, s.svcCtx)
 	return l.DelFork(in)
 }
 
-func (s *RelationServer) DelAllFork(ctx context.Context, in *relation_relation.DelAllForkReq) (*relation_relation.DelAllForkResp, error) {
+func (s *RelationServer) DelAllFork(ctx context.Context, in *relation.DelAllForkReq) (*relation.DelAllForkResp, error) {
 	l := logic.NewDelAllForkLogic(ctx, s.svcCtx)
 	return l.DelAllFork(in)
 }
 
-func (s *RelationServer) GetOrigin(ctx context.Context, in *relation_relation.GetOriginReq) (*relation_relation.GetOriginResp, error) {
+func (s *RelationServer) GetOrigin(ctx context.Context, in *relation.GetOriginReq) (*relation.GetOriginResp, error) {
 	l := logic.NewGetOriginLogic(ctx, s.svcCtx)
 	return l.GetOrigin(in)
 }
 
-func (s *RelationServer) SearchFork(ctx context.Context, in *relation_relation.SearchForkReq) (*relation_relation.SearchForkResp, error) {
+func (s *RelationServer) SearchFork(ctx context.Context, in *relation.SearchForkReq) (*relation.SearchForkResp, error) {
 	l := logic.NewSearchForkLogic(ctx, s.svcCtx)
 	return l.SearchFork(in)
 }
 
-func (s *RelationServer) UpdateFork(ctx context.Context, in *relation_relation.UpdateForkReq) (*relation_relation.UpdateForkResp, error) {
+func (s *RelationServer) UpdateFork(ctx context.Context, in *relation.UpdateForkReq) (*relation.UpdateForkResp, error) {
 	l := logic.NewUpdateForkLogic(ctx, s.svcCtx)
 	return l.UpdateFork(in)
 }
 
-func (s *RelationServer) GetForkUpdatedAt(ctx context.Context, in *relation_relation.GetForkUpdatedAtReq) (*relation_relation.GetForkUpdatedAtResp, error) {
+func (s *RelationServer) GetForkUpdatedAt(ctx context.Context, in *relation.GetForkUpdatedAtReq) (*relation.GetForkUpdatedAtResp, error) {
 	l := logic.NewGetForkUpdatedAtLogic(ctx, s.svcCtx)
 	return l.GetForkUpdatedAt(in)
 }
 
 // -----------------------Star-----------------------
-func (s *RelationServer) AddStar(ctx context.Context, in *relation_relation.AddStarReq) (*relation_relation.AddStarResp, error) {
+func (s *RelationServer) AddStar(ctx context.Context, in *relation.AddStarReq) (*relation.AddStarResp, error) {
 	l := logic.NewAddStarLogic(ctx, s.svcCtx)
 	return l.AddStar(in)
 }
 
-func (s *RelationServer) DelStar(ctx context.Context, in *relation_relation.DelStarReq) (*relation_relation.DelStarResp, error) {
+func (s *RelationServer) DelStar(ctx context.Context, in *relation.DelStarReq) (*relation.DelStarResp, error) {
 	l := logic.NewDelStarLogic(ctx, s.svcCtx)
 	return l.DelStar(in)
 }
 
-func (s *RelationServer) DelAllStarredRepo(ctx context.Context, in *relation_relation.DelAllStarredRepoReq) (*relation_relation.DelAllStarredRepoResp, error) {
+func (s *RelationServer) DelAllStarredRepo(ctx context.Context, in *relation.DelAllStarredRepoReq) (*relation.DelAllStarredRepoResp, error) {
 	l := logic.NewDelAllStarredRepoLogic(ctx, s.svcCtx)
 	return l.DelAllStarredRepo(in)
 }
 
-func (s *RelationServer) DelAllStaringDev(ctx context.Context, in *relation_relation.DelAllStaringDevReq) (*relation_relation.DelAllStaringDevResp, error) {
+func (s *RelationServer) DelAllStaringDev(ctx context.Context, in *relation.DelAllStaringDevReq) (*relation.DelAllStaringDevResp, error) {
 	l := logic.NewDelAllStaringDevLogic(ctx, s.svcCtx)
 	return l.DelAllStaringDev(in)
 }
 
-func (s *RelationServer) CheckIfStar(ctx context.Context, in *relation_relation.CheckIfStarReq) (*relation_relation.CheckIfStarResp, error) {
+func (s *RelationServer) CheckIfStar(ctx context.Context, in *relation.CheckIfStarReq) (*relation.CheckIfStarResp, error) {
 	l := logic.NewCheckIfStarLogic(ctx, s.svcCtx)
 	return l.CheckIfStar(in)
 }
 
-func (s *RelationServer) SearchStarredRepo(ctx context.Context, in *relation_relation.SearchStarredRepoReq) (*relation_relation.SearchStarredRepoResp, error) {
+func (s *RelationServer) SearchStarredRepo(ctx context.Context, in *relation.SearchStarredRepoReq) (*relation.SearchStarredRepoResp, error) {
 	l := logic.NewSearchStarredRepoLogic(ctx, s.svcCtx)
 	return l.SearchStarredRepo(in)
 }
 
-func (s *RelationServer) SearchStaringDev(ctx context.Context, in *relation_relation.SearchStaringDevReq) (*relation_relation.SearchStaringDevResp, error) {
+func (s *RelationServer) SearchStaringDev(ctx context.Context, in *relation.SearchStaringDevReq) (*relation.SearchStaringDevResp, error) {
 	l := logic.NewSearchStaringDevLogic(ctx, s.svcCtx)
 	return l.SearchStaringDev(in)
 }
 
-func (s *RelationServer) UpdateStarredRepo(ctx context.Context, in *relation_relation.UpdateStarredRepoReq) (*relation_relation.UpdateStarredRepoResp, error) {
+func (s *RelationServer) UpdateStarredRepo(ctx context.Context, in *relation.UpdateStarredRepoReq) (*relation.UpdateStarredRepoResp, error) {
 	l := logic.NewUpdateStarredRepoLogic(ctx, s.svcCtx)
 	return l.UpdateStarredRepo(in)
 }
 
-func (s *RelationServer) GetStarredRepoUpdatedAt(ctx context.Context, in *relation_relation.GetStarredRepoUpdatedAtReq) (*relation_relation.GetStarredRepoUpdatedAtResp, error) {
+func (s *RelationServer) GetStarredRepoUpdatedAt(ctx context.Context, in *relation.GetStarredRepoUpdatedAtReq) (*relation.GetStarredRepoUpdatedAtResp, error) {
 	l := logic.NewGetStarredRepoUpdatedAtLogic(ctx, s.svcCtx)
 	return l.GetStarredRepoUpdatedAt(in)
 }

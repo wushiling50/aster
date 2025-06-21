@@ -24,8 +24,8 @@ func NewAddForkLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddForkLo
 }
 
 // -----------------------Fork-----------------------
-func (l *AddForkLogic) AddFork(in *relation_relation.AddForkReq) (*relation_relation.AddForkResp, error) {
+func (l *AddForkLogic) AddFork(in *relation.AddForkReq) (*relation.AddForkResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation_relation.AddForkResp{}, nil
+	return &relation.AddForkResp{}, nil
 }

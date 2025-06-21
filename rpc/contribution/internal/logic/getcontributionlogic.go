@@ -23,8 +23,8 @@ func NewGetContributionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 	}
 }
 
-func (l *GetContributionLogic) GetContribution(in *contribution_contribution.GetContributionReq) (*contribution_contribution.GetContributionResp, error) {
+func (l *GetContributionLogic) GetContribution(in *contribution.GetContributionReq) (*contribution.GetContributionResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.GetContributionResp{}, nil
+	return &contribution.GetContributionResp{}, nil
 }

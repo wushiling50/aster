@@ -23,8 +23,8 @@ func NewUpdateIssuePROfUserLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
-func (l *UpdateIssuePROfUserLogic) UpdateIssuePROfUser(in *contribution_contribution.UpdateIssuePROfUserReq) (*contribution_contribution.UpdateIssuePROfUserResp, error) {
+func (l *UpdateIssuePROfUserLogic) UpdateIssuePROfUser(in *contribution.UpdateIssuePROfUserReq) (*contribution.UpdateIssuePROfUserResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &contribution_contribution.UpdateIssuePROfUserResp{}, nil
+	return &contribution.UpdateIssuePROfUserResp{}, nil
 }
