@@ -13,7 +13,7 @@ NO_DB_SERVICES := id_generator
 
 .PHONY: init
 init:
-	sh ./script/init.sh
+	sh ./hack/init.sh
 	
 .PHONY: env-up
 env-up:
