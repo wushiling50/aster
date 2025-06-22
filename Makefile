@@ -17,11 +17,12 @@ init:
 	
 .PHONY: env-up
 env-up:
-	docker-compose up -d
+	@ docker compose -f ./docker/docker-compose.yml up -d
 
 .PHONY: env-down
 env-down:
-	docker-compose down
+	@ cd ./docker && docker compose down
+	sudo rm -f ./docker/data//mysql/mysql.sock
 
 .PHONY: api-format
 api-format:
