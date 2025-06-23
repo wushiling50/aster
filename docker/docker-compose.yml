@@ -81,59 +81,61 @@ services:
     networks:
       - aster
 
-  # elasticsearch:
-  #   image: elasticsearch:8.4.2
-  #   container_name: aster-elasticsearch
-  #   ports:
-  #     - "9200:9200"
-  #   env_file:
-  #     - "./env/es.env"
-  #   healthcheck:
-  #     test: [ "CMD-SHELL", "curl -sf http://elasticsearch:9200/_cluster/health || exit 1" ] # ⼼跳检测，成功之后不再执⾏后⾯的退出
-  #     interval: 60s # ⼼跳检测间隔周期
-  #     timeout: 10s
-  #     retries: 3
-  #     start_period: 60s # ⾸次检测延迟时间
-  #   ulimits:
-  #     memlock:
-  #       soft: -1
-  #       hard: -1
-  #   volumes:
-  #     - ../config/elasticsearch:/usr/share/elasticsearch/config
-  #     - ./data/elasticsearch:/usr/share/elasticsearch/data
-  #   restart: always
-  #   networks:
-  #     - aster
+  elasticsearch:
+    image: elasticsearch:8.17.1
+    container_name: aster-elasticsearch
+    ports:
+      - "9200:9200"
+    env_file:
+      - "./env/es.env"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sf http://elasticsearch:9200/_cluster/health || exit 1" ] # ⼼跳检测，成功之后不再执⾏后⾯的退出
+      interval: 60s # ⼼跳检测间隔周期
+      timeout: 10s
+      retries: 3
+      start_period: 60s # ⾸次检测延迟时间
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ../config/elasticsearch:/usr/share/elasticsearch/config 
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
+    restart: always
+    networks:
+      - aster
 
-  # kibana:
-  #   image: kibana:8.4.2
+  # kibana: # 初始化导致 docker 崩溃
+  #   image: kibana:8.17.1
   #   container_name: aster-kibana
   #   env_file:
   #     - "./env/kibana.env"
   #   depends_on:
-  #     - elasticsearch
+  #     elasticsearch:
+  #       condition: service_healthy
   #   ports:
   #     - "5601:5601"
   #   volumes:
   #     - ../config/kibana:/usr/share/kibana/config
+  #     - ../config/kibana/node.options:/usr/share/kibana/config/node.options:ro
   #     - ./data/kibana:/usr/share/kibana/data
   #   networks:
   #     - aster
 
-  # filebeat:
-  #   image: elastic/filebeat:8.4.2
-  #   container_name: aster-filebeat
-  #   user: root
-  #   volumes:
-  #     - ../config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml # 挂载配置文件
-  #     - ./data/filebeat:/usr/share/filebeat/data  # 持久化注册表文件
-  #     - ../log:/usr/share/filebeat/logs  # 挂载日志目录
-  #   depends_on:
-  #     elasticsearch:
-  #       condition: service_healthy
-  #   restart: on-failure
-  #   networks:
-  #     - aster
+  filebeat: # 权限问题执行 sudo chmod go-w (挂载目录)/filebeat.yml
+    image: elastic/filebeat:8.17.1
+    container_name: aster-filebeat
+    user: root
+    volumes:
+      - ../config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml # 挂载配置文件
+      - ./data/filebeat:/usr/share/filebeat/data  # 持久化注册表文件
+      - ../log:/usr/share/filebeat/logs  # 挂载日志目录
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - aster
 
   jaeger:
     container_name: aster-jaeger
