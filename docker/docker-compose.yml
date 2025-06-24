@@ -105,22 +105,25 @@ services:
     networks:
       - aster
 
-  # kibana: # 初始化导致 docker 崩溃
-  #   image: kibana:8.17.1
-  #   container_name: aster-kibana
-  #   env_file:
-  #     - "./env/kibana.env"
-  #   depends_on:
-  #     elasticsearch:
-  #       condition: service_healthy
-  #   ports:
-  #     - "5601:5601"
-  #   volumes:
-  #     - ../config/kibana:/usr/share/kibana/config
-  #     - ../config/kibana/node.options:/usr/share/kibana/config/node.options:ro
-  #     - ./data/kibana:/usr/share/kibana/data
-  #   networks:
-  #     - aster
+  kibana: # data 数据卷挂载导致 docker 崩溃
+    image: kibana:8.17.1
+    container_name: aster-kibana
+    env_file:
+      - "./env/kibana.env"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -I http://localhost:5601 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    volumes:
+      - ../config/kibana:/usr/share/kibana/config
+      # - ./data/kibana:/usr/share/kibana/data
+    networks:
+      - aster
 
   filebeat: # 权限问题执行 sudo chmod go-w (挂载目录)/filebeat.yml
     image: elastic/filebeat:8.17.1
