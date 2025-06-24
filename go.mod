@@ -2,9 +2,8 @@ module github.com/wushiling50/aster
 
 go 1.23.1
 
-replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
-
 require (
+	github.com/hibiken/asynq v0.25.1
 	github.com/zeromicro/go-zero v1.8.4
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.36.5
@@ -54,7 +53,9 @@ require (
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/redis/go-redis/v9 v9.10.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
+	github.com/spf13/cast v1.7.0 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.15 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.15 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.15 // indirect

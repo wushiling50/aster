@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 
 	"github.com/wushiling50/aster/api/internal/config"
 	"github.com/wushiling50/aster/api/internal/handler"
@@ -20,7 +21,13 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf)
+	server := rest.MustNewServer(c.RestConf, rest.WithCustomCors(func(header http.Header) {
+		header.Set("Access-Control-Allow-Origin", "*")
+		header.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		header.Set("Access-Control-Allow-Headers", "*")
+		header.Set("Access-Control-Expose-Headers", "Content-Length")
+		header.Set("Access-Control-Max-Age", "43200")
+	}, func(w http.ResponseWriter) {}))
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)
