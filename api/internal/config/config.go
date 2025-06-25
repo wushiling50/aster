@@ -18,6 +18,6 @@ type Config struct {
 		Relation     zrpc.RpcClientConf
 		Repo         zrpc.RpcClientConf
 		Contribution zrpc.RpcClientConf
-		IDGenerator  zrpc.RpcClientConf
+		IdGenerator  zrpc.RpcClientConf
 	}
 }

@@ -24,7 +24,7 @@ type ServiceContext struct {
 	ContributionRpcClient contribution.ContributionZrpcClient
 	RelationRpcClient     relation.Relation
 	AnalysisRpcClient     analysis.Analysis
-	IDGeneratorRpcClient  idgenerator.IdGenerator
+	IdGeneratorRpcClient  idgenerator.IdGenerator
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -47,6 +47,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		ContributionRpcClient: contribution.NewContributionZrpcClient(zrpc.MustNewClient(c.Services.Contribution)),
 		RelationRpcClient:     relation.NewRelation(zrpc.MustNewClient(c.Services.Relation)),
 		AnalysisRpcClient:     analysis.NewAnalysis(zrpc.MustNewClient(c.Services.Analysis)),
-		IDGeneratorRpcClient:  idgenerator.NewIdGenerator(zrpc.MustNewClient(c.Services.IDGenerator)),
+		IdGeneratorRpcClient:  idgenerator.NewIdGenerator(zrpc.MustNewClient(c.Services.IdGenerator)),
 	}
 }
