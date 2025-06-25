@@ -7,5 +7,7 @@ var (
 
 	BizError = NewErrNo(BizErrorCode, "请求业务出现问题")
 
-	InternalServiceError = NewErrNo(InternalServiceErrorCode, "内部服务错误")
+	InternalServiceError  = NewErrNo(InternalServiceErrorCode, "内部服务错误")
+	InternalDatabaseError = NewErrNo(InternalDatabaseErrorCode, "数据库错误")
+	InternalRedisError    = NewErrNo(InternalRedisErrorCode, "Redis 错误")
 )

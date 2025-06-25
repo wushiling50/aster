@@ -9,6 +9,9 @@ import (
 	"github.com/wushiling50/aster/api/internal/svc"
 	"github.com/wushiling50/aster/api/internal/types"
 
+	"github.com/wushiling50/aster/pkg/cache/rank"
+	"github.com/wushiling50/aster/pkg/constants"
+
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/utils"
 	analysis "github.com/wushiling50/aster/rpc/analysis/analysisclient"
@@ -34,19 +37,19 @@ func NewGetScoreRankLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetS
 
 func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *types.GetScoreRankResp, err error) {
 	resp = new(types.GetScoreRankResp)
-	var rank []redis.FloatPair
+	var scoreList []redis.FloatPair
 
 	// 获取分数排行 (DeveloperID - Score)
-	resp.Rank = make([]*types.DeveloperWithScore, 0, len(rank))
+	resp.Rank = make([]*types.DeveloperWithScore, 0, len(scoreList))
 	start := req.Limit * req.Offset
 	stop := start + req.Limit - 1
-	if rank, err = l.svcCtx.RedisClient.ZrevrangeWithScoresByFloatCtx(l.ctx, "score", start, stop); err != nil {
+	if scoreList, err = rank.CacheCli.GetScores(l.ctx, constants.ScoreKey, start, stop); err != nil {
 		logx.Error(err)
 		return
 	}
 
 	// 整合排名相关信息
-	for _, pair := range rank {
+	for _, pair := range scoreList {
 		var (
 			developerId   int64
 			nation        string
@@ -99,7 +102,7 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 		})
 	}
 
-	total, err := l.svcCtx.RedisClient.ZcardCtx(l.ctx, "score")
+	total, err := l.svcCtx.RedisClient.ZcardCtx(l.ctx, constants.ScoreKey)
 	if err != nil {
 		logx.Error(err)
 		return

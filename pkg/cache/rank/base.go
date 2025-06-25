@@ -1,12 +1,16 @@
 package rank
 
-import "github.com/redis/go-redis/v9"
+import (
+	"github.com/zeromicro/go-zero/core/stores/redis"
+)
+
+var CacheCli *CacheRank
 
 type CacheRank struct {
-	client *redis.Client
+	client *redis.Redis
 }
 
-func NewCacheRank(client *redis.Client) *CacheRank {
+func NewCacheRank(client *redis.Redis) *CacheRank {
 	return &CacheRank{
 		client: client,
 	}
