@@ -9,7 +9,6 @@ import (
 	"github.com/wushiling50/aster/api/internal/svc"
 	"github.com/wushiling50/aster/api/internal/types"
 
-	"github.com/wushiling50/aster/pkg/cache/rank"
 	"github.com/wushiling50/aster/pkg/constants"
 
 	"github.com/wushiling50/aster/pkg/errno"
@@ -43,8 +42,8 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 	resp.Rank = make([]*types.DeveloperWithScore, 0, len(scoreList))
 	start := req.Limit * req.Offset
 	stop := start + req.Limit - 1
-	if scoreList, err = rank.CacheCli.GetScores(l.ctx, constants.ScoreKey, start, stop); err != nil {
-		logx.Error(err)
+	if scoreList, err = l.svcCtx.RankModel.GetScores(l.ctx, constants.ScoreKey, start, stop); err != nil {
+		logx.Errorf("service.GetScoreRank: Get Score List failed: %v", err.Error())
 		return
 	}
 
@@ -60,7 +59,7 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 
 		if developerId, err = strconv.ParseInt(pair.Key, 10, 64); err != nil {
 			logx.Error(err)
-			return
+			continue
 		}
 
 		// filter
@@ -102,14 +101,11 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 		})
 	}
 
-	total, err := l.svcCtx.RedisClient.ZcardCtx(l.ctx, constants.ScoreKey)
+	resp.Total, err = l.svcCtx.RankModel.GetScoresTotal(l.ctx, constants.ScoreKey)
 	if err != nil {
-		logx.Error(err)
+		logx.Errorf("service.GetScoreRank: Get Scores Total failed: %v", err.Error())
 		return
 	}
-	resp.Total = int64(total)
-
-	// TODO: cache and ...
 
 	return
 }

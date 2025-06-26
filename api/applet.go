@@ -8,7 +8,6 @@ import (
 	"github.com/wushiling50/aster/api/internal/config"
 	"github.com/wushiling50/aster/api/internal/handler"
 	"github.com/wushiling50/aster/api/internal/svc"
-	"github.com/wushiling50/aster/pkg/cache/rank"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -32,7 +31,6 @@ func main() {
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)
-	rank.CacheCli = rank.NewCacheRank(ctx.RedisClient)
 	handler.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)

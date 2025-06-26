@@ -1,8 +1,11 @@
 package svc
 
 import (
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/api/internal/config"
+	"github.com/wushiling50/aster/pkg/model/rank"
+	"github.com/wushiling50/aster/pkg/utils"
 	analysis "github.com/wushiling50/aster/rpc/analysis/analysisclient"
 	contribution "github.com/wushiling50/aster/rpc/contribution/contributionclient"
 	developer "github.com/wushiling50/aster/rpc/developer/developerclient"
@@ -10,6 +13,7 @@ import (
 	relation "github.com/wushiling50/aster/rpc/relation/relationclient"
 	repo "github.com/wushiling50/aster/rpc/repo/repoclient"
 	"github.com/zeromicro/go-zero/core/stores/redis"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
@@ -17,7 +21,7 @@ type ServiceContext struct {
 	Config         config.Config
 	AsynqClient    *asynq.Client
 	AsynqInspector *asynq.Inspector
-	RedisClient    *redis.Redis
+	RankModel      *rank.RankModel
 
 	DeveloperRpcClient    developer.DeveloperZrpcClient
 	RepoRpcClient         repo.RepoZrpcClient
@@ -40,7 +44,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 			Password: c.AsynqRedisConf.Pass,
 			DB:       c.AsynqRedisConf.DB,
 		}),
-		RedisClient: redis.MustNewRedis(c.Redis),
+		RankModel: rank.NewRankModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)), redis.MustNewRedis(c.Redis)),
 
 		DeveloperRpcClient:    developer.NewDeveloperZrpcClient(zrpc.MustNewClient(c.Services.Developer)),
 		RepoRpcClient:         repo.NewRepoZrpcClient(zrpc.MustNewClient(c.Services.Repo)),

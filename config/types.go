@@ -17,10 +17,3 @@ type MysqlConf struct {
 	Password string
 	Charset  string
 }
-
-// mysql:
-//   addr: 127.0.0.1:3306
-//   database: aster
-//   username: aster
-//   password: aster
-//   charset: utf8mb4

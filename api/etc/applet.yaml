@@ -23,6 +23,13 @@ Telemetry:
   Sampler: 1.0
   Batcher: jaeger
 
+Mysql:
+  addr: 127.0.0.1:3306
+  database: aster
+  username: aster
+  password: aster
+  charset: utf8mb4
+
 Redis:
   Host: 127.0.0.1:6379
   Type: node
