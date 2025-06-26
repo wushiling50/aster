@@ -152,7 +152,7 @@ func (l *GetScoreRankLogic) getLanguagesById(developerId int64) (languages map[s
 
 	if err = json.Unmarshal([]byte(resp.Languages.Languages), &languages); err != nil {
 		logx.Error(err)
-		err = errno.InternalServiceError.WithMessage(err.Error())
+		err = errno.InternalJSONError.WithMessage(err.Error())
 		return
 	}
 

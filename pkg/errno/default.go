@@ -10,4 +10,6 @@ var (
 	InternalServiceError  = NewErrNo(InternalServiceErrorCode, "内部服务错误")
 	InternalDatabaseError = NewErrNo(InternalDatabaseErrorCode, "数据库错误")
 	InternalRedisError    = NewErrNo(InternalRedisErrorCode, "Redis 错误")
+	InternalJSONError     = NewErrNo(InternalJSONErrorCode, "JSON 错误")
+	InternalLanguages     = NewErrNo(InternalLanguagesErrorCode, "获取语言数据错误")
 )

@@ -3,6 +3,7 @@ module github.com/wushiling50/aster
 go 1.23.1
 
 require (
+	github.com/NDoolan360/github-langs-go v1.0.2
 	github.com/go-sql-driver/mysql v1.9.0
 	github.com/hibiken/asynq v0.25.1
 	github.com/zeromicro/go-zero v1.8.4

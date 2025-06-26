@@ -2,9 +2,12 @@ package languages
 
 import (
 	"context"
+	"strings"
 
+	githublangsgo "github.com/NDoolan360/github-langs-go"
 	"github.com/wushiling50/aster/api/internal/svc"
 	"github.com/wushiling50/aster/api/internal/types"
+	"github.com/wushiling50/aster/pkg/errno"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +27,23 @@ func NewGetLanguagesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetL
 }
 
 func (l *GetLanguagesLogic) GetLanguages(req *types.GetLanguagesReq) (resp *types.GetLanguagesResp, err error) {
-	// todo: add your logic here and delete this line
+	resp = new(types.GetLanguagesResp)
+
+	var allLang map[string]githublangsgo.Language
+
+	if allLang, err = githublangsgo.GetAllLanguages(); err != nil {
+		logx.Errorf("service.GetLanguages: Get Github Languages Data failed: %v", err.Error())
+		err = errno.InternalLanguages.WithMessage(err.Error())
+		return
+	}
+
+	for langName, lang := range allLang {
+		resp.LanguageList = append(resp.LanguageList, types.Language{
+			Id:    strings.ReplaceAll(strings.ToLower(langName), " ", "-"),
+			Name:  langName,
+			Color: lang.Color,
+		})
+	}
 
 	return
 }

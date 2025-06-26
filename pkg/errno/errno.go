@@ -16,7 +16,9 @@ const (
 
 	BizErrorCode = 40001 // 业务错误
 
-	InternalServiceErrorCode  = 50001 // 未知服务错误
-	InternalDatabaseErrorCode = 50002 // 数据库错误
-	InternalRedisErrorCode    = 50003 // Redis错误
+	InternalServiceErrorCode   = 50001 // 未知服务错误
+	InternalDatabaseErrorCode  = 50002 // 数据库错误
+	InternalRedisErrorCode     = 50003 // Redis错误
+	InternalJSONErrorCode      = 50004 // JSON错误
+	InternalLanguagesErrorCode = 50005 // Languages Data 错误
 )
