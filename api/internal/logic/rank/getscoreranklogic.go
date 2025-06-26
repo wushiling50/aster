@@ -107,6 +107,7 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 		return
 	}
 
+	logx.Info("Successfully Get Rank")
 	return
 }
 
@@ -118,7 +119,7 @@ func (l *GetScoreRankLogic) getNationById(id int64) (nation string, confidence f
 	})
 	if err != nil {
 		logx.Errorf("GetNationRPC: RPC called failed: %v", err.Error())
-		err = errno.InternalServiceError.WithMessage(err.Error())
+		err = errno.InternalServiceError.WithError(err)
 		return
 	}
 
@@ -141,7 +142,7 @@ func (l *GetScoreRankLogic) getLanguagesById(developerId int64) (languages map[s
 	})
 	if err != nil {
 		logx.Errorf("GetLanguagesRPC: RPC called failed: %v", err.Error())
-		err = errno.InternalServiceError.WithMessage(err.Error())
+		err = errno.InternalServiceError.WithError(err)
 		return
 	}
 
@@ -152,7 +153,7 @@ func (l *GetScoreRankLogic) getLanguagesById(developerId int64) (languages map[s
 
 	if err = json.Unmarshal([]byte(resp.Languages.Languages), &languages); err != nil {
 		logx.Error(err)
-		err = errno.InternalJSONError.WithMessage(err.Error())
+		err = errno.InternalJSONError.WithError(err)
 		return
 	}
 
@@ -167,7 +168,7 @@ func (l *GetScoreRankLogic) getDeveloperById(developerId int64) (typeDeveloper *
 	})
 	if err != nil {
 		logx.Errorf("GetDeveloperByIdRPC: RPC called failed: %v", err.Error())
-		err = errno.InternalServiceError.WithMessage(err.Error())
+		err = errno.InternalServiceError.WithError(err)
 		return
 	}
 
@@ -176,7 +177,7 @@ func (l *GetScoreRankLogic) getDeveloperById(developerId int64) (typeDeveloper *
 		return
 	}
 
-	typeDeveloper = pack.BuildTypeDeveloper(resp)
+	typeDeveloper = pack.BuildTypeDeveloper(resp.Developer)
 
 	return
 }
@@ -189,7 +190,7 @@ func (l *GetScoreRankLogic) getScoreById(developerId int64, score float64) (type
 	})
 	if err != nil {
 		logx.Errorf("GetScoreRPC: RPC called failed: %v", err.Error())
-		err = errno.InternalServiceError.WithMessage(err.Error())
+		err = errno.InternalServiceError.WithError(err)
 		return
 	}
 
@@ -198,7 +199,7 @@ func (l *GetScoreRankLogic) getScoreById(developerId int64, score float64) (type
 		return
 	}
 
-	typeScore = pack.BuildTypeScore(resp, developerId, score)
+	typeScore = pack.BuildTypeScore(resp.Score, developerId, score)
 
 	return
 }

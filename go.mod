@@ -5,6 +5,7 @@ go 1.23.1
 require (
 	github.com/NDoolan360/github-langs-go v1.0.2
 	github.com/go-sql-driver/mysql v1.9.0
+	github.com/google/go-github/v66 v66.0.0
 	github.com/hibiken/asynq v0.25.1
 	github.com/zeromicro/go-zero v1.8.4
 	google.golang.org/grpc v1.65.0
@@ -33,6 +34,7 @@ require (
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/grafana/pyroscope-go v1.2.2 // indirect

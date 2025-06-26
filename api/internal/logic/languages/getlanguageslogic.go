@@ -33,7 +33,7 @@ func (l *GetLanguagesLogic) GetLanguages(req *types.GetLanguagesReq) (resp *type
 
 	if allLang, err = githublangsgo.GetAllLanguages(); err != nil {
 		logx.Errorf("service.GetLanguages: Get Github Languages Data failed: %v", err.Error())
-		err = errno.InternalLanguages.WithMessage(err.Error())
+		err = errno.InternalLanguagesError.WithError(err)
 		return
 	}
 
@@ -45,5 +45,6 @@ func (l *GetLanguagesLogic) GetLanguages(req *types.GetLanguagesReq) (resp *type
 		})
 	}
 
+	logx.Info("Successfully Get Languages")
 	return
 }

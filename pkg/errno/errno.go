@@ -18,7 +18,8 @@ const (
 
 	InternalServiceErrorCode   = 50001 // 未知服务错误
 	InternalDatabaseErrorCode  = 50002 // 数据库错误
-	InternalRedisErrorCode     = 50003 // Redis错误
-	InternalJSONErrorCode      = 50004 // JSON错误
+	InternalRedisErrorCode     = 50003 // Redis 错误
+	InternalJSONErrorCode      = 50004 // JSON 错误
 	InternalLanguagesErrorCode = 50005 // Languages Data 错误
+	InternalGithubErrorCode    = 50006 // Github 错误
 )
