@@ -10,10 +10,17 @@ type GetDeveloper struct {
 
 type GetLanguageUsage struct {
 	LanguageUsage types.LanguageUsage `json:"language_usage"`
+	TaskState     types.TaskState     `json:"task_state"`
 }
 
 type GetNation struct {
-	Nation types.Nation `json:"nation"`
+	Nation    types.Nation    `json:"nation"`
+	TaskState types.TaskState `json:"task_state"`
+}
+
+type GetScore struct {
+	Score     types.Score     `json:"score"`
+	TaskState types.TaskState `json:"task_state"`
 }
 
 func BuildDeveloper(res *types.GetDeveloperResp) *GetDeveloper {
@@ -25,11 +32,20 @@ func BuildDeveloper(res *types.GetDeveloperResp) *GetDeveloper {
 func BuildLanguageUsage(res *types.GetLanguageUsageResp) *GetLanguageUsage {
 	return &GetLanguageUsage{
 		LanguageUsage: res.LanguageUsage,
+		TaskState:     res.TaskState,
 	}
 }
 
 func BuildNation(res *types.GetNationResp) *GetNation {
 	return &GetNation{
-		Nation: res.Nation,
+		Nation:    res.Nation,
+		TaskState: res.TaskState,
+	}
+}
+
+func BuildScore(res *types.GetScoreResp) *GetScore {
+	return &GetScore{
+		Score:     res.Score,
+		TaskState: res.TaskState,
 	}
 }
