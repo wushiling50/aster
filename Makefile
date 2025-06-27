@@ -32,6 +32,10 @@ api-format:
 api-go:
 	goctl api go --dir=${API_PATH} --api ${IDL_PATH}/api.api
 
+.PHONY: api-run
+api-run:
+	go run ./api/applet.go
+
 $(SERVICES): gen-base
 
 .PHONY: $(SERVICES)
