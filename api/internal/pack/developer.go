@@ -23,6 +23,11 @@ type GetScore struct {
 	TaskState types.TaskState `json:"task_state"`
 }
 
+type GetSummary struct {
+	Summary   types.Summary   `json:"summary"`
+	TaskState types.TaskState `json:"task_state"`
+}
+
 func BuildDeveloper(res *types.GetDeveloperResp) *GetDeveloper {
 	return &GetDeveloper{
 		Developer: res.Developer,
@@ -46,6 +51,13 @@ func BuildNation(res *types.GetNationResp) *GetNation {
 func BuildScore(res *types.GetScoreResp) *GetScore {
 	return &GetScore{
 		Score:     res.Score,
+		TaskState: res.TaskState,
+	}
+}
+
+func BuildSummary(res *types.GetSummaryResp) *GetSummary {
+	return &GetSummary{
+		Summary:   res.Summary,
 		TaskState: res.TaskState,
 	}
 }

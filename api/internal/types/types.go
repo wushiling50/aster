@@ -101,8 +101,9 @@ type GetSummaryReq struct {
 }
 
 type GetSummaryResp struct {
-	BaseResp BaseResp `json:"base"`
-	Summary  Summary  `json:"summary"`
+	BaseResp  BaseResp  `json:"base"`
+	Summary   Summary   `json:"summary"`
+	TaskState TaskState `json:"task_state"`
 }
 
 type Language struct {
