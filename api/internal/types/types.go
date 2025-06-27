@@ -49,6 +49,7 @@ type GetLanguageUsageReq struct {
 type GetLanguageUsageResp struct {
 	BaseResp      BaseResp      `json:"base"`
 	LanguageUsage LanguageUsage `json:"language_usage"`
+	TaskState     TaskState     `json:"task_state"`
 }
 
 type GetLanguagesReq struct {
@@ -88,8 +89,9 @@ type GetScoreReq struct {
 }
 
 type GetScoreResp struct {
-	BaseResp BaseResp `json:"base"`
-	Score    Score    `json:"score"`
+	BaseResp  BaseResp  `json:"base"`
+	Score     Score     `json:"score"`
+	TaskState TaskState `json:"task_state"`
 }
 
 type GetSummaryReq struct {

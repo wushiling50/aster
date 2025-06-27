@@ -43,7 +43,7 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 	start := req.Limit * req.Offset
 	stop := start + req.Limit - 1
 	if scoreList, err = l.svcCtx.RankModel.GetScores(l.ctx, constants.ScoreKey, start, stop); err != nil {
-		logx.Errorf("service.GetScoreRank: Get Score List failed: %v", err.Error())
+		logx.Errorf("applet.GetScoreRank: Get Score List failed: %v", err.Error())
 		return
 	}
 
@@ -103,7 +103,7 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 
 	resp.Total, err = l.svcCtx.RankModel.GetScoresTotal(l.ctx, constants.ScoreKey)
 	if err != nil {
-		logx.Errorf("service.GetScoreRank: Get Scores Total failed: %v", err.Error())
+		logx.Errorf("applet.GetScoreRank: Get Scores Total failed: %v", err.Error())
 		return
 	}
 

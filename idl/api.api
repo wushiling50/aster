@@ -128,8 +128,9 @@ type GetScoreReq {
 }
 
 type GetScoreResp {
-	BaseResp BaseResp `json:"base"`
-	Score    Score    `json:"score"`
+	BaseResp  BaseResp  `json:"base"`
+	Score     Score     `json:"score"`
+	TaskState TaskState `json:"task_state"`
 }
 
 type GetLanguageUsageReq {
@@ -140,6 +141,7 @@ type GetLanguageUsageReq {
 type GetLanguageUsageResp {
 	BaseResp      BaseResp      `json:"base"`
 	LanguageUsage LanguageUsage `json:"language_usage"`
+	TaskState     TaskState     `json:"task_state"`
 }
 
 type GetNationReq {

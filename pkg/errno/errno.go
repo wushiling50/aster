@@ -1,25 +1,53 @@
+// DO NOT EDIT
+
 package errno
 
-const (
-	// For microservices
-	SuccessCode = 10000
-	SuccessMsg  = "ok"
-
-	// Error
-	/*
-		200xx: 参数错误，Param 打头
-		400xx: 业务错误，Biz 打头
-		500xx: 内部错误，Internal 打头
-	*/
-
-	ParamErrorCode = 20001 // 参数错误
-
-	BizErrorCode = 40001 // 业务错误
-
-	InternalServiceErrorCode   = 50001 // 未知服务错误
-	InternalDatabaseErrorCode  = 50002 // 数据库错误
-	InternalRedisErrorCode     = 50003 // Redis 错误
-	InternalJSONErrorCode      = 50004 // JSON 错误
-	InternalLanguagesErrorCode = 50005 // Languages Data 错误
-	InternalGithubErrorCode    = 50006 // Github 错误
+import (
+	"errors"
+	"fmt"
 )
+
+type ErrNo struct {
+	ErrorCode int64
+	ErrorMsg  string
+}
+
+func (e ErrNo) Error() string {
+	return fmt.Sprintf("[%d] %s", e.ErrorCode, e.ErrorMsg)
+}
+
+func NewErrNo(code int64, msg string) ErrNo {
+	return ErrNo{
+		ErrorCode: code,
+		ErrorMsg:  msg,
+	}
+}
+
+// WithMessage will replace default msg to new
+func (e ErrNo) WithMessage(msg string) ErrNo {
+	e.ErrorMsg = msg
+	return e
+}
+
+// WithError will add error msg after Message
+func (e ErrNo) WithError(err error) ErrNo {
+	e.ErrorMsg = e.ErrorMsg + ", " + err.Error()
+	return e
+}
+
+// ConvertErr convert error to ErrNo
+// in Default user InternalServiceError
+func ConvertErr(err error) ErrNo {
+	if err == nil {
+		return Success
+	}
+
+	errno := ErrNo{}
+	if errors.As(err, &errno) {
+		return errno
+	}
+
+	s := InternalServiceError
+	s.ErrorMsg = err.Error()
+	return s
+}

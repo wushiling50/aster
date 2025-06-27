@@ -13,4 +13,5 @@ var (
 	InternalJSONError      = NewErrNo(InternalJSONErrorCode, "JSON 错误")
 	InternalLanguagesError = NewErrNo(InternalLanguagesErrorCode, "获取语言数据错误")
 	InternalGithubError    = NewErrNo(InternalGithubErrorCode, "Github 错误")
+	InternalAsynqError     = NewErrNo(InternalAsynqErrorCode, "Asynq 错误")
 )
