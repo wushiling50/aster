@@ -23,12 +23,16 @@ Telemetry:
   Sampler: 1.0
   Batcher: jaeger
 
+Snowflake:
+  WorkerId: 0
+  DatancenterId: 0
+
 Mysql:
-  addr: 127.0.0.1:3306
-  database: aster
-  username: aster
-  password: aster
-  charset: utf8mb4
+  Addr: 127.0.0.1:3306
+  Database: aster
+  Username: aster
+  Password: aster
+  Charset: utf8mb4
 
 Redis:
   Host: 127.0.0.1:6379

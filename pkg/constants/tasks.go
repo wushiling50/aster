@@ -16,9 +16,9 @@ const (
 )
 
 const (
-	APIGetDeveloper = iota
+	APIGetDeveloper int = iota
 	APIGetLanguage
-	APIGetPulsePoint
-	APIGetRegion
+	APIGetScore
+	APIGetNation
 	APIGetSummary
 )

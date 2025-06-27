@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	rest.RestConf
+	Snowflake      config.Snowflake
 	Mysql          config.MysqlConf
 	Redis          redis.RedisConf
 	AsynqRedisConf config.AsynqRedisConf

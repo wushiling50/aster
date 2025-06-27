@@ -39,18 +39,19 @@ func (l *GetLanguageUsageLogic) GetLanguageUsage(req *types.GetLanguageUsageReq)
 
 	reqId := req.TaskId
 
-	id, err := github.GetIdByLogin(l.ctx, req.Login)
+	developerId, err := github.GetIdByLogin(l.ctx, req.Login)
 	if err != nil {
 		logx.Errorf("applet.GetLanguageUsage: Failed To Get Id By Login %v", err.Error())
 		err = errno.InternalLanguagesError.WithError(err)
 		return
 	}
 
-	taskId := tasks.GetNewAPITaskKey(constants.APIGetLanguage, id, reqId)
+	taskId := tasks.GetNewAPITaskKey(constants.APIGetLanguage, developerId, reqId)
 	taskInfo, err := l.svcCtx.AsynqInspector.GetTaskInfo(constants.APITaskQueue, taskId)
 	if err != nil {
 		logx.Errorf("applet.GetLanguageUsage: Failed To Get Task Info %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
+		return
 	}
 
 	switch taskInfo.State {
@@ -107,7 +108,7 @@ func (l *GetLanguageUsageLogic) GetLanguageUsage(req *types.GetLanguageUsageReq)
 		}
 
 		resp.LanguageUsage = types.LanguageUsage{
-			Id:        id,
+			Id:        developerId,
 			Languages: usageArr,
 			UpdatedAt: time.Unix(languages.DataUpdatedAt, 0).Format(time.RFC3339),
 		}

@@ -17,3 +17,8 @@ type MysqlConf struct {
 	Password string
 	Charset  string
 }
+
+type Snowflake struct {
+	WorkerId      int64
+	DatancenterId int64
+}

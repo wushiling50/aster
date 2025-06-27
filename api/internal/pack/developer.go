@@ -28,6 +28,10 @@ type GetSummary struct {
 	TaskState types.TaskState `json:"task_state"`
 }
 
+type PostTask struct {
+	TaskId types.TaskId `json:"task_id"`
+}
+
 func BuildDeveloper(res *types.GetDeveloperResp) *GetDeveloper {
 	return &GetDeveloper{
 		Developer: res.Developer,
@@ -59,5 +63,11 @@ func BuildSummary(res *types.GetSummaryResp) *GetSummary {
 	return &GetSummary{
 		Summary:   res.Summary,
 		TaskState: res.TaskState,
+	}
+}
+
+func BuildTaskId(id types.TaskId) *PostTask {
+	return &PostTask{
+		TaskId: id,
 	}
 }

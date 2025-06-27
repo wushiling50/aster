@@ -44,7 +44,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 			Password: c.AsynqRedisConf.Pass,
 			DB:       c.AsynqRedisConf.DB,
 		}),
-		RankModel: rank.NewRankModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)), redis.MustNewRedis(c.Redis)),
+		RankModel: rank.NewRankModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
+			redis.MustNewRedis(c.Redis), c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 
 		DeveloperRpcClient:    developer.NewDeveloperZrpcClient(zrpc.MustNewClient(c.Services.Developer)),
 		RepoRpcClient:         repo.NewRepoZrpcClient(zrpc.MustNewClient(c.Services.Repo)),

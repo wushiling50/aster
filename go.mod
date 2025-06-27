@@ -7,6 +7,7 @@ require (
 	github.com/go-sql-driver/mysql v1.9.0
 	github.com/google/go-github/v66 v66.0.0
 	github.com/hibiken/asynq v0.25.1
+	github.com/matoous/go-nanoid v1.5.1
 	github.com/zeromicro/go-zero v1.8.4
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.36.5

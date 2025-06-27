@@ -36,18 +36,19 @@ func (l *GetNationLogic) GetNation(req *types.GetNationReq) (resp *types.GetNati
 
 	reqId := req.TaskId
 
-	id, err := github.GetIdByLogin(l.ctx, req.Login)
+	developerId, err := github.GetIdByLogin(l.ctx, req.Login)
 	if err != nil {
 		logx.Errorf("applet.GetNation: Failed To Get Id By Login %v", err.Error())
 		err = errno.InternalLanguagesError.WithError(err)
 		return
 	}
 
-	taskId := tasks.GetNewAPITaskKey(constants.APIGetRegion, id, reqId)
+	taskId := tasks.GetNewAPITaskKey(constants.APIGetNation, developerId, reqId)
 	taskInfo, err := l.svcCtx.AsynqInspector.GetTaskInfo(constants.APITaskQueue, taskId)
 	if err != nil {
 		logx.Errorf("applet.GetNation: Failed To Get Task Info %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
+		return
 	}
 
 	switch taskInfo.State {
@@ -76,7 +77,7 @@ func (l *GetNationLogic) GetNation(req *types.GetNationReq) (resp *types.GetNati
 		}
 
 		resp.Nation = types.Nation{
-			Id:         id,
+			Id:         developerId,
 			Nation:     nation.Nation,
 			Confidence: nation.Confidence,
 		}
