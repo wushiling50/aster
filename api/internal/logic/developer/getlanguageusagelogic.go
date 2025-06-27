@@ -111,11 +111,8 @@ func (l *GetLanguageUsageLogic) GetLanguageUsage(req *types.GetLanguageUsageReq)
 			Languages: usageArr,
 			UpdatedAt: time.Unix(languages.DataUpdatedAt, 0).Format(time.RFC3339),
 		}
-
-		return
 	default:
 		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected task state: %v", taskInfo.State.String()))
-		return
 	}
 
 	return

@@ -150,8 +150,9 @@ type GetNationReq {
 }
 
 type GetNationResp {
-	BaseResp BaseResp `json:"base"`
-	Nation   Nation   `json:"nation"`
+	BaseResp  BaseResp  `json:"base"`
+	Nation    Nation    `json:"nation"`
+	TaskState TaskState `json:"task_state"`
 }
 
 type GetSummaryReq {

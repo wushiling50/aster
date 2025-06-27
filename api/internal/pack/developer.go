@@ -12,6 +12,10 @@ type GetLanguageUsage struct {
 	LanguageUsage types.LanguageUsage `json:"language_usage"`
 }
 
+type GetNation struct {
+	Nation types.Nation `json:"nation"`
+}
+
 func BuildDeveloper(res *types.GetDeveloperResp) *GetDeveloper {
 	return &GetDeveloper{
 		Developer: res.Developer,
@@ -21,5 +25,11 @@ func BuildDeveloper(res *types.GetDeveloperResp) *GetDeveloper {
 func BuildLanguageUsage(res *types.GetLanguageUsageResp) *GetLanguageUsage {
 	return &GetLanguageUsage{
 		LanguageUsage: res.LanguageUsage,
+	}
+}
+
+func BuildNation(res *types.GetNationResp) *GetNation {
+	return &GetNation{
+		Nation: res.Nation,
 	}
 }

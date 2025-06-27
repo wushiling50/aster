@@ -66,8 +66,9 @@ type GetNationReq struct {
 }
 
 type GetNationResp struct {
-	BaseResp BaseResp `json:"base"`
-	Nation   Nation   `json:"nation"`
+	BaseResp  BaseResp  `json:"base"`
+	Nation    Nation    `json:"nation"`
+	TaskState TaskState `json:"task_state"`
 }
 
 type GetScoreRankReq struct {
