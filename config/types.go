@@ -22,3 +22,8 @@ type Snowflake struct {
 	WorkerId      int64
 	DatancenterId int64
 }
+
+type KqPusherConf struct {
+	Brokers []string
+	Topic   string
+}
