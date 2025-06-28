@@ -12,23 +12,24 @@ type Config struct {
 	Redis          redis.RedisConf
 	AsynqRedisConf config.AsynqRedisConf
 
+	KafkaQueue struct {
+		KqDeveloperPusherConf                  config.KqPusherConf
+		KqContributionPusherConf               config.KqPusherConf
+		KqCreateRepoPusherConf                 config.KqPusherConf
+		KqForkPusherConf                       config.KqPusherConf
+		KqStarPusherConf                       config.KqPusherConf
+		KqFollowPusherConf                     config.KqPusherConf
+		KqRepoPusherConf                       config.KqPusherConf
+		KqDeveloperUpdateCompletePusherConf    config.KqPusherConf
+		KqRepoUpdateCompletePusherConf         config.KqPusherConf
+		KqContributionUpdateCompletePusherConf config.KqPusherConf
+		KqRelationUpdateCompletePusherConf     config.KqPusherConf
+	}
+
 	Services struct {
 		Developer    zrpc.RpcClientConf
 		Relation     zrpc.RpcClientConf
 		Repo         zrpc.RpcClientConf
 		Contribution zrpc.RpcClientConf
 	}
-
-	KqDeveloperPusherConf    config.KqPusherConf
-	KqContributionPusherConf config.KqPusherConf
-	KqCreateRepoPusherConf   config.KqPusherConf
-	KqForkPusherConf         config.KqPusherConf
-	KqStarPusherConf         config.KqPusherConf
-	KqFollowPusherConf       config.KqPusherConf
-	KqRepoPusherConf         config.KqPusherConf
-
-	KqDeveloperUpdateCompletePusherConf    config.KqPusherConf
-	KqRepoUpdateCompletePusherConf         config.KqPusherConf
-	KqContributionUpdateCompletePusherConf config.KqPusherConf
-	KqRelationUpdateCompletePusherConf     config.KqPusherConf
 }

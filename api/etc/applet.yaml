@@ -58,24 +58,6 @@ Services:
       - 127.0.0.1:2379
       Key: analysis.rpc
 
-  Relation:
-    Etcd:
-      Hosts:
-      - 127.0.0.1:2379
-      Key: relation.rpc
-
-  Repo:
-    Etcd:
-      Hosts:
-      - 127.0.0.1:2379
-      Key: repo.rpc
-
-  Contribution:
-    Etcd:
-      Hosts:
-      - 127.0.0.1:2379
-      Key: contribution.rpc
-
   IdGenerator:
     Etcd:
       Hosts:

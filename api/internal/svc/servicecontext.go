@@ -7,11 +7,8 @@ import (
 	"github.com/wushiling50/aster/pkg/model/rank"
 	"github.com/wushiling50/aster/pkg/utils"
 	analysis "github.com/wushiling50/aster/rpc/analysis/analysisclient"
-	contribution "github.com/wushiling50/aster/rpc/contribution/contributionclient"
 	developer "github.com/wushiling50/aster/rpc/developer/developerclient"
 	"github.com/wushiling50/aster/rpc/id_generator/idgenerator"
-	relation "github.com/wushiling50/aster/rpc/relation/relationclient"
-	repo "github.com/wushiling50/aster/rpc/repo/repoclient"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -23,12 +20,9 @@ type ServiceContext struct {
 	AsynqInspector *asynq.Inspector
 	RankModel      *rank.RankModel
 
-	DeveloperRpcClient    developer.DeveloperZrpcClient
-	RepoRpcClient         repo.RepoZrpcClient
-	ContributionRpcClient contribution.ContributionZrpcClient
-	RelationRpcClient     relation.Relation
-	AnalysisRpcClient     analysis.Analysis
-	IdGeneratorRpcClient  idgenerator.IdGenerator
+	DeveloperRpcClient   developer.DeveloperZrpcClient
+	AnalysisRpcClient    analysis.Analysis
+	IdGeneratorRpcClient idgenerator.IdGenerator
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -47,11 +41,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		RankModel: rank.NewRankModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			redis.MustNewRedis(c.Redis), c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 
-		DeveloperRpcClient:    developer.NewDeveloperZrpcClient(zrpc.MustNewClient(c.Services.Developer)),
-		RepoRpcClient:         repo.NewRepoZrpcClient(zrpc.MustNewClient(c.Services.Repo)),
-		ContributionRpcClient: contribution.NewContributionZrpcClient(zrpc.MustNewClient(c.Services.Contribution)),
-		RelationRpcClient:     relation.NewRelation(zrpc.MustNewClient(c.Services.Relation)),
-		AnalysisRpcClient:     analysis.NewAnalysis(zrpc.MustNewClient(c.Services.Analysis)),
-		IdGeneratorRpcClient:  idgenerator.NewIdGenerator(zrpc.MustNewClient(c.Services.IdGenerator)),
+		DeveloperRpcClient:   developer.NewDeveloperZrpcClient(zrpc.MustNewClient(c.Services.Developer)),
+		AnalysisRpcClient:    analysis.NewAnalysis(zrpc.MustNewClient(c.Services.Analysis)),
+		IdGeneratorRpcClient: idgenerator.NewIdGenerator(zrpc.MustNewClient(c.Services.IdGenerator)),
 	}
 }

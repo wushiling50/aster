@@ -1,0 +1,124 @@
+Name: fetcher
+Mode: dev
+
+# dev 环境模式配置
+DevServer:
+  Enabled: true
+  Port: 6001
+
+# 日志配置
+Log:
+  ServiceName: fetcher
+  Mode: file
+  Encoding: json
+  Path: log/fetcher/
+
+# 链路追踪​
+Telemetry:
+  Name: fetcher
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Pass: aster
+
+AsynqRedisConf:
+  Addr: 127.0.0.1:6379
+  Pass: aster
+  DB: 0
+
+KafkaQueue:
+  KqDeveloperPusherConf:
+    Name: developer-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: developer-update
+
+  KqContributionPusherConf:
+    Name: contribution-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: contribution-update
+
+  KqCreateRepoPusherConf:
+    Name: create-repo-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: create-repo-update
+
+  KqForkPusherConf:
+    Name: fork-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: fork-update
+
+  KqStarPusherConf:
+    Name: star-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: star-update
+
+  KqFollowPusherConf:
+    Name: follow-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: follow-update
+
+  KqRepoPusherConf:
+    Name: repo-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: repo-update
+
+  KqDeveloperUpdateCompletePusherConf:
+    Name: developer-update-complete-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: developer-update-complete
+
+  KqRepoUpdateCompletePusherConf:
+    Name: repo-update-complete-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: repo-update-complete
+
+  KqContributionUpdateCompletePusherConf:
+    Name: contribution-update-complete-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: contribution-update-complete
+
+  KqRelationUpdateCompletePusherConf:
+    Name: relation-update-complete-pusher
+    Brokers:
+      - 127.0.0.1:9092
+    Topic: relation-update-complete
+
+# RPC 服务配置
+Services:
+  Developer:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: developer.rpc
+
+  Relation:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: relation.rpc
+
+  Repo:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: repo.rpc
+
+  Contribution:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: contribution.rpc
