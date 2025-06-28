@@ -116,6 +116,7 @@ func (l *GetLanguageUsageLogic) GetLanguageUsage(req *types.GetLanguageUsageReq)
 		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected task state: %v", taskInfo.State.String()))
 	}
 
+	logx.Info("Successfully Get LanguageUsage")
 	return
 }
 

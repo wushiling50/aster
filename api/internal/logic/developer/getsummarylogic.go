@@ -86,5 +86,6 @@ func (l *GetSummaryLogic) GetSummary(req *types.GetSummaryReq) (resp *types.GetS
 		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected task state: %v", taskInfo.State.String()))
 	}
 
+	logx.Info("Successfully Get Summary")
 	return
 }

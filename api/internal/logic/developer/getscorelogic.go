@@ -86,5 +86,6 @@ func (l *GetScoreLogic) GetScore(req *types.GetScoreReq) (resp *types.GetScoreRe
 		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected task state: %v", taskInfo.State.String()))
 	}
 
+	logx.Info("Successfully Get Score")
 	return
 }

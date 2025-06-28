@@ -1,16 +1,13 @@
-package developer
+package logic
 
 import (
 	"context"
+	"encoding/json"
 
-	"github.com/wushiling50/aster/api/internal/pack"
-	"github.com/wushiling50/aster/api/internal/svc"
-	"github.com/wushiling50/aster/api/internal/types"
+	"github.com/wushiling50/aster/gen/developer"
 	"github.com/wushiling50/aster/pkg/errno"
-	"github.com/wushiling50/aster/pkg/github"
 	"github.com/wushiling50/aster/pkg/utils"
-	developer "github.com/wushiling50/aster/rpc/developer/developerclient"
-
+	"github.com/wushiling50/aster/rpc/api_processor/internal/svc"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -28,33 +25,24 @@ func NewGetDeveloperLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetD
 	}
 }
 
-func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *types.GetDeveloperResp, err error) {
-	resp = new(types.GetDeveloperResp)
-
-	var (
-		id      int64
-		rpcResp *types.Developer
-	)
-
-	if id, err = github.GetIdByLogin(l.ctx, req.Login); err != nil {
-		logx.Errorf("applet.GetDeveloper: Failed To Get Id By Login %v", err.Error())
-		return
-	}
-
-	if err = l.rpcUpdateDeveloper(id); err != nil {
+func (l *GetDeveloperLogic) GetDeveloper(id int64) ([]byte, error) {
+	if err := l.rpcUpdateDeveloper(id); err != nil {
 		logx.Error(err)
-		return
+		return nil, err
 	}
 
-	if rpcResp, err = l.rpcGetDeveloperById(id); err != nil {
+	resp, err := l.rpcGetDeveloperById(id)
+	if err != nil {
 		logx.Error(err)
-		return
+		return nil, err
 	}
 
-	resp.Developer = *rpcResp
+	data, err := json.Marshal(resp.Developer)
+	if err != nil {
+		return nil, err
+	}
 
-	logx.Info("Successfully Get Developer")
-	return
+	return data, nil
 }
 
 func (l *GetDeveloperLogic) rpcUpdateDeveloper(id int64) (err error) {
@@ -64,7 +52,7 @@ func (l *GetDeveloperLogic) rpcUpdateDeveloper(id int64) (err error) {
 		Id: id,
 	})
 	if err != nil {
-		logx.Errorf("UpdateDeveloperRPC: RPC called failed: %v", err.Error())
+		logx.Errorf("UpdateDeveloper: RPC called failed: %v", err.Error())
 		err = errno.InternalServiceError.WithError(err)
 		return
 	}
@@ -77,9 +65,7 @@ func (l *GetDeveloperLogic) rpcUpdateDeveloper(id int64) (err error) {
 	return
 }
 
-func (l *GetDeveloperLogic) rpcGetDeveloperById(id int64) (typeDeveloper *types.Developer, err error) {
-	var resp *developer.GetDeveloperByIdResp
-
+func (l *GetDeveloperLogic) rpcGetDeveloperById(id int64) (resp *developer.GetDeveloperByIdResp, err error) {
 	resp, err = l.svcCtx.DeveloperRpcClient.GetDeveloperById(l.ctx, &developer.GetDeveloperByIdReq{
 		Id: id,
 	})
@@ -93,8 +79,6 @@ func (l *GetDeveloperLogic) rpcGetDeveloperById(id int64) (typeDeveloper *types.
 		err = errno.BizError.WithMessage(resp.Base.Message)
 		return
 	}
-
-	typeDeveloper = pack.BuildTypeDeveloper(resp.Developer)
 
 	return
 }

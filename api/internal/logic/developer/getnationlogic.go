@@ -85,5 +85,6 @@ func (l *GetNationLogic) GetNation(req *types.GetNationReq) (resp *types.GetNati
 		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected task state: %v", taskInfo.State.String()))
 	}
 
+	logx.Info("Successfully Get Nation")
 	return
 }

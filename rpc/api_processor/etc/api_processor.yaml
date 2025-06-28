@@ -1,0 +1,63 @@
+Name: apiProcessor
+Mode: dev
+
+# dev 环境模式配置
+DevServer:
+  Enabled: true
+  Port: 5003
+
+# 日志配置
+Log:
+  ServiceName: apiProcessor
+  Mode: file
+  Encoding: json
+  Path: log/apiProcessor/
+
+# 链路追踪​
+Telemetry:
+  Name: apiProcessor
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Pass: aster
+
+AsynqRedisConf:
+  Addr: 127.0.0.1:6379
+  Pass: aster
+  DB: 0
+
+# RPC 服务配置
+Services:
+  Developer:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: developer.rpc
+
+  Analysis:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: analysis.rpc
+
+  Relation:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: relation.rpc
+
+  Repo:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: repo.rpc
+
+  Contribution:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: contribution.rpc
