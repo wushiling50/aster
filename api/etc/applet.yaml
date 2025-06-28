@@ -14,7 +14,7 @@ Log:
   ServiceName: applet
   Mode: file
   Encoding: json
-  Path: logs/applet/
+  Path: log/applet/
 
 # 链路追踪​
 Telemetry:

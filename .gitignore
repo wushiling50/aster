@@ -42,4 +42,4 @@ config/filebeat
 config/mysql-exporter
 
 # log file
-/logs
+/log
