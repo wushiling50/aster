@@ -10,6 +10,7 @@ import (
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/github"
 	"github.com/wushiling50/aster/pkg/tasks"
+	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/id_generator/idgenerator"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -39,13 +40,11 @@ func (l *PostScoreTaskLogic) PostScoreTask(req *types.PostTaskReq) (resp *types.
 		return
 	}
 
-	getIdResp, err := l.svcCtx.IdGeneratorRpcClient.GetId(l.ctx, &idgenerator.GetIdReq{})
+	reqId, err := l.rpcGetId()
 	if err != nil {
-		logx.Errorf("IdGeneratorRpc: RPC called failed: %v", err.Error())
-		err = errno.InternalServiceError.WithError(err)
-		return nil, err
+		logx.Error(err)
+		return
 	}
-	reqId := getIdResp.Id
 
 	task, taskId, err := tasks.NewAPITask(constants.APIGetScore, developerId, reqId)
 	if err != nil {
@@ -70,6 +69,26 @@ func (l *PostScoreTaskLogic) PostScoreTask(req *types.PostTaskReq) (resp *types.
 	resp.TaskId = types.TaskId{
 		TaskId: reqId,
 	}
+
+	return
+}
+
+func (l *PostScoreTaskLogic) rpcGetId() (id string, err error) {
+	var resp *idgenerator.GetIdResp
+
+	resp, err = l.svcCtx.IdGeneratorRpcClient.GetId(l.ctx, &idgenerator.GetIdReq{})
+	if err != nil {
+		logx.Errorf("IdGeneratorRpc: RPC called failed: %v", err.Error())
+		err = errno.InternalServiceError.WithError(err)
+		return
+	}
+
+	if !utils.IsSuccess(resp.Base) {
+		err = errno.BizError.WithMessage(resp.Base.Message)
+		return
+	}
+
+	id = resp.Id
 
 	return
 }
