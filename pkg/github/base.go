@@ -11,8 +11,12 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
+func githubClientInit() *github.Client {
+	return github.NewClient(nil).WithAuthToken(os.Getenv(constants.GithubAPIToken))
+}
+
 func GetIdByLogin(ctx context.Context, login string) (id int64, err error) {
-	var githubClient *github.Client = github.NewClient(nil).WithAuthToken(os.Getenv(constants.GithubAPIToken))
+	var githubClient *github.Client = githubClientInit()
 	var githubUser *github.User
 
 	if githubUser, _, err = githubClient.Users.Get(ctx, login); err != nil {
@@ -28,11 +32,11 @@ func GetIdByLogin(ctx context.Context, login string) (id int64, err error) {
 }
 
 func GetLoginById(ctx context.Context, id int64) (login string, err error) {
-	var githubClient *github.Client = github.NewClient(nil).WithAuthToken(os.Getenv(constants.GithubAPIToken))
+	var githubClient *github.Client = githubClientInit()
 	var githubUser *github.User
 
 	if githubUser, _, err = githubClient.Users.GetByID(ctx, id); err != nil {
-		logx.Errorf("github.GetIdByLogin: Fail To Fetching user: %v", err.Error())
+		logx.Errorf("github.GetIdByLogin: Fail To Fetching User: %v", err.Error())
 		err = errno.InternalGithubError.WithError(err)
 		return
 	}
@@ -40,6 +44,17 @@ func GetLoginById(ctx context.Context, id int64) (login string, err error) {
 	login = githubUser.GetLogin()
 
 	logx.Infof("Successfully Get Login %s Of Id %v", login, id)
+	return
+}
+
+func GetUserById(ctx context.Context, id int64) (githubUser *github.User, githubResp *github.Response, err error) {
+	var githubClient *github.Client = githubClientInit()
+	if githubUser, githubResp, err = githubClient.Users.GetByID(ctx, id); err != nil {
+		logx.Errorf("github.GetUserById: Fail To Fetching User: %v", err.Error())
+		err = errno.InternalGithubError.WithError(err)
+		return
+	}
+
 	return
 }
 

@@ -23,4 +23,5 @@ const (
 	InternalLanguagesErrorCode = 50005 // Languages Data 错误
 	InternalGithubErrorCode    = 50006 // Github 错误
 	InternalAsynqErrorCode     = 50007 // Asynq 错误
+	InternalKafkaErrorCode     = 50008 // Kafka 错误
 )

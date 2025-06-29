@@ -14,4 +14,5 @@ var (
 	InternalLanguagesError = NewErrNo(InternalLanguagesErrorCode, "获取语言数据错误")
 	InternalGithubError    = NewErrNo(InternalGithubErrorCode, "Github 错误")
 	InternalAsynqError     = NewErrNo(InternalAsynqErrorCode, "Asynq 错误")
+	InternalKafkaError     = NewErrNo(InternalKafkaErrorCode, "Kafka 错误")
 )
