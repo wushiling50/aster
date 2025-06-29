@@ -15,13 +15,11 @@ import (
 )
 
 type APITaskConsumer struct {
-	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewAPITaskConsumer(ctx context.Context, svcCtx *svc.ServiceContext) *APITaskConsumer {
+func NewAPITaskConsumer(svcCtx *svc.ServiceContext) *APITaskConsumer {
 	return &APITaskConsumer{
-		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
@@ -52,27 +50,27 @@ func (c *APITaskConsumer) Consume(ctx context.Context, task *asynq.Task) error {
 	case constants.APIGetDeveloper:
 		logx.Info("Consume Message: APIGetDeveloper")
 
-		l := logic.NewGetDeveloperLogic(c.ctx, c.svcCtx)
+		l := logic.NewGetDeveloperLogic(ctx, c.svcCtx)
 		data, err = l.GetDeveloper(msg.Id)
 	case constants.APIGetLanguage:
 		logx.Info("Consume Message: APIGetLanguage")
 
-		l := logic.NewGetLanguageLogic(c.ctx, c.svcCtx)
+		l := logic.NewGetLanguageLogic(ctx, c.svcCtx)
 		data, err = l.GetLanguage(msg.Id)
 	case constants.APIGetScore:
 		logx.Info("Consume Message: APIGetScore")
 
-		l := logic.NewGetScoreLogic(c.ctx, c.svcCtx)
+		l := logic.NewGetScoreLogic(ctx, c.svcCtx)
 		data, err = l.GetScore(msg.Id)
 	case constants.APIGetNation:
 		logx.Info("Consume Message: APIGetNation")
 
-		l := logic.NewGetNationLogic(c.ctx, c.svcCtx)
+		l := logic.NewGetNationLogic(ctx, c.svcCtx)
 		data, err = l.GetNation(msg.Id)
 	case constants.APIGetSummary:
 		logx.Info("Consume Message: APIGetSummary")
 
-		l := logic.NewGetSummaryLogic(c.ctx, c.svcCtx)
+		l := logic.NewGetSummaryLogic(ctx, c.svcCtx)
 		data, err = l.GetSummary(msg.Id)
 	default:
 		err = errors.New("Unexpected Message Type: " + strconv.FormatInt(int64(msg.Type), 10))

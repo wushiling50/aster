@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 
 	"github.com/wushiling50/aster/rpc/api_processor/internal/config"
@@ -18,13 +17,13 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
-	ctx := context.Background()
+
 	c.MustSetUp()
 
-	svcContext := svc.NewServiceContext(c)
-	taskConsumer := consumer.NewAPITaskConsumer(ctx, svcContext)
+	svcCtx := svc.NewServiceContext(c)
+	taskConsumer := consumer.NewAPITaskConsumer(svcCtx)
 	mux := taskConsumer.Register()
-	if err := svcContext.AsynqServer.Run(mux); err != nil {
+	if err := svcCtx.AsynqServer.Run(mux); err != nil {
 		logx.Error(err)
 		return
 	}
