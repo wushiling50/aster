@@ -15,76 +15,76 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FetchStarredRepoLogic struct {
+type FetchForkLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewFetchStarredRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FetchStarredRepoLogic {
-	return &FetchStarredRepoLogic{
+func NewFetchForkLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FetchForkLogic {
+	return &FetchForkLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *FetchStarredRepoLogic) FetchStarredRepo(userId int64) (err error) {
+func (l *FetchForkLogic) FetchFork(repoId int64) (err error) {
 	var (
-		githubUser *github.User
-		allRepos   []*github.StarredRepository
+		originalRepo *github.Repository
+		allForks     []*github.Repository
 	)
 
-	githubUser, _, err = githubFunc.GetUserById(l.ctx, userId)
+	originalRepo, _, err = githubFunc.GetRepo(l.ctx, repoId)
 	if err != nil {
 		logx.Error(err)
 		return
 	}
 
-	if allRepos, err = githubFunc.GetAllStarredReposByLogin(l.ctx, githubUser.GetLogin()); err != nil {
+	if allForks, err = githubFunc.GetAllForksByRepo(l.ctx, originalRepo.GetOwner().GetLogin(), originalRepo.GetName()); err != nil {
 		logx.Error(err)
 		return
 	}
 
-	if err = l.rpcDelAllStarredRepo(userId); err != nil {
+	if err = l.rpcDelAllFork(repoId); err != nil {
 		logx.Error(err)
 		return
 	}
 
-	for _, githubRepo := range allRepos {
-		modelStarredRepo := pack.BuildStarredRepo(githubRepo, userId)
+	for _, fork := range allForks {
+		modelFork := pack.BuildFork(repoId, fork.GetID())
 
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelStarredRepo); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(modelFork); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue
 		}
 
-		if err = l.svcCtx.KqStarPusher.Push(l.ctx, jsonStr); err != nil {
+		if err = l.svcCtx.KqForkPusher.Push(l.ctx, jsonStr); err != nil {
 			err = errno.InternalKafkaError.WithError(err)
 			logx.Error(err)
 			continue
 		}
 
-		if err = doFetchRepo(l.ctx, l.svcCtx, githubRepo.Repository); err != nil {
+		if err = doFetchRepo(l.ctx, l.svcCtx, fork); err != nil {
 			err = errno.BizError.WithError(err)
 			logx.Error(err)
 			continue
 		}
 	}
 
-	completedStarredRepo := pack.BuildCompletedStarredRepo(constants.FetchStarredRepoCompletedDataId, userId)
+	completedFork := pack.BuildCompletedFork(constants.FetchForkCompletedDataId, repoId)
 
 	var completedStr string
-	if completedStr, err = jsonx.MarshalToString(completedStarredRepo); err != nil {
+	if completedStr, err = jsonx.MarshalToString(completedFork); err != nil {
 		logx.Error(err)
 		err = errno.InternalJSONError.WithError(err)
 		return
 	}
 
-	if err = l.svcCtx.KqStarPusher.Push(l.ctx, completedStr); err != nil {
+	if err = l.svcCtx.KqForkPusher.Push(l.ctx, completedStr); err != nil {
 		logx.Error(err)
 		err = errno.InternalKafkaError.WithError(err)
 		return
@@ -93,15 +93,15 @@ func (l *FetchStarredRepoLogic) FetchStarredRepo(userId int64) (err error) {
 	return
 }
 
-func (l *FetchStarredRepoLogic) rpcDelAllStarredRepo(userId int64) (err error) {
-	var resp *relation.DelAllStarredRepoResp
+func (l *FetchForkLogic) rpcDelAllFork(repoId int64) (err error) {
+	var resp *relation.DelAllForkResp
 
-	resp, err = l.svcCtx.RelationRpcClient.DelAllStarredRepo(l.ctx, &relation.DelAllStarredRepoReq{
-		DeveloperId: userId,
+	resp, err = l.svcCtx.RelationRpcClient.DelAllFork(l.ctx, &relation.DelAllForkReq{
+		OriginalRepoId: repoId,
 	})
 
 	if err != nil {
-		logx.Errorf("DelDelAllStarredRepo: RPC called failed: %v", err.Error())
+		logx.Errorf("DelAllFork: RPC called failed: %v", err.Error())
 		err = errno.InternalServiceError.WithError(err)
 		return
 	}

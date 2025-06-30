@@ -21,17 +21,13 @@ type ServiceContext struct {
 	Redis       *redis.Redis
 	AsynqServer *asynq.Server
 
-	KqDeveloperPusher                  *kq.Pusher
-	KqContributionPusher               *kq.Pusher
-	KqCreateRepoPusher                 *kq.Pusher
-	KqForkPusher                       *kq.Pusher
-	KqStarPusher                       *kq.Pusher
-	KqFollowPusher                     *kq.Pusher
-	KqRepoPusher                       *kq.Pusher
-	KqDeveloperUpdateCompletePusher    *kq.Pusher
-	KqRepoUpdateCompletePusher         *kq.Pusher
-	KqContributionUpdateCompletePusher *kq.Pusher
-	KqRelationUpdateCompletePusher     *kq.Pusher
+	KqDeveloperPusher    *kq.Pusher
+	KqContributionPusher *kq.Pusher
+	KqCreateRepoPusher   *kq.Pusher
+	KqForkPusher         *kq.Pusher
+	KqStarPusher         *kq.Pusher
+	KqFollowPusher       *kq.Pusher
+	KqRepoPusher         *kq.Pusher
 
 	DeveloperRpcClient    developer.DeveloperZrpcClient
 	RelationRpcClient     relation.Relation
@@ -81,26 +77,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		KqRepoPusher: kq.NewPusher(
 			c.KafkaQueue.KqRepoPusherConf.Brokers,
 			c.KafkaQueue.KqRepoPusherConf.Topic,
-			kq.WithAllowAutoTopicCreation(),
-			kq.WithSyncPush()),
-		KqDeveloperUpdateCompletePusher: kq.NewPusher(
-			c.KafkaQueue.KqDeveloperUpdateCompletePusherConf.Brokers,
-			c.KafkaQueue.KqDeveloperUpdateCompletePusherConf.Topic,
-			kq.WithAllowAutoTopicCreation(),
-			kq.WithSyncPush()),
-		KqRepoUpdateCompletePusher: kq.NewPusher(
-			c.KafkaQueue.KqRepoUpdateCompletePusherConf.Brokers,
-			c.KafkaQueue.KqRepoUpdateCompletePusherConf.Topic,
-			kq.WithAllowAutoTopicCreation(),
-			kq.WithSyncPush()),
-		KqContributionUpdateCompletePusher: kq.NewPusher(
-			c.KafkaQueue.KqContributionUpdateCompletePusherConf.Brokers,
-			c.KafkaQueue.KqContributionUpdateCompletePusherConf.Topic,
-			kq.WithAllowAutoTopicCreation(),
-			kq.WithSyncPush()),
-		KqRelationUpdateCompletePusher: kq.NewPusher(
-			c.KafkaQueue.KqRelationUpdateCompletePusherConf.Brokers,
-			c.KafkaQueue.KqRelationUpdateCompletePusherConf.Topic,
 			kq.WithAllowAutoTopicCreation(),
 			kq.WithSyncPush()),
 

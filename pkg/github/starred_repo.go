@@ -16,7 +16,7 @@ func GetAllStarredReposByLogin(ctx context.Context, login string) (allRepos []*g
 	for {
 		repos, resp, err := githubClient.Activity.ListStarred(ctx, login, opts)
 		if err != nil {
-			logx.Errorf("Unexpected Error When Fetching Github Starred Repos: %v" + err.Error())
+			logx.Errorf("github.GetAllStarredReposByLogin: Fail To Fetching Starred Repo: %v", err.Error())
 			err = errno.InternalGithubError.WithError(err)
 			return nil, err
 		}

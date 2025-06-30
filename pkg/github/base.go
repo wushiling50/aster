@@ -3,6 +3,7 @@ package github
 import (
 	"context"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/google/go-github/v66/github"
@@ -51,6 +52,39 @@ func GetUserById(ctx context.Context, id int64) (githubUser *github.User, github
 	var githubClient *github.Client = githubClientInit()
 	if githubUser, githubResp, err = githubClient.Users.GetByID(ctx, id); err != nil {
 		logx.Errorf("github.GetUserById: Fail To Fetching User: %v", err.Error())
+		err = errno.InternalGithubError.WithError(err)
+		return
+	}
+
+	logx.Infof("Successfully Get User")
+	return
+}
+
+func GetRepo(ctx context.Context, repoId int64) (githubRepo *github.Repository, githubResp *github.Response, err error) {
+	var githubClient *github.Client = githubClientInit()
+	if githubRepo, githubResp, err = githubClient.Repositories.GetByID(ctx, repoId); err != nil {
+		logx.Errorf("github.GetRepo: Fail To Fetching Repo: %v", err.Error())
+		err = errno.InternalGithubError.WithError(err)
+		return
+	}
+
+	logx.Infof("Successfully Get Repo")
+	return
+}
+
+func GetRepoByUrl(ctx context.Context, repoUrl string) (repo *github.Repository, err error) {
+	var (
+		githubClient *github.Client = githubClientInit()
+		split        []string
+		owner        string
+		repoName     string
+	)
+	split = strings.Split(repoUrl, "/")
+	owner = split[len(split)-2]
+	repoName = split[len(split)-1]
+
+	if repo, _, err = githubClient.Repositories.Get(ctx, owner, repoName); err != nil {
+		logx.Errorf("github.GetRepoByUrl: Fail To Fetching Repo: %v", err.Error())
 		err = errno.InternalGithubError.WithError(err)
 		return
 	}

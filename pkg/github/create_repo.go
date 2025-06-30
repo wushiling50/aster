@@ -17,7 +17,7 @@ func GetAllReposByLogin(ctx context.Context, login string) (allRepos []*github.R
 	for {
 		repos, resp, err := githubClient.Repositories.ListByUser(ctx, login, opts)
 		if err != nil {
-			logx.Errorf("Unexpected Error When Fetching Github Repos: %v" + err.Error())
+			logx.Errorf("github.GetAllReposByLogin: Fail To Fetching Repos: %v", err.Error())
 			err = errno.InternalGithubError.WithError(err)
 			return nil, err
 		}
@@ -27,5 +27,6 @@ func GetAllReposByLogin(ctx context.Context, login string) (allRepos []*github.R
 		}
 		opts.Page = resp.NextPage
 	}
+
 	return
 }

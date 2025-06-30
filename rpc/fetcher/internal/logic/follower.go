@@ -15,24 +15,24 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FetchFollowingLogic struct {
+type FetchFollowerLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewFetchFollowingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FetchFollowingLogic {
-	return &FetchFollowingLogic{
+func NewFetchFollowerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FetchFollowerLogic {
+	return &FetchFollowerLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *FetchFollowingLogic) FetchFollowing(userId int64) (err error) {
+func (l *FetchFollowerLogic) FetchFollower(userId int64) (err error) {
 	var (
 		githubUser   *github.User
-		allFollowing []*github.User
+		allFollowers []*github.User
 	)
 
 	githubUser, _, err = githubFunc.GetUserById(l.ctx, userId)
@@ -41,17 +41,18 @@ func (l *FetchFollowingLogic) FetchFollowing(userId int64) (err error) {
 		return
 	}
 
-	if allFollowing, err = githubFunc.GetAllFollowingByLogin(l.ctx, githubUser.GetLogin()); err != nil {
+	if allFollowers, err = githubFunc.GetAllFollowersByLogin(l.ctx, githubUser.GetLogin()); err != nil {
 		logx.Error(err)
 		return
 	}
 
-	if err = l.rpcDelAllFollowing(userId); err != nil {
+	if err = l.rpcDelAllFollower(userId); err != nil {
+		logx.Error(err)
 		return
 	}
 
-	for _, following := range allFollowing {
-		modelFollow := pack.BuildFollow(userId, following.GetID())
+	for _, follower := range allFollowers {
+		modelFollow := pack.BuildFollow(follower.GetID(), userId)
 
 		var jsonStr string
 
@@ -67,14 +68,14 @@ func (l *FetchFollowingLogic) FetchFollowing(userId int64) (err error) {
 			continue
 		}
 
-		if err = doFetchDeveloper(l.ctx, l.svcCtx, following); err != nil {
+		if err = doFetchDeveloper(l.ctx, l.svcCtx, follower); err != nil {
 			err = errno.BizError.WithError(err)
 			logx.Error(err)
 			continue
 		}
 	}
 
-	completedFollow := pack.BuildCompletedFollow(constants.FetchFollowingCompletedDataId, userId)
+	completedFollow := pack.BuildCompletedFollow(constants.FetchFollowerCompletedDataId, userId)
 
 	var completedStr string
 	if completedStr, err = jsonx.MarshalToString(completedFollow); err != nil {
@@ -92,15 +93,15 @@ func (l *FetchFollowingLogic) FetchFollowing(userId int64) (err error) {
 	return
 }
 
-func (l *FetchFollowingLogic) rpcDelAllFollowing(userId int64) (err error) {
-	var resp *relation.DelAllFollowingResp
+func (l *FetchFollowerLogic) rpcDelAllFollower(developerId int64) (err error) {
+	var resp *relation.DelAllFollowerResp
 
-	resp, err = l.svcCtx.RelationRpcClient.DelAllFollowing(l.ctx, &relation.DelAllFollowingReq{
-		DeveloperId: userId,
+	resp, err = l.svcCtx.RelationRpcClient.DelAllFollower(l.ctx, &relation.DelAllFollowerReq{
+		DeveloperId: developerId,
 	})
 
 	if err != nil {
-		logx.Errorf("DelAllFollowingResp: RPC called failed: %v", err.Error())
+		logx.Errorf("DelAllFollower: RPC called failed: %v", err.Error())
 		err = errno.InternalServiceError.WithError(err)
 		return
 	}

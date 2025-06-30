@@ -92,11 +92,11 @@ func (l *FetchCreatedRepoLogic) FetchCreatedRepo(userId int64) (err error) {
 	return
 }
 
-func (l *FetchCreatedRepoLogic) rpcDelAllCreatedRepo(userId int64) (err error) {
+func (l *FetchCreatedRepoLogic) rpcDelAllCreatedRepo(developerId int64) (err error) {
 	var resp *relation.DelAllCreatedRepoResp
 
 	resp, err = l.svcCtx.RelationRpcClient.DelAllCreatedRepo(l.ctx, &relation.DelAllCreatedRepoReq{
-		DeveloperId: userId,
+		DeveloperId: developerId,
 	})
 
 	if err != nil {

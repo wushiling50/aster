@@ -13,17 +13,13 @@ type Config struct {
 	AsynqRedisConf config.AsynqRedisConf
 
 	KafkaQueue struct {
-		KqDeveloperPusherConf                  config.KqPusherConf
-		KqContributionPusherConf               config.KqPusherConf
-		KqCreateRepoPusherConf                 config.KqPusherConf
-		KqForkPusherConf                       config.KqPusherConf
-		KqStarPusherConf                       config.KqPusherConf
-		KqFollowPusherConf                     config.KqPusherConf
-		KqRepoPusherConf                       config.KqPusherConf
-		KqDeveloperUpdateCompletePusherConf    config.KqPusherConf
-		KqRepoUpdateCompletePusherConf         config.KqPusherConf
-		KqContributionUpdateCompletePusherConf config.KqPusherConf
-		KqRelationUpdateCompletePusherConf     config.KqPusherConf
+		KqDeveloperPusherConf    config.KqPusherConf
+		KqContributionPusherConf config.KqPusherConf
+		KqCreateRepoPusherConf   config.KqPusherConf
+		KqForkPusherConf         config.KqPusherConf
+		KqStarPusherConf         config.KqPusherConf
+		KqFollowPusherConf       config.KqPusherConf
+		KqRepoPusherConf         config.KqPusherConf
 	}
 
 	Services struct {

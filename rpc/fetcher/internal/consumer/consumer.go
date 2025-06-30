@@ -18,7 +18,7 @@ type FetcherTaskConsumer struct {
 	svcCtx *svc.ServiceContext
 }
 
-func NewFetcherTaskConsumer(ctx context.Context, svcCtx *svc.ServiceContext) *FetcherTaskConsumer {
+func NewFetcherTaskConsumer(svcCtx *svc.ServiceContext) *FetcherTaskConsumer {
 	return &FetcherTaskConsumer{
 		svcCtx: svcCtx,
 	}
@@ -70,6 +70,26 @@ func (c *FetcherTaskConsumer) Consume(ctx context.Context, task *asynq.Task) (er
 
 		l := logic.NewFetchFollowingLogic(ctx, c.svcCtx)
 		err = l.FetchFollowing(msg.Id)
+	case constants.FetchFork:
+		logx.Info("Consume Message: FetchFork")
+
+		l := logic.NewFetchFollowingLogic(ctx, c.svcCtx)
+		err = l.FetchFollowing(msg.Id)
+	case constants.FetchIssuePROfUser:
+		logx.Info("Consume Message: FetchIssuePROfUser")
+
+		l := logic.NewFetchIssuePROfUserLogic(ctx, c.svcCtx)
+		err = l.FetchIssuePROfUser(msg.Id, msg.UpdateAfter, msg.SearchLimit)
+	case constants.FetchCommentOfUser:
+		logx.Info("Consume Message: FetchCommentOfUser")
+
+		l := logic.NewFetchCommentOfUserLogic(ctx, c.svcCtx)
+		err = l.FetchCommentOfUser(msg.Id, msg.UpdateAfter, msg.SearchLimit)
+	case constants.FetchReviewOfUser:
+		logx.Info("Consume Message: FetchReviewOfUser")
+
+		l := logic.NewFetchReviewOfUserLogic(ctx, c.svcCtx)
+		err = l.FetchReviewOfUser(msg.Id, msg.UpdateAfter, msg.SearchLimit)
 	default:
 		err = errors.New("Unexpected Message Type: " + strconv.FormatInt(int64(msg.Type), 10))
 	}

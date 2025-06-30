@@ -15,24 +15,24 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FetchFollowerLogic struct {
+type FetchStarredRepoLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewFetchFollowerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FetchFollowerLogic {
-	return &FetchFollowerLogic{
+func NewFetchStarredRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FetchStarredRepoLogic {
+	return &FetchStarredRepoLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *FetchFollowerLogic) FetchFollower(userId int64) (err error) {
+func (l *FetchStarredRepoLogic) FetchStarredRepo(userId int64) (err error) {
 	var (
-		githubUser   *github.User
-		allFollowers []*github.User
+		githubUser *github.User
+		allRepos   []*github.StarredRepository
 	)
 
 	githubUser, _, err = githubFunc.GetUserById(l.ctx, userId)
@@ -41,49 +41,50 @@ func (l *FetchFollowerLogic) FetchFollower(userId int64) (err error) {
 		return
 	}
 
-	if allFollowers, err = githubFunc.GetAllFollowersByLogin(l.ctx, githubUser.GetLogin()); err != nil {
+	if allRepos, err = githubFunc.GetAllStarredReposByLogin(l.ctx, githubUser.GetLogin()); err != nil {
 		logx.Error(err)
 		return
 	}
 
-	if err = l.rpcDelAllFollower(userId); err != nil {
+	if err = l.rpcDelAllStarredRepo(userId); err != nil {
+		logx.Error(err)
 		return
 	}
 
-	for _, follower := range allFollowers {
-		modelFollow := pack.BuildFollow(follower.GetID(), userId)
+	for _, githubRepo := range allRepos {
+		modelStarredRepo := pack.BuildStarredRepo(githubRepo, userId)
 
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelFollow); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(modelStarredRepo); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue
 		}
 
-		if err = l.svcCtx.KqFollowPusher.Push(l.ctx, jsonStr); err != nil {
+		if err = l.svcCtx.KqStarPusher.Push(l.ctx, jsonStr); err != nil {
 			err = errno.InternalKafkaError.WithError(err)
 			logx.Error(err)
 			continue
 		}
 
-		if err = doFetchDeveloper(l.ctx, l.svcCtx, follower); err != nil {
+		if err = doFetchRepo(l.ctx, l.svcCtx, githubRepo.Repository); err != nil {
 			err = errno.BizError.WithError(err)
 			logx.Error(err)
 			continue
 		}
 	}
 
-	completedFollow := pack.BuildCompletedFollow(constants.FetchFollowerCompletedDataId, userId)
+	completedStarredRepo := pack.BuildCompletedStarredRepo(constants.FetchStarredRepoCompletedDataId, userId)
 
 	var completedStr string
-	if completedStr, err = jsonx.MarshalToString(completedFollow); err != nil {
+	if completedStr, err = jsonx.MarshalToString(completedStarredRepo); err != nil {
 		logx.Error(err)
 		err = errno.InternalJSONError.WithError(err)
 		return
 	}
 
-	if err = l.svcCtx.KqFollowPusher.Push(l.ctx, completedStr); err != nil {
+	if err = l.svcCtx.KqStarPusher.Push(l.ctx, completedStr); err != nil {
 		logx.Error(err)
 		err = errno.InternalKafkaError.WithError(err)
 		return
@@ -92,15 +93,15 @@ func (l *FetchFollowerLogic) FetchFollower(userId int64) (err error) {
 	return
 }
 
-func (l *FetchFollowerLogic) rpcDelAllFollower(userId int64) (err error) {
-	var resp *relation.DelAllFollowerResp
+func (l *FetchStarredRepoLogic) rpcDelAllStarredRepo(developerId int64) (err error) {
+	var resp *relation.DelAllStarredRepoResp
 
-	resp, err = l.svcCtx.RelationRpcClient.DelAllFollower(l.ctx, &relation.DelAllFollowerReq{
-		DeveloperId: userId,
+	resp, err = l.svcCtx.RelationRpcClient.DelAllStarredRepo(l.ctx, &relation.DelAllStarredRepoReq{
+		DeveloperId: developerId,
 	})
 
 	if err != nil {
-		logx.Errorf("DelAllFollowerResp: RPC called failed: %v", err.Error())
+		logx.Errorf("DelDelAllStarredRepo: RPC called failed: %v", err.Error())
 		err = errno.InternalServiceError.WithError(err)
 		return
 	}

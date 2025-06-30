@@ -23,6 +23,7 @@ func main() {
 	svcCtx := svc.NewServiceContext(c)
 	taskConsumer := consumer.NewAPITaskConsumer(svcCtx)
 	mux := taskConsumer.Register()
+
 	if err := svcCtx.AsynqServer.Run(mux); err != nil {
 		logx.Error(err)
 		return

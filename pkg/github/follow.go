@@ -14,7 +14,7 @@ func GetAllFollowersByLogin(ctx context.Context, login string) (allFollowers []*
 	for {
 		followers, resp, err := githubClient.Users.ListFollowers(ctx, login, opts)
 		if err != nil {
-			logx.Errorf("Unexpected Error When Fetching Follower: %v" + err.Error())
+			logx.Errorf("github.GetAllFollowersByLogin: Fail To Fetching Follower: %v", err.Error())
 			err = errno.InternalGithubError.WithError(err)
 			return nil, err
 		}
@@ -34,7 +34,7 @@ func GetAllFollowingByLogin(ctx context.Context, login string) (allFollowing []*
 	for {
 		following, resp, err := githubClient.Users.ListFollowing(ctx, login, opts)
 		if err != nil {
-			logx.Errorf("Unexpected Error When Fetching Following: %v" + err.Error())
+			logx.Errorf("github.GetAllFollowingByLogin: Fail To Fetching Following: %v", err.Error())
 			err = errno.InternalGithubError.WithError(err)
 			return nil, err
 		}

@@ -11,18 +11,6 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-func GetRepo(ctx context.Context, repoId int64) (githubRepo *github.Repository, githubResp *github.Response, err error) {
-	var githubClient *github.Client = githubClientInit()
-	if githubRepo, githubResp, err = githubClient.Repositories.GetByID(ctx, repoId); err != nil {
-		logx.Errorf("github.GetRepo: Fail To Fetching Repo: %v", err.Error())
-		err = errno.InternalGithubError.WithError(err)
-		return
-	}
-
-	logx.Infof("Successfully Get Repo")
-	return
-}
-
 func GetIssuePrCountByRepo(ctx context.Context, owner string, name string) (issueCount int64, prCount int64, err error) {
 	var (
 		githubClient    *github.Client = githubClientInit()
