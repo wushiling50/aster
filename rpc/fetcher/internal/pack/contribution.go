@@ -1,8 +1,6 @@
 package pack
 
 import (
-	"time"
-
 	"github.com/google/go-github/v66/github"
 	"github.com/wushiling50/aster/pkg/constants"
 	githubFunc "github.com/wushiling50/aster/pkg/github"
@@ -12,8 +10,6 @@ import (
 // Issue - PR
 func BuildIssuePR(issuePR *github.Issue, developerId int64, category string, merged bool, repo *github.Repository) *contribution.Contribution {
 	return &contribution.Contribution{
-		DataCreatedAt:  time.Now(),
-		DataUpdatedAt:  time.Now(),
 		DeveloperId:    developerId,
 		RepoId:         repo.GetID(),
 		Category:       category,
@@ -28,8 +24,6 @@ func BuildIssuePR(issuePR *github.Issue, developerId int64, category string, mer
 func BuildComment(githubCommentWithRepoId *githubFunc.CommentWithRepoId, developerId int64) *contribution.Contribution {
 	if githubCommentWithRepoId.IsIssueComment {
 		return &contribution.Contribution{
-			DataCreatedAt:  time.Now(),
-			DataUpdatedAt:  time.Now(),
 			DeveloperId:    developerId,
 			RepoId:         githubCommentWithRepoId.RepoId,
 			Category:       constants.CategoryComment,
@@ -40,8 +34,6 @@ func BuildComment(githubCommentWithRepoId *githubFunc.CommentWithRepoId, develop
 		}
 	}
 	return &contribution.Contribution{
-		DataCreatedAt:  time.Now(),
-		DataUpdatedAt:  time.Now(),
 		DeveloperId:    developerId,
 		RepoId:         githubCommentWithRepoId.RepoId,
 		Category:       constants.CategoryComment,
@@ -55,8 +47,6 @@ func BuildComment(githubCommentWithRepoId *githubFunc.CommentWithRepoId, develop
 // Review
 func BuildReview(githubReviewWithRepoId *githubFunc.ReviewWithRepoId, developerId int64) *contribution.Contribution {
 	return &contribution.Contribution{
-		DataCreatedAt:  time.Now(),
-		DataUpdatedAt:  time.Now(),
 		DeveloperId:    developerId,
 		RepoId:         githubReviewWithRepoId.RepoId,
 		Category:       constants.CategoryReview,

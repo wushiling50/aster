@@ -1,16 +1,12 @@
 package pack
 
 import (
-	"time"
-
 	"github.com/google/go-github/v66/github"
 	"github.com/wushiling50/aster/pkg/model/developer"
 )
 
 func BuildDeveloperProfile(githubUser *github.User, starredRepoCount int64) *developer.Developer {
 	return &developer.Developer{
-		DataCreatedAt:   time.Now(),
-		DataUpdatedAt:   time.Now(),
 		Id:              githubUser.GetID(),
 		Name:            githubUser.GetName(),
 		Login:           githubUser.GetLogin(),

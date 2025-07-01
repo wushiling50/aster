@@ -7,3 +7,50 @@ Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: repo.rpc
+
+# dev 环境模式配置
+DevServer:
+  Enabled: true
+  Port: 5003
+
+# 日志配置
+Log:
+  ServiceName: repo.rpc
+  Mode: file
+  Encoding: json
+  Path: log/repo_rpc/
+
+# 链路追踪​
+Telemetry:
+  Name: repo.rpc
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Snowflake:
+  WorkerId: 0
+  DatancenterId: 0
+
+Mysql:
+  Addr: 127.0.0.1:3306
+  Database: aster
+  Username: aster
+  Password: aster
+  Charset: utf8mb4
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Pass: aster
+
+AsynqRedisConf:
+  Addr: 127.0.0.1:6379
+  Pass: aster
+  DB: 0
+
+KqRepoConsumerConf:
+  Name: repo-consumer
+  Brokers:
+    - 127.0.0.1:9092
+  Group: repo
+  Topic: repo-update

@@ -5,7 +5,6 @@ import (
 
 	"github.com/wushiling50/aster/gen/repo"
 	"github.com/wushiling50/aster/rpc/repo/internal/svc"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -24,7 +23,7 @@ func NewGetRepoByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetRe
 }
 
 func (l *GetRepoByIdLogic) GetRepoById(in *repo.GetRepoByIdReq) (*repo.GetRepoByIdResp, error) {
-	// todo: add your logic here and delete this line
 
+	// handler + service
 	return &repo.GetRepoByIdResp{}, nil
 }
