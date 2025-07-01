@@ -1,5 +1,8 @@
 Name: relation.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:20006
+Mode: dev
+Timeout: 30000
+
 Etcd:
   Hosts:
   - 127.0.0.1:2379
