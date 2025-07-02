@@ -8,29 +8,6 @@ import "idl/base.proto";
 
 // ====== Developer ======
 message Developer {
-    int64 dataId = 1; // Generated primary key, MUST NOT be changed.
-    int64 dataCreatedAt = 2; // dataCreatedAt
-    int64 dataUpdatedAt = 3; // dataUpdatedAt
-    int64 id = 4; // Unique id of GitHub user.
-    string name = 5; // name
-    string login = 6; // login
-    string avatarUrl = 7; // avatarUrl
-    string company = 8; // company
-    string location = 9; // location
-    string bio = 10; // bio
-    string blog = 11; // blog
-    string email = 12; // email
-    string twitterUsername = 13; // twitterUsername
-    int64 repos = 14; // repo_count
-    int64 following = 15; // following_count
-    int64 followers = 16; // followers_count
-    int64 stars = 17; // star_count
-    int64 gists = 18; // gists_count
-    int64 createdAt = 19; // createdAt
-    int64 updatedAt = 20; // updatedAt
-}
-
-message AddDeveloperReq {
     int64 id = 1; // Unique id of GitHub user.
     string name = 2; // name
     string login = 3; // login
@@ -45,9 +22,13 @@ message AddDeveloperReq {
     int64 following = 12; // following_count
     int64 followers = 13; // followers_count
     int64 stars = 14; // star_count
-    int64 gists = 15; // gists_c
+    int64 gists = 15; // gists_count
     int64 createdAt = 16; // createdAt
     int64 updatedAt = 17; // updatedAt
+}
+
+message AddDeveloperReq {
+    Developer developer = 1;
 }
 
 message AddDeveloperResp {
