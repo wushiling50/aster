@@ -53,11 +53,11 @@ func (l *FetchCommentOfUserLogic) FetchCommentOfUser(userId int64, createAfter s
 	}
 
 	for _, comment := range allComment {
-		modelComment := pack.BuildComment(comment, userId)
+		comment := pack.BuildComment(comment, userId)
 
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelComment); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(comment); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue

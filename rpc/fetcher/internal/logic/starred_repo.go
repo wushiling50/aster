@@ -52,11 +52,11 @@ func (l *FetchStarredRepoLogic) FetchStarredRepo(userId int64) (err error) {
 	}
 
 	for _, githubRepo := range allRepos {
-		modelStarredRepo := pack.BuildStarredRepo(githubRepo, userId)
+		starredRepo := pack.BuildStarredRepo(githubRepo, userId)
 
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelStarredRepo); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(starredRepo); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue

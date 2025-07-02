@@ -93,10 +93,10 @@ func doFetchRepo(ctx context.Context, svcCtx *svc.ServiceContext, githubRepo *gi
 		return
 	}
 
-	modelRepo := pack.BuildRepo(githubRepo, issueCount, prCount, commitCount, openPrCount, mergedPrCount,
+	repo := pack.BuildRepo(githubRepo, issueCount, prCount, commitCount, openPrCount, mergedPrCount,
 		commentCount, reviewCount, languages)
 
-	if jsonStr, err = jsonx.MarshalToString(modelRepo); err != nil {
+	if jsonStr, err = jsonx.MarshalToString(repo); err != nil {
 		logx.Error(err)
 		err = errno.InternalJSONError.WithError(err)
 		return

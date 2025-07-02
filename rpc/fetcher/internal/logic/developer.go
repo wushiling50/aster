@@ -44,11 +44,11 @@ func doFetchDeveloper(ctx context.Context, svcCtx *svc.ServiceContext, githubUse
 		return
 	}
 
-	modelDeveloper := pack.BuildDeveloperProfile(githubUser, starredRepoCount)
+	developer := pack.BuildDeveloperProfile(githubUser, starredRepoCount)
 
 	var jsonStr string
 
-	if jsonStr, err = jsonx.MarshalToString(modelDeveloper); err != nil {
+	if jsonStr, err = jsonx.MarshalToString(developer); err != nil {
 		logx.Error(err)
 		err = errno.InternalJSONError.WithError(err)
 		return

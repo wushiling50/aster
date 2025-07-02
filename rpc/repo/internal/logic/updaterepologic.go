@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/wushiling50/aster/gen/repo"
+	model_repo "github.com/wushiling50/aster/pkg/model/repo"
+	"github.com/wushiling50/aster/rpc/repo/internal/pack"
 	"github.com/wushiling50/aster/rpc/repo/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -24,7 +26,25 @@ func NewUpdateRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 }
 
 func (l *UpdateRepoLogic) UpdateRepo(in *repo.UpdateRepoReq) (*repo.UpdateRepoResp, error) {
-	// todo: add your logic here and delete this line
+	resp := new(repo.UpdateRepoResp)
 
-	return &repo.UpdateRepoResp{}, nil
+	err := l.updateRepo(pack.BuildModelRepo(in.Repo))
+	if err != nil {
+		logx.Errorf("service.UpdateRepo: Update Repo Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	resp.Base = pack.BuildSuccessResp()
+
+	return resp, nil
+}
+
+func (l *UpdateRepoLogic) updateRepo(model *model_repo.Repo) error {
+	err := l.svcCtx.RepoModel.Update(l.ctx, model)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

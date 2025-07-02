@@ -57,11 +57,11 @@ func (l *FetchCreatedRepoLogic) FetchCreatedRepo(userId int64) (err error) {
 			continue
 		}
 
-		modelCreatedRepo := pack.BuildCreatedRepo(githubRepo, userId)
+		createdRepo := pack.BuildCreatedRepo(githubRepo, userId)
 
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelCreatedRepo); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(createdRepo); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue

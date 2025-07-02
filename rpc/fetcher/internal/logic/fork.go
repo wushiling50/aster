@@ -51,12 +51,12 @@ func (l *FetchForkLogic) FetchFork(repoId int64) (err error) {
 		return
 	}
 
-	for _, fork := range allForks {
-		modelFork := pack.BuildFork(repoId, fork.GetID())
+	for _, forkRepo := range allForks {
+		fork := pack.BuildFork(repoId, forkRepo.GetID())
 
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelFork); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(fork); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue
@@ -68,7 +68,7 @@ func (l *FetchForkLogic) FetchFork(repoId int64) (err error) {
 			continue
 		}
 
-		if err = doFetchRepo(l.ctx, l.svcCtx, fork); err != nil {
+		if err = doFetchRepo(l.ctx, l.svcCtx, forkRepo); err != nil {
 			err = errno.BizError.WithError(err)
 			logx.Error(err)
 			continue

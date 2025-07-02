@@ -52,11 +52,11 @@ func (l *FetchFollowingLogic) FetchFollowing(userId int64) (err error) {
 	}
 
 	for _, following := range allFollowing {
-		modelFollow := pack.BuildFollow(userId, following.GetID())
+		follow := pack.BuildFollow(userId, following.GetID())
 
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelFollow); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(follow); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue

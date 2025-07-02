@@ -14,7 +14,8 @@ const (
 
 	ParamErrorCode = 20001 // 参数错误
 
-	BizErrorCode = 40001 // 业务错误
+	BizErrorCode             = 40001 // 业务错误
+	BizRepoNotFoundErrorCode = 40002
 
 	InternalServiceErrorCode   = 50001 // 未知服务错误
 	InternalDatabaseErrorCode  = 50002 // 数据库错误

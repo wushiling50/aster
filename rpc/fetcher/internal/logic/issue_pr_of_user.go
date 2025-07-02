@@ -89,10 +89,10 @@ func (l *FetchIssuePROfUserLogic) FetchIssuePROfUser(userId int64, createAfter s
 			category = constants.CategoryOpenIssue
 		}
 
-		modelIssuePR := pack.BuildIssuePR(issuePR, userId, category, merged, repo)
+		genIssuePR := pack.BuildIssuePR(issuePR, userId, category, merged, repo)
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelIssuePR); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(genIssuePR); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue

@@ -5,10 +5,9 @@ import (
 
 	"github.com/wushiling50/aster/gen/repo"
 	"github.com/wushiling50/aster/pkg/errno"
-	model_repo "github.com/wushiling50/aster/pkg/model/repo"
+	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/repo/internal/config"
 	"github.com/wushiling50/aster/rpc/repo/internal/logic"
-	"github.com/wushiling50/aster/rpc/repo/internal/pack"
 	"github.com/wushiling50/aster/rpc/repo/internal/svc"
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/jsonx"
@@ -38,8 +37,7 @@ func (c *RepoConsumer) Consume(ctx context.Context, key string, value string) (e
 	logx.Info("Consume Message: ", value)
 
 	var (
-		newRepo *model_repo.Repo
-		oldRepo *model_repo.Repo
+		newRepo *repo.Repo
 		exist   bool
 	)
 
@@ -49,33 +47,29 @@ func (c *RepoConsumer) Consume(ctx context.Context, key string, value string) (e
 		return
 	}
 
-	if oldRepo, exist, err = c.getRepo(newRepo.Id); err != nil {
+	if _, exist, err = c.getRepo(newRepo.Id); err != nil {
 		logx.Error(err)
 		return
 	}
 
 	if exist {
-		err = c.updateOldRepo(oldRepo, newRepo)
+		err = c.updateOldRepo(newRepo)
+		if err != nil {
+			logx.Error(err)
+			return
+		}
+	} else {
+		err = c.addNewRepo(newRepo)
 		if err != nil {
 			logx.Error(err)
 			return
 		}
 	}
 
-	err = c.insertNewRepo(newRepo)
-	if err != nil {
-		logx.Error(err)
-		return
-	}
-
-	// if err = unblockRepoUpdateLock(c, newRepo.Id); err != nil {
-	// 	return
-	// }
-
 	return
 }
 
-func (c *RepoConsumer) getRepo(repoId int64) (*model_repo.Repo, bool, error) {
+func (c *RepoConsumer) getRepo(repoId int64) (*repo.Repo, bool, error) {
 	l := logic.NewGetRepoByIdLogic(c.ctx, c.svc)
 
 	resp, err := l.GetRepoById(&repo.GetRepoByIdReq{
@@ -83,7 +77,12 @@ func (c *RepoConsumer) getRepo(repoId int64) (*model_repo.Repo, bool, error) {
 	})
 
 	if err != nil {
-		logx.Error(err)
+		err = errno.InternalServiceError.WithError(err)
+		return nil, false, err
+	}
+
+	if !utils.IsSuccess(resp.Base) {
+		err = errno.BizError.WithMessage(resp.Base.Message)
 		return nil, false, err
 	}
 
@@ -92,15 +91,45 @@ func (c *RepoConsumer) getRepo(repoId int64) (*model_repo.Repo, bool, error) {
 		return nil, false, nil
 	}
 
-	modelRepo := pack.BuildModelRepo(resp.Repo)
-
-	return modelRepo, true, nil
+	return resp.Repo, true, nil
 }
 
-func (c *RepoConsumer) updateOldRepo(oldRepo *model_repo.Repo, newRepo *model_repo.Repo) error {
+func (c *RepoConsumer) updateOldRepo(newRepo *repo.Repo) error {
+	l := logic.NewUpdateRepoLogic(c.ctx, c.svc)
+
+	resp, err := l.UpdateRepo(&repo.UpdateRepoReq{
+		Repo: newRepo,
+	})
+
+	if err != nil {
+		err = errno.InternalServiceError.WithError(err)
+		return err
+	}
+
+	if !utils.IsSuccess(resp.Base) {
+		err = errno.BizError.WithMessage(resp.Base.Message)
+		return err
+	}
+
 	return nil
 }
 
-func (c *RepoConsumer) insertNewRepo(newRepo *model_repo.Repo) error {
+func (c *RepoConsumer) addNewRepo(newRepo *repo.Repo) error {
+	l := logic.NewAddRepoLogic(c.ctx, c.svc)
+
+	resp, err := l.AddRepo(&repo.AddRepoReq{
+		Repo: newRepo,
+	})
+
+	if err != nil {
+		err = errno.InternalServiceError.WithError(err)
+		return err
+	}
+
+	if !utils.IsSuccess(resp.Base) {
+		err = errno.BizError.WithMessage(resp.Base.Message)
+		return err
+	}
+
 	return nil
 }

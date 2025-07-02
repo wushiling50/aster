@@ -53,11 +53,11 @@ func (l *FetchReviewOfUserLogic) FetchReviewOfUser(userId int64, createAfter str
 	}
 
 	for _, review := range allReview {
-		modelReview := pack.BuildReview(review, userId)
+		review := pack.BuildReview(review, userId)
 
 		var jsonStr string
 
-		if jsonStr, err = jsonx.MarshalToString(modelReview); err != nil {
+		if jsonStr, err = jsonx.MarshalToString(review); err != nil {
 			err = errno.InternalJSONError.WithError(err)
 			logx.Error(err)
 			continue

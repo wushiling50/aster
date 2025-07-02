@@ -7,7 +7,6 @@ import (
 
 func BuildModelRepo(repo *repo.Repo) *model_repo.Repo {
 	return &model_repo.Repo{
-		DataId:                  repo.DataId,
 		Id:                      repo.Id,
 		Name:                    repo.Name,
 		StarCount:               repo.StarCount,
@@ -28,7 +27,6 @@ func BuildModelRepo(repo *repo.Repo) *model_repo.Repo {
 
 func BuildGenRepo(modelRepo *model_repo.Repo) *repo.Repo {
 	return &repo.Repo{
-		DataId:                  modelRepo.DataId,
 		Id:                      modelRepo.Id,
 		Name:                    modelRepo.Name,
 		StarCount:               modelRepo.StarCount,
