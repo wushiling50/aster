@@ -2,9 +2,9 @@ package pack
 
 import (
 	"github.com/google/go-github/v66/github"
+	"github.com/wushiling50/aster/gen/contribution"
 	"github.com/wushiling50/aster/pkg/constants"
 	githubFunc "github.com/wushiling50/aster/pkg/github"
-	"github.com/wushiling50/aster/pkg/model/contribution"
 )
 
 // Issue - PR
@@ -14,8 +14,8 @@ func BuildIssuePR(issuePR *github.Issue, developerId int64, category string, mer
 		RepoId:         repo.GetID(),
 		Category:       category,
 		Content:        issuePR.GetTitle() + " " + issuePR.GetBody(),
-		CreatedAt:      issuePR.GetCreatedAt().Time,
-		UpdatedAt:      issuePR.GetUpdatedAt().Time,
+		CreatedAt:      issuePR.GetCreatedAt().Unix(),
+		UpdatedAt:      issuePR.GetUpdatedAt().Unix(),
 		ContributionId: issuePR.GetID(),
 	}
 }
@@ -28,8 +28,8 @@ func BuildComment(githubCommentWithRepoId *githubFunc.CommentWithRepoId, develop
 			RepoId:         githubCommentWithRepoId.RepoId,
 			Category:       constants.CategoryComment,
 			Content:        githubCommentWithRepoId.IssueComment.GetBody(),
-			CreatedAt:      githubCommentWithRepoId.IssueComment.GetCreatedAt().Time,
-			UpdatedAt:      githubCommentWithRepoId.IssueComment.GetUpdatedAt().Time,
+			CreatedAt:      githubCommentWithRepoId.IssueComment.GetCreatedAt().Unix(),
+			UpdatedAt:      githubCommentWithRepoId.IssueComment.GetUpdatedAt().Unix(),
 			ContributionId: githubCommentWithRepoId.IssueComment.GetID(),
 		}
 	}
@@ -38,8 +38,8 @@ func BuildComment(githubCommentWithRepoId *githubFunc.CommentWithRepoId, develop
 		RepoId:         githubCommentWithRepoId.RepoId,
 		Category:       constants.CategoryComment,
 		Content:        githubCommentWithRepoId.PRComment.GetBody(),
-		CreatedAt:      githubCommentWithRepoId.PRComment.GetCreatedAt().Time,
-		UpdatedAt:      githubCommentWithRepoId.PRComment.GetUpdatedAt().Time,
+		CreatedAt:      githubCommentWithRepoId.PRComment.GetCreatedAt().Unix(),
+		UpdatedAt:      githubCommentWithRepoId.PRComment.GetUpdatedAt().Unix(),
 		ContributionId: githubCommentWithRepoId.PRComment.GetID(),
 	}
 }
@@ -51,8 +51,8 @@ func BuildReview(githubReviewWithRepoId *githubFunc.ReviewWithRepoId, developerI
 		RepoId:         githubReviewWithRepoId.RepoId,
 		Category:       constants.CategoryReview,
 		Content:        githubReviewWithRepoId.Review.GetBody(),
-		CreatedAt:      githubReviewWithRepoId.Review.GetSubmittedAt().Time,
-		UpdatedAt:      githubReviewWithRepoId.Review.GetSubmittedAt().Time,
+		CreatedAt:      githubReviewWithRepoId.Review.GetSubmittedAt().Unix(),
+		UpdatedAt:      githubReviewWithRepoId.Review.GetSubmittedAt().Unix(),
 		ContributionId: githubReviewWithRepoId.Review.GetID(),
 	}
 }

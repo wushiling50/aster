@@ -2,7 +2,7 @@ package pack
 
 import (
 	"github.com/google/go-github/v66/github"
-	"github.com/wushiling50/aster/pkg/model/relation"
+	"github.com/wushiling50/aster/gen/relation"
 )
 
 // CreatedRepo

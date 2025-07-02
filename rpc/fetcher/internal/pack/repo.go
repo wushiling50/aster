@@ -3,7 +3,7 @@ package pack
 import (
 	"github.com/google/go-github/v66/github"
 
-	"github.com/wushiling50/aster/pkg/model/repo"
+	"github.com/wushiling50/aster/gen/repo"
 )
 
 func BuildRepo(githubRepo *github.Repository, issueCount int64, prCount int64, commitCount int64,

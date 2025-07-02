@@ -2,7 +2,7 @@ package pack
 
 import (
 	"github.com/google/go-github/v66/github"
-	"github.com/wushiling50/aster/pkg/model/developer"
+	"github.com/wushiling50/aster/gen/developer"
 )
 
 func BuildDeveloperProfile(githubUser *github.User, starredRepoCount int64) *developer.Developer {
@@ -16,8 +16,8 @@ func BuildDeveloperProfile(githubUser *github.User, starredRepoCount int64) *dev
 		Bio:             githubUser.GetBio(),
 		Blog:            githubUser.GetBlog(),
 		Email:           githubUser.GetEmail(),
-		CreatedAt:       githubUser.GetCreatedAt().Time,
-		UpdatedAt:       githubUser.GetUpdatedAt().Time,
+		CreatedAt:       githubUser.GetCreatedAt().Unix(),
+		UpdatedAt:       githubUser.GetUpdatedAt().Unix(),
 		TwitterUsername: githubUser.GetTwitterUsername(),
 		Repos:           int64(githubUser.GetPublicRepos()),
 		Following:       int64(githubUser.GetFollowing()),
