@@ -42,7 +42,13 @@ func (l *AddRepoLogic) AddRepo(in *repo.AddRepoReq) (*repo.AddRepoResp, error) {
 }
 
 func (l *AddRepoLogic) addRepo(model *model_repo.Repo) error {
-	_, err := l.svcCtx.RepoModel.Insert(l.ctx, model)
+	dataId, err := l.svcCtx.RepoModel.CreateDataId()
+	if err != nil {
+		return err
+	}
+
+	model.DataId = dataId
+	_, err = l.svcCtx.RepoModel.Insert(l.ctx, model)
 	if err != nil {
 		return err
 	}

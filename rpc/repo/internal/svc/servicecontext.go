@@ -16,8 +16,9 @@ type ServiceContext struct {
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config:    c,
-		RepoModel: repo.NewRepoModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)), c.Redis),
+		Config: c,
+		RepoModel: repo.NewRepoModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
+			c.Redis, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 		AsynqClient: asynq.NewClient(asynq.RedisClientOpt{
 			Addr:     c.AsynqRedisConf.Addr,
 			Password: c.AsynqRedisConf.Pass,
