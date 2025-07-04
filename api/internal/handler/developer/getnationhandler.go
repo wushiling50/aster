@@ -23,8 +23,10 @@ func GetNationHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		resp, err := l.GetNation(&req)
 		if err != nil {
 			httpx.OkJsonCtx(r.Context(), w, pack.RespError(err))
-		} else {
+		} else if resp.Nation != nil {
 			httpx.OkJsonCtx(r.Context(), w, pack.RespData(pack.BuildNation(resp)))
+		} else {
+			httpx.OkJsonCtx(r.Context(), w, pack.RespData(resp.TaskState))
 		}
 	}
 }

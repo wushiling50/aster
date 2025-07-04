@@ -48,7 +48,7 @@ func (l *PostLanguageUsageTaskLogic) PostLanguageUsageTask(req *types.PostTaskRe
 
 	task, taskId, err := tasks.NewAPITask(constants.APIGetLanguage, developerId, reqId)
 	if err != nil {
-		logx.Errorf("applet.PostLanguageUsageTask: Failed To Create Task: %v", err.Error())
+		logx.Errorf("applet.PostLanguageUsage: Failed To Create Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
@@ -61,7 +61,7 @@ func (l *PostLanguageUsageTaskLogic) PostLanguageUsageTask(req *types.PostTaskRe
 		asynq.Queue(constants.APITaskQueue),
 	)
 	if err != nil {
-		logx.Errorf("applet.PostLanguageUsageTask: Failed To Enqueue Task: %v", err.Error())
+		logx.Errorf("applet.PostLanguageUsage: Failed To Enqueue Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
@@ -78,7 +78,7 @@ func (l *PostLanguageUsageTaskLogic) rpcGetId() (id string, err error) {
 
 	resp, err = l.svcCtx.IdGeneratorRpcClient.GetId(l.ctx, &idgenerator.GetIdReq{})
 	if err != nil {
-		logx.Errorf("IdGeneratorRpc: RPC called failed: %v", err.Error())
+		logx.Errorf("IdGeneratorRpc: RPC Called Failed: %v", err.Error())
 		err = errno.InternalServiceError.WithError(err)
 		return
 	}

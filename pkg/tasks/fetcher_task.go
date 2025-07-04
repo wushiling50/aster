@@ -15,7 +15,7 @@ type FetchPayload struct {
 	SearchLimit int64  `json:"searchLimit"`
 }
 
-func getNewFetcherTaskKey(fetchType int, id int64) string {
+func GetNewFetcherTaskKey(fetchType int, id int64) string {
 	return constants.FetcherTaskName + constants.Separator + strconv.Itoa((fetchType)) +
 		constants.Separator + strconv.Itoa(int(id))
 }
@@ -30,5 +30,5 @@ func NewFetcherTask(fetchType int, id int64, updateAfter string, searchLimit int
 	if err != nil {
 		return nil, "", err
 	}
-	return asynq.NewTask(constants.FetcherTaskName, payload), getNewFetcherTaskKey(fetchType, id), nil
+	return asynq.NewTask(constants.FetcherTaskName, payload), GetNewFetcherTaskKey(fetchType, id), nil
 }

@@ -18,8 +18,7 @@ const (
 )
 
 const (
-	APIGetDeveloper int = iota
-	APIGetLanguage
+	APIGetLanguage int = iota
 	APIGetScore
 	APIGetNation
 	APIGetSummary
@@ -27,6 +26,7 @@ const (
 
 // ------ FetcherTask ------
 const (
+	FetchExpireTime  = time.Minute * 5
 	FetchMaxRetry    = 3
 	FetchRetryDelay  = time.Second * 5
 	FetchConcurrency = 20

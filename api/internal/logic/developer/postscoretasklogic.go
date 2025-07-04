@@ -35,7 +35,7 @@ func (l *PostScoreTaskLogic) PostScoreTask(req *types.PostTaskReq) (resp *types.
 
 	developerId, err := github.GetIdByLogin(l.ctx, req.Login)
 	if err != nil {
-		logx.Errorf("applet.PostScoreTask: Failed To Get Id By Login %v", err.Error())
+		logx.Errorf("applet.PostScore: Failed To Get Id By Login %v", err.Error())
 		err = errno.InternalLanguagesError.WithError(err)
 		return
 	}
@@ -48,7 +48,7 @@ func (l *PostScoreTaskLogic) PostScoreTask(req *types.PostTaskReq) (resp *types.
 
 	task, taskId, err := tasks.NewAPITask(constants.APIGetScore, developerId, reqId)
 	if err != nil {
-		logx.Errorf("applet.PostScoreTask: Failed To Create Task: %v", err.Error())
+		logx.Errorf("applet.PostScore: Failed To Create Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
@@ -61,7 +61,7 @@ func (l *PostScoreTaskLogic) PostScoreTask(req *types.PostTaskReq) (resp *types.
 		asynq.Queue(constants.APITaskQueue),
 	)
 	if err != nil {
-		logx.Errorf("applet.PostScoreTask: Failed To Enqueue Task: %v", err.Error())
+		logx.Errorf("applet.PostScore: Failed To Enqueue Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
@@ -78,7 +78,7 @@ func (l *PostScoreTaskLogic) rpcGetId() (id string, err error) {
 
 	resp, err = l.svcCtx.IdGeneratorRpcClient.GetId(l.ctx, &idgenerator.GetIdReq{})
 	if err != nil {
-		logx.Errorf("IdGeneratorRpc: RPC called failed: %v", err.Error())
+		logx.Errorf("IdGeneratorRpc: RPC Called Failed: %v", err.Error())
 		err = errno.InternalServiceError.WithError(err)
 		return
 	}

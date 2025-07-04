@@ -37,8 +37,9 @@ type GetDeveloperReq struct {
 }
 
 type GetDeveloperResp struct {
-	BaseResp  BaseResp  `json:"base"`
-	Developer Developer `json:"developer"`
+	BaseResp  BaseResp   `json:"base"`
+	Developer *Developer `json:"developer"`
+	TaskState TaskState  `json:"task_state"`
 }
 
 type GetLanguageUsageReq struct {
@@ -47,9 +48,9 @@ type GetLanguageUsageReq struct {
 }
 
 type GetLanguageUsageResp struct {
-	BaseResp      BaseResp      `json:"base"`
-	LanguageUsage LanguageUsage `json:"language_usage"`
-	TaskState     TaskState     `json:"task_state"`
+	BaseResp      BaseResp       `json:"base"`
+	LanguageUsage *LanguageUsage `json:"language_usage"`
+	TaskState     TaskState      `json:"task_state"`
 }
 
 type GetLanguagesReq struct {
@@ -67,7 +68,7 @@ type GetNationReq struct {
 
 type GetNationResp struct {
 	BaseResp  BaseResp  `json:"base"`
-	Nation    Nation    `json:"nation"`
+	Nation    *Nation   `json:"nation"`
 	TaskState TaskState `json:"task_state"`
 }
 
@@ -91,7 +92,7 @@ type GetScoreReq struct {
 
 type GetScoreResp struct {
 	BaseResp  BaseResp  `json:"base"`
-	Score     Score     `json:"score"`
+	Score     *Score    `json:"score"`
 	TaskState TaskState `json:"task_state"`
 }
 
@@ -102,7 +103,7 @@ type GetSummaryReq struct {
 
 type GetSummaryResp struct {
 	BaseResp  BaseResp  `json:"base"`
-	Summary   Summary   `json:"summary"`
+	Summary   *Summary  `json:"summary"`
 	TaskState TaskState `json:"task_state"`
 }
 

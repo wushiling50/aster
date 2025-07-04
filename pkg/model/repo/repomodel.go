@@ -42,7 +42,7 @@ func NewRepoModel(conn sqlx.SqlConn, c cache.CacheConf, DatancenterId, WorkerId 
 }
 
 func (m *customRepoModel) FindOneById(ctx context.Context, id int64) (*Repo, error) {
-	repoRepoIdKey := fmt.Sprintf("%s%v", "cache:repo:dataId:", id)
+	repoRepoIdKey := fmt.Sprintf("%s%v", "cache:repo:id:", id)
 	var resp Repo
 	err := m.QueryRowIndexCtx(ctx, &resp, repoRepoIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
 		query := fmt.Sprintf("select %s from %s where id = $1 limit 1", repoRows, m.table)

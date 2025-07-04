@@ -47,11 +47,6 @@ func (c *APITaskConsumer) Consume(ctx context.Context, task *asynq.Task) error {
 	}
 
 	switch msg.Type {
-	case constants.APIGetDeveloper:
-		logx.Info("Consume Message: APIGetDeveloper")
-
-		l := logic.NewGetDeveloperLogic(ctx, c.svcCtx)
-		data, err = l.GetDeveloper(msg.Id)
 	case constants.APIGetLanguage:
 		logx.Info("Consume Message: APIGetLanguage")
 

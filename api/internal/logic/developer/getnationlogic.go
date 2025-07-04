@@ -76,13 +76,13 @@ func (l *GetNationLogic) GetNation(req *types.GetNationReq) (resp *types.GetNati
 			return
 		}
 
-		resp.Nation = types.Nation{
+		resp.Nation = &types.Nation{
 			Id:         developerId,
 			Nation:     nation.Nation,
 			Confidence: nation.Confidence,
 		}
 	default:
-		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected task state: %v", taskInfo.State.String()))
+		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected Task State: %v", taskInfo.State.String()))
 	}
 
 	logx.Info("Successfully Get Nation")

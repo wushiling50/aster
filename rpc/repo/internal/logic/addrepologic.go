@@ -38,7 +38,6 @@ func (l *AddRepoLogic) AddRepo(in *repo.AddRepoReq) (*repo.AddRepoResp, error) {
 	resp.Base = pack.BuildSuccessResp()
 
 	return resp, nil
-
 }
 
 func (l *AddRepoLogic) addRepo(model *model_repo.Repo) error {

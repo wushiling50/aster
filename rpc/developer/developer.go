@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 
 	"github.com/wushiling50/aster/gen/developer"
 	"github.com/wushiling50/aster/rpc/developer/internal/config"
+	"github.com/wushiling50/aster/rpc/developer/internal/consumer"
 	"github.com/wushiling50/aster/rpc/developer/internal/server"
 	"github.com/wushiling50/aster/rpc/developer/internal/svc"
 
@@ -25,6 +27,9 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 
+	serviceGroup := service.NewServiceGroup()
+	defer serviceGroup.Stop()
+
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		developer.RegisterDeveloperServer(grpcServer, server.NewDeveloperServer(ctx))
 
@@ -32,8 +37,12 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
-	defer s.Stop()
+	serviceGroup.Add(s)
+
+	for _, s := range consumer.Consumers(c, context.Background(), ctx) {
+		serviceGroup.Add(s)
+	}
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
-	s.Start()
+	serviceGroup.Start()
 }

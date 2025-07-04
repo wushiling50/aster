@@ -118,8 +118,9 @@ type GetDeveloperReq {
 }
 
 type GetDeveloperResp {
-	BaseResp  BaseResp  `json:"base"`
-	Developer Developer `json:"developer"`
+	BaseResp  BaseResp   `json:"base"`
+	Developer *Developer `json:"developer"`
+	TaskState TaskState  `json:"task_state"`
 }
 
 type GetScoreReq {
@@ -129,7 +130,7 @@ type GetScoreReq {
 
 type GetScoreResp {
 	BaseResp  BaseResp  `json:"base"`
-	Score     Score     `json:"score"`
+	Score     *Score    `json:"score"`
 	TaskState TaskState `json:"task_state"`
 }
 
@@ -139,9 +140,9 @@ type GetLanguageUsageReq {
 }
 
 type GetLanguageUsageResp {
-	BaseResp      BaseResp      `json:"base"`
-	LanguageUsage LanguageUsage `json:"language_usage"`
-	TaskState     TaskState     `json:"task_state"`
+	BaseResp      BaseResp       `json:"base"`
+	LanguageUsage *LanguageUsage `json:"language_usage"`
+	TaskState     TaskState      `json:"task_state"`
 }
 
 type GetNationReq {
@@ -151,7 +152,7 @@ type GetNationReq {
 
 type GetNationResp {
 	BaseResp  BaseResp  `json:"base"`
-	Nation    Nation    `json:"nation"`
+	Nation    *Nation   `json:"nation"`
 	TaskState TaskState `json:"task_state"`
 }
 
@@ -162,7 +163,7 @@ type GetSummaryReq {
 
 type GetSummaryResp {
 	BaseResp  BaseResp  `json:"base"`
-	Summary   Summary   `json:"summary"`
+	Summary   *Summary  `json:"summary"`
 	TaskState TaskState `json:"task_state"`
 }
 
@@ -171,6 +172,9 @@ type GetSummaryResp {
 	group:  developer
 )
 service Applet {
+	@handler postDeveloper
+	post /:login (PostTaskReq) returns (PostTaskResp)
+
 	@handler postScoreTask
 	post /:login/score (PostTaskReq) returns (PostTaskResp)
 

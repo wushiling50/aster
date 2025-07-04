@@ -2,12 +2,16 @@ package developer
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/api/internal/pack"
 	"github.com/wushiling50/aster/api/internal/svc"
 	"github.com/wushiling50/aster/api/internal/types"
+	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/github"
+	"github.com/wushiling50/aster/pkg/tasks"
 	"github.com/wushiling50/aster/pkg/utils"
 	developer "github.com/wushiling50/aster/rpc/developer/developerclient"
 
@@ -31,49 +35,52 @@ func NewGetDeveloperLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetD
 func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *types.GetDeveloperResp, err error) {
 	resp = new(types.GetDeveloperResp)
 
-	var (
-		id      int64
-		rpcResp *types.Developer
-	)
-
-	if id, err = github.GetIdByLogin(l.ctx, req.Login); err != nil {
+	developerId, err := github.GetIdByLogin(l.ctx, req.Login)
+	if err != nil {
 		logx.Errorf("applet.GetDeveloper: Failed To Get Id By Login %v", err.Error())
+		err = errno.InternalLanguagesError.WithError(err)
 		return
 	}
 
-	if err = l.rpcUpdateDeveloper(id); err != nil {
-		logx.Error(err)
+	taskId := tasks.GetNewFetcherTaskKey(constants.FetchDeveloper, developerId)
+	taskInfo, err := l.svcCtx.AsynqInspector.GetTaskInfo(constants.FetcherTaskQueue, taskId)
+	if err != nil {
+		logx.Errorf("applet.GetDeveloper: Failed To Get Task Info %v", err.Error())
+		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
 
-	if rpcResp, err = l.rpcGetDeveloperById(id); err != nil {
-		logx.Error(err)
-		return
-	}
+	switch taskInfo.State {
+	case asynq.TaskStatePending, asynq.TaskStateActive:
+		resp.TaskState = types.TaskState{
+			State: taskInfo.State.String(),
+		}
+	case asynq.TaskStateRetry:
+		resp.TaskState = types.TaskState{
+			State:  taskInfo.State.String(),
+			Reason: taskInfo.LastErr,
+		}
+	case asynq.TaskStateArchived:
+		resp.TaskState = types.TaskState{
+			State:  "fail",
+			Reason: taskInfo.LastErr,
+		}
+	case asynq.TaskStateCompleted:
+		var rpcResp *types.Developer
 
-	resp.Developer = *rpcResp
+		rpcResp, err = l.rpcGetDeveloperById(developerId)
+		if err != nil {
+			logx.Error(err)
+			return
+		}
+
+		resp.Developer = rpcResp
+
+	default:
+		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected Task State: %v", taskInfo.State.String()))
+	}
 
 	logx.Info("Successfully Get Developer")
-	return
-}
-
-func (l *GetDeveloperLogic) rpcUpdateDeveloper(id int64) (err error) {
-	var resp *developer.UpdateDeveloperResp
-
-	resp, err = l.svcCtx.DeveloperRpcClient.UpdateDeveloper(l.ctx, &developer.UpdateDeveloperReq{
-		Id: id,
-	})
-	if err != nil {
-		logx.Errorf("UpdateDeveloperRPC: RPC called failed: %v", err.Error())
-		err = errno.InternalServiceError.WithError(err)
-		return
-	}
-
-	if !utils.IsSuccess(resp.Base) {
-		err = errno.BizError.WithMessage(resp.Base.Message)
-		return
-	}
-
 	return
 }
 
@@ -84,7 +91,7 @@ func (l *GetDeveloperLogic) rpcGetDeveloperById(id int64) (typeDeveloper *types.
 		Id: id,
 	})
 	if err != nil {
-		logx.Errorf("GetDeveloperByIdRPC: RPC called failed: %v", err.Error())
+		logx.Errorf("GetDeveloperByIdRPC: RPC Called Failed: %v", err.Error())
 		err = errno.InternalServiceError.WithError(err)
 		return
 	}

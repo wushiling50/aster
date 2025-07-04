@@ -23,8 +23,10 @@ func GetSummaryHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		resp, err := l.GetSummary(&req)
 		if err != nil {
 			httpx.OkJsonCtx(r.Context(), w, pack.RespError(err))
-		} else {
+		} else if resp.Summary != nil {
 			httpx.OkJsonCtx(r.Context(), w, pack.RespData(pack.BuildSummary(resp)))
+		} else {
+			httpx.OkJsonCtx(r.Context(), w, pack.RespData(resp.TaskState))
 		}
 	}
 }

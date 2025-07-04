@@ -16,26 +16,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PostNationTaskLogic struct {
+type PostDeveloperLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewPostNationTaskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PostNationTaskLogic {
-	return &PostNationTaskLogic{
+func NewPostDeveloperLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PostDeveloperLogic {
+	return &PostDeveloperLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *PostNationTaskLogic) PostNationTask(req *types.PostTaskReq) (resp *types.PostTaskResp, err error) {
+func (l *PostDeveloperLogic) PostDeveloper(req *types.PostTaskReq) (resp *types.PostTaskResp, err error) {
 	resp = new(types.PostTaskResp)
 
 	developerId, err := github.GetIdByLogin(l.ctx, req.Login)
 	if err != nil {
-		logx.Errorf("applet.PostNationTask: Failed To Get Id By Login %v", err.Error())
+		logx.Errorf("applet.PostLanguageUsageTask: Failed To Get Id By Login %v", err.Error())
 		err = errno.InternalLanguagesError.WithError(err)
 		return
 	}
@@ -46,9 +46,9 @@ func (l *PostNationTaskLogic) PostNationTask(req *types.PostTaskReq) (resp *type
 		return
 	}
 
-	task, taskId, err := tasks.NewAPITask(constants.APIGetNation, developerId, reqId)
+	task, taskId, err := tasks.NewFetcherTask(constants.FetchDeveloper, developerId, "", 0)
 	if err != nil {
-		logx.Errorf("applet.PostNation: Failed To Create Task: %v", err.Error())
+		logx.Errorf("applet.PostDeveloper: Failed To Create Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
@@ -56,12 +56,12 @@ func (l *PostNationTaskLogic) PostNationTask(req *types.PostTaskReq) (resp *type
 	_, err = l.svcCtx.AsynqClient.Enqueue(
 		task,
 		asynq.TaskID(taskId),
-		asynq.Retention(constants.APITaskExpireTime),
-		asynq.MaxRetry(constants.APIMaxRetry),
-		asynq.Queue(constants.APITaskQueue),
+		asynq.Retention(constants.FetchExpireTime),
+		asynq.MaxRetry(constants.FetchMaxRetry),
+		asynq.Queue(constants.FetcherTaskQueue),
 	)
 	if err != nil {
-		logx.Errorf("applet.PostNation: Failed To Enqueue Task: %v", err.Error())
+		logx.Errorf("applet.PostDeveloper: Failed To Enqueue Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
@@ -73,7 +73,7 @@ func (l *PostNationTaskLogic) PostNationTask(req *types.PostTaskReq) (resp *type
 	return
 }
 
-func (l *PostNationTaskLogic) rpcGetId() (id string, err error) {
+func (l *PostDeveloperLogic) rpcGetId() (id string, err error) {
 	var resp *idgenerator.GetIdResp
 
 	resp, err = l.svcCtx.IdGeneratorRpcClient.GetId(l.ctx, &idgenerator.GetIdReq{})

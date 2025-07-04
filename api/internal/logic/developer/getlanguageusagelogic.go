@@ -107,13 +107,13 @@ func (l *GetLanguageUsageLogic) GetLanguageUsage(req *types.GetLanguageUsageReq)
 			})
 		}
 
-		resp.LanguageUsage = types.LanguageUsage{
+		resp.LanguageUsage = &types.LanguageUsage{
 			Id:        developerId,
 			Languages: usageArr,
 			UpdatedAt: time.Unix(languages.DataUpdatedAt, 0).Format(time.RFC3339),
 		}
 	default:
-		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected task state: %v", taskInfo.State.String()))
+		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected Task State: %v", taskInfo.State.String()))
 	}
 
 	logx.Info("Successfully Get LanguageUsage")

@@ -34,34 +34,34 @@ type PostTask struct {
 
 func BuildDeveloper(res *types.GetDeveloperResp) *GetDeveloper {
 	return &GetDeveloper{
-		Developer: res.Developer,
+		Developer: *res.Developer,
 	}
 }
 
 func BuildLanguageUsage(res *types.GetLanguageUsageResp) *GetLanguageUsage {
 	return &GetLanguageUsage{
-		LanguageUsage: res.LanguageUsage,
+		LanguageUsage: *res.LanguageUsage,
 		TaskState:     res.TaskState,
 	}
 }
 
 func BuildNation(res *types.GetNationResp) *GetNation {
 	return &GetNation{
-		Nation:    res.Nation,
+		Nation:    *res.Nation,
 		TaskState: res.TaskState,
 	}
 }
 
 func BuildScore(res *types.GetScoreResp) *GetScore {
 	return &GetScore{
-		Score:     res.Score,
+		Score:     *res.Score,
 		TaskState: res.TaskState,
 	}
 }
 
 func BuildSummary(res *types.GetSummaryResp) *GetSummary {
 	return &GetSummary{
-		Summary:   res.Summary,
+		Summary:   *res.Summary,
 		TaskState: res.TaskState,
 	}
 }

@@ -41,7 +41,13 @@ func (l *UpdateRepoLogic) UpdateRepo(in *repo.UpdateRepoReq) (*repo.UpdateRepoRe
 }
 
 func (l *UpdateRepoLogic) updateRepo(model *model_repo.Repo) error {
-	err := l.svcCtx.RepoModel.Update(l.ctx, model)
+	repo, err := l.svcCtx.RepoModel.FindOneById(l.ctx, model.Id)
+	if err != nil {
+		return err
+	}
+
+	model.DataId = repo.DataId
+	err = l.svcCtx.RepoModel.Update(l.ctx, model)
 	if err != nil {
 		return err
 	}

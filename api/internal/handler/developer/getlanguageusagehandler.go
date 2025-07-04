@@ -23,8 +23,10 @@ func GetLanguageUsageHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		resp, err := l.GetLanguageUsage(&req)
 		if err != nil {
 			httpx.OkJsonCtx(r.Context(), w, pack.RespError(err))
-		} else {
+		} else if resp.LanguageUsage != nil {
 			httpx.OkJsonCtx(r.Context(), w, pack.RespData(pack.BuildLanguageUsage(resp)))
+		} else {
+			httpx.OkJsonCtx(r.Context(), w, pack.RespData(resp.TaskState))
 		}
 	}
 }
