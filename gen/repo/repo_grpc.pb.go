@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Repo_AddRepo_FullMethodName     = "/repo.repo/AddRepo"
 	Repo_UpdateRepo_FullMethodName  = "/repo.repo/UpdateRepo"
-	Repo_DelRepoById_FullMethodName = "/repo.repo/DelRepoById"
 	Repo_GetRepoById_FullMethodName = "/repo.repo/GetRepoById"
 )
 
@@ -31,7 +30,6 @@ const (
 type RepoClient interface {
 	AddRepo(ctx context.Context, in *AddRepoReq, opts ...grpc.CallOption) (*AddRepoResp, error)
 	UpdateRepo(ctx context.Context, in *UpdateRepoReq, opts ...grpc.CallOption) (*UpdateRepoResp, error)
-	DelRepoById(ctx context.Context, in *DelRepoByIdReq, opts ...grpc.CallOption) (*DelRepoByIdResp, error)
 	GetRepoById(ctx context.Context, in *GetRepoByIdReq, opts ...grpc.CallOption) (*GetRepoByIdResp, error)
 }
 
@@ -61,15 +59,6 @@ func (c *repoClient) UpdateRepo(ctx context.Context, in *UpdateRepoReq, opts ...
 	return out, nil
 }
 
-func (c *repoClient) DelRepoById(ctx context.Context, in *DelRepoByIdReq, opts ...grpc.CallOption) (*DelRepoByIdResp, error) {
-	out := new(DelRepoByIdResp)
-	err := c.cc.Invoke(ctx, Repo_DelRepoById_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *repoClient) GetRepoById(ctx context.Context, in *GetRepoByIdReq, opts ...grpc.CallOption) (*GetRepoByIdResp, error) {
 	out := new(GetRepoByIdResp)
 	err := c.cc.Invoke(ctx, Repo_GetRepoById_FullMethodName, in, out, opts...)
@@ -85,7 +74,6 @@ func (c *repoClient) GetRepoById(ctx context.Context, in *GetRepoByIdReq, opts .
 type RepoServer interface {
 	AddRepo(context.Context, *AddRepoReq) (*AddRepoResp, error)
 	UpdateRepo(context.Context, *UpdateRepoReq) (*UpdateRepoResp, error)
-	DelRepoById(context.Context, *DelRepoByIdReq) (*DelRepoByIdResp, error)
 	GetRepoById(context.Context, *GetRepoByIdReq) (*GetRepoByIdResp, error)
 	mustEmbedUnimplementedRepoServer()
 }
@@ -99,9 +87,6 @@ func (UnimplementedRepoServer) AddRepo(context.Context, *AddRepoReq) (*AddRepoRe
 }
 func (UnimplementedRepoServer) UpdateRepo(context.Context, *UpdateRepoReq) (*UpdateRepoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateRepo not implemented")
-}
-func (UnimplementedRepoServer) DelRepoById(context.Context, *DelRepoByIdReq) (*DelRepoByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelRepoById not implemented")
 }
 func (UnimplementedRepoServer) GetRepoById(context.Context, *GetRepoByIdReq) (*GetRepoByIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRepoById not implemented")
@@ -155,24 +140,6 @@ func _Repo_UpdateRepo_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Repo_DelRepoById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelRepoByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RepoServer).DelRepoById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Repo_DelRepoById_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RepoServer).DelRepoById(ctx, req.(*DelRepoByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Repo_GetRepoById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRepoByIdReq)
 	if err := dec(in); err != nil {
@@ -205,10 +172,6 @@ var Repo_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateRepo",
 			Handler:    _Repo_UpdateRepo_Handler,
-		},
-		{
-			MethodName: "DelRepoById",
-			Handler:    _Repo_DelRepoById_Handler,
 		},
 		{
 			MethodName: "GetRepoById",

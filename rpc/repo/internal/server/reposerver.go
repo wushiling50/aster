@@ -33,11 +33,6 @@ func (s *RepoServer) UpdateRepo(ctx context.Context, in *repo.UpdateRepoReq) (*r
 	return l.UpdateRepo(in)
 }
 
-func (s *RepoServer) DelRepoById(ctx context.Context, in *repo.DelRepoByIdReq) (*repo.DelRepoByIdResp, error) {
-	l := logic.NewDelRepoByIdLogic(ctx, s.svcCtx)
-	return l.DelRepoById(in)
-}
-
 func (s *RepoServer) GetRepoById(ctx context.Context, in *repo.GetRepoByIdReq) (*repo.GetRepoByIdResp, error) {
 	l := logic.NewGetRepoByIdLogic(ctx, s.svcCtx)
 	return l.GetRepoById(in)

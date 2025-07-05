@@ -33,16 +33,6 @@ func (s *DeveloperServer) UpdateDeveloper(ctx context.Context, in *developer.Upd
 	return l.UpdateDeveloper(in)
 }
 
-func (s *DeveloperServer) DelDeveloperById(ctx context.Context, in *developer.DelDeveloperByIdReq) (*developer.DelDeveloperByIdResp, error) {
-	l := logic.NewDelDeveloperByIdLogic(ctx, s.svcCtx)
-	return l.DelDeveloperById(in)
-}
-
-func (s *DeveloperServer) DelDeveloperByLogin(ctx context.Context, in *developer.DelDeveloperByLoginReq) (*developer.DelDeveloperByLoginResp, error) {
-	l := logic.NewDelDeveloperByLoginLogic(ctx, s.svcCtx)
-	return l.DelDeveloperByLogin(in)
-}
-
 func (s *DeveloperServer) GetDeveloperById(ctx context.Context, in *developer.GetDeveloperByIdReq) (*developer.GetDeveloperByIdResp, error) {
 	l := logic.NewGetDeveloperByIdLogic(ctx, s.svcCtx)
 	return l.GetDeveloperById(in)

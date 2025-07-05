@@ -41,14 +41,6 @@ message UpdateRepoResp {
     base.Base base = 1;
 }
 
-message DelRepoByIdReq {
-    int64 id = 1; // id
-}
-
-message DelRepoByIdResp {
-    base.Base base = 1;
-}
-
 message GetRepoByIdReq {
     int64 id = 1; // id
 }
@@ -61,6 +53,5 @@ message GetRepoByIdResp {
 service repo{ 
     rpc AddRepo(AddRepoReq) returns (AddRepoResp); 
     rpc UpdateRepo(UpdateRepoReq) returns (UpdateRepoResp); 
-    rpc DelRepoById(DelRepoByIdReq) returns (DelRepoByIdResp);
     rpc GetRepoById(GetRepoByIdReq) returns (GetRepoByIdResp);
 }

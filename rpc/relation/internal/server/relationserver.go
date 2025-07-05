@@ -50,11 +50,6 @@ func (s *RelationServer) AddFollow(ctx context.Context, in *relation.AddFollowRe
 	return l.AddFollow(in)
 }
 
-func (s *RelationServer) DelFollow(ctx context.Context, in *relation.DelFollowReq) (*relation.DelFollowResp, error) {
-	l := logic.NewDelFollowLogic(ctx, s.svcCtx)
-	return l.DelFollow(in)
-}
-
 func (s *RelationServer) DelAllFollower(ctx context.Context, in *relation.DelAllFollowerReq) (*relation.DelAllFollowerResp, error) {
 	l := logic.NewDelAllFollowerLogic(ctx, s.svcCtx)
 	return l.DelAllFollower(in)
@@ -90,25 +85,10 @@ func (s *RelationServer) UpdateFollower(ctx context.Context, in *relation.Update
 	return l.UpdateFollower(in)
 }
 
-func (s *RelationServer) GetFollowingUpdatedAt(ctx context.Context, in *relation.GetFollowingUpdatedAtReq) (*relation.GetFollowingUpdatedAtResp, error) {
-	l := logic.NewGetFollowingUpdatedAtLogic(ctx, s.svcCtx)
-	return l.GetFollowingUpdatedAt(in)
-}
-
-func (s *RelationServer) GetFollowerUpdatedAt(ctx context.Context, in *relation.GetFollowerUpdatedAtReq) (*relation.GetFollowerUpdatedAtResp, error) {
-	l := logic.NewGetFollowerUpdatedAtLogic(ctx, s.svcCtx)
-	return l.GetFollowerUpdatedAt(in)
-}
-
 // -----------------------Fork-----------------------
 func (s *RelationServer) AddFork(ctx context.Context, in *relation.AddForkReq) (*relation.AddForkResp, error) {
 	l := logic.NewAddForkLogic(ctx, s.svcCtx)
 	return l.AddFork(in)
-}
-
-func (s *RelationServer) DelFork(ctx context.Context, in *relation.DelForkReq) (*relation.DelForkResp, error) {
-	l := logic.NewDelForkLogic(ctx, s.svcCtx)
-	return l.DelFork(in)
 }
 
 func (s *RelationServer) DelAllFork(ctx context.Context, in *relation.DelAllForkReq) (*relation.DelAllForkResp, error) {
@@ -131,20 +111,10 @@ func (s *RelationServer) UpdateFork(ctx context.Context, in *relation.UpdateFork
 	return l.UpdateFork(in)
 }
 
-func (s *RelationServer) GetForkUpdatedAt(ctx context.Context, in *relation.GetForkUpdatedAtReq) (*relation.GetForkUpdatedAtResp, error) {
-	l := logic.NewGetForkUpdatedAtLogic(ctx, s.svcCtx)
-	return l.GetForkUpdatedAt(in)
-}
-
 // -----------------------Star-----------------------
 func (s *RelationServer) AddStar(ctx context.Context, in *relation.AddStarReq) (*relation.AddStarResp, error) {
 	l := logic.NewAddStarLogic(ctx, s.svcCtx)
 	return l.AddStar(in)
-}
-
-func (s *RelationServer) DelStar(ctx context.Context, in *relation.DelStarReq) (*relation.DelStarResp, error) {
-	l := logic.NewDelStarLogic(ctx, s.svcCtx)
-	return l.DelStar(in)
 }
 
 func (s *RelationServer) DelAllStarredRepo(ctx context.Context, in *relation.DelAllStarredRepoReq) (*relation.DelAllStarredRepoResp, error) {
@@ -152,9 +122,9 @@ func (s *RelationServer) DelAllStarredRepo(ctx context.Context, in *relation.Del
 	return l.DelAllStarredRepo(in)
 }
 
-func (s *RelationServer) DelAllStaringDev(ctx context.Context, in *relation.DelAllStaringDevReq) (*relation.DelAllStaringDevResp, error) {
-	l := logic.NewDelAllStaringDevLogic(ctx, s.svcCtx)
-	return l.DelAllStaringDev(in)
+func (s *RelationServer) DelAllStaringDeveloper(ctx context.Context, in *relation.DelAllStaringDeveloperReq) (*relation.DelAllStaringDeveloperResp, error) {
+	l := logic.NewDelAllStaringDeveloperLogic(ctx, s.svcCtx)
+	return l.DelAllStaringDeveloper(in)
 }
 
 func (s *RelationServer) CheckIfStar(ctx context.Context, in *relation.CheckIfStarReq) (*relation.CheckIfStarResp, error) {
@@ -167,17 +137,12 @@ func (s *RelationServer) SearchStarredRepo(ctx context.Context, in *relation.Sea
 	return l.SearchStarredRepo(in)
 }
 
-func (s *RelationServer) SearchStaringDev(ctx context.Context, in *relation.SearchStaringDevReq) (*relation.SearchStaringDevResp, error) {
-	l := logic.NewSearchStaringDevLogic(ctx, s.svcCtx)
-	return l.SearchStaringDev(in)
+func (s *RelationServer) SearchStaringDeveloper(ctx context.Context, in *relation.SearchStaringDeveloperReq) (*relation.SearchStaringDeveloperResp, error) {
+	l := logic.NewSearchStaringDeveloperLogic(ctx, s.svcCtx)
+	return l.SearchStaringDeveloper(in)
 }
 
 func (s *RelationServer) UpdateStarredRepo(ctx context.Context, in *relation.UpdateStarredRepoReq) (*relation.UpdateStarredRepoResp, error) {
 	l := logic.NewUpdateStarredRepoLogic(ctx, s.svcCtx)
 	return l.UpdateStarredRepo(in)
-}
-
-func (s *RelationServer) GetStarredRepoUpdatedAt(ctx context.Context, in *relation.GetStarredRepoUpdatedAtReq) (*relation.GetStarredRepoUpdatedAtResp, error) {
-	l := logic.NewGetStarredRepoUpdatedAtLogic(ctx, s.svcCtx)
-	return l.GetStarredRepoUpdatedAt(in)
 }

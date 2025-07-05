@@ -16,8 +16,6 @@ import (
 type (
 	AddRepoReq      = repo.AddRepoReq
 	AddRepoResp     = repo.AddRepoResp
-	DelRepoByIdReq  = repo.DelRepoByIdReq
-	DelRepoByIdResp = repo.DelRepoByIdResp
 	GetRepoByIdReq  = repo.GetRepoByIdReq
 	GetRepoByIdResp = repo.GetRepoByIdResp
 	Repo            = repo.Repo
@@ -27,7 +25,6 @@ type (
 	RepoZrpcClient interface {
 		AddRepo(ctx context.Context, in *AddRepoReq, opts ...grpc.CallOption) (*AddRepoResp, error)
 		UpdateRepo(ctx context.Context, in *UpdateRepoReq, opts ...grpc.CallOption) (*UpdateRepoResp, error)
-		DelRepoById(ctx context.Context, in *DelRepoByIdReq, opts ...grpc.CallOption) (*DelRepoByIdResp, error)
 		GetRepoById(ctx context.Context, in *GetRepoByIdReq, opts ...grpc.CallOption) (*GetRepoByIdResp, error)
 	}
 
@@ -50,11 +47,6 @@ func (m *defaultRepoZrpcClient) AddRepo(ctx context.Context, in *AddRepoReq, opt
 func (m *defaultRepoZrpcClient) UpdateRepo(ctx context.Context, in *UpdateRepoReq, opts ...grpc.CallOption) (*UpdateRepoResp, error) {
 	client := repo.NewRepoClient(m.cli.Conn())
 	return client.UpdateRepo(ctx, in, opts...)
-}
-
-func (m *defaultRepoZrpcClient) DelRepoById(ctx context.Context, in *DelRepoByIdReq, opts ...grpc.CallOption) (*DelRepoByIdResp, error) {
-	client := repo.NewRepoClient(m.cli.Conn())
-	return client.DelRepoById(ctx, in, opts...)
 }
 
 func (m *defaultRepoZrpcClient) GetRepoById(ctx context.Context, in *GetRepoByIdReq, opts ...grpc.CallOption) (*GetRepoByIdResp, error) {

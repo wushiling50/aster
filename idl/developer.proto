@@ -43,22 +43,6 @@ message UpdateDeveloperResp {
     base.Base base = 1;
 }
 
-message DelDeveloperByIdReq {
-    int64 id = 1; // id
-}
-
-message DelDeveloperByIdResp {
-    base.Base base = 1;
-}
-
-message DelDeveloperByLoginReq {
-    string login = 1; // login
-}
-
-message DelDeveloperByLoginResp {
-    base.Base base = 1;
-}
-
 message GetDeveloperByIdReq {
     int64 id = 1; // id
 }
@@ -80,8 +64,6 @@ message GetDeveloperByLoginResp {
 service developer{
     rpc AddDeveloper(AddDeveloperReq) returns (AddDeveloperResp);
     rpc UpdateDeveloper(UpdateDeveloperReq) returns (UpdateDeveloperResp);
-    rpc DelDeveloperById(DelDeveloperByIdReq) returns (DelDeveloperByIdResp);
-    rpc DelDeveloperByLogin(DelDeveloperByLoginReq) returns (DelDeveloperByLoginResp);
     rpc GetDeveloperById(GetDeveloperByIdReq) returns (GetDeveloperByIdResp);
     rpc GetDeveloperByLogin(GetDeveloperByLoginReq) returns (GetDeveloperByLoginResp);
 }

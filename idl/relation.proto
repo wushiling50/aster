@@ -67,15 +67,6 @@ message AddFollowResp {
     base.Base base = 1;
 }
 
-message DelFollowReq {
-    int64 followerId = 1; // followerId
-    int64 followingId = 2; // followingId
-}
-
-message DelFollowResp {
-    base.Base base = 1;
-}
-
 message DelAllFollowerReq {
     int64 developerId = 1; // developerId
 }
@@ -140,24 +131,6 @@ message UpdateFollowerResp {
     base.Base base = 1;
 }
 
-message GetFollowingUpdatedAtReq {
-    int64 developerId = 1;
-}
-
-message GetFollowingUpdatedAtResp {
-    base.Base base = 1;
-    int64 updatedAt = 2;
-}
-
-message GetFollowerUpdatedAtReq {
-    int64 developerId = 1;
-}
-
-message GetFollowerUpdatedAtResp {
-    base.Base base = 1;
-    int64 updatedAt = 2;
-}
-
 // ====== Fork ======
 message Fork {
     int64 dataId = 1; // dataId
@@ -171,14 +144,6 @@ message AddForkReq {
 }
 
 message AddForkResp {
-    base.Base base = 1;
-}
-
-message DelForkReq {
-    int64 forkRepoId = 1; // forkRepoId
-}
-
-message DelForkResp {
     base.Base base = 1;
 }
 
@@ -218,15 +183,6 @@ message UpdateForkResp {
     base.Base base = 1;
 }
 
-message GetForkUpdatedAtReq {
-    int64 originalRepoId = 1;
-}
-
-message GetForkUpdatedAtResp {
-    base.Base base = 1;
-    int64 updatedAt = 2;
-}
-
 // ====== Star ======
 message Star {
     int64 dataId = 1; // dataId
@@ -243,15 +199,6 @@ message AddStarResp {
     base.Base base = 1;
 }
 
-message DelStarReq {
-    int64 developerId = 1; // developerId
-    int64 repoId = 2; // repoId
-}
-
-message DelStarResp {
-    base.Base base = 1;
-}
-
 message DelAllStarredRepoReq {
     int64 developerId = 1; // developerId
 }
@@ -260,11 +207,11 @@ message DelAllStarredRepoResp {
     base.Base base = 1;
 }
 
-message DelAllStaringDevReq {
+message DelAllStaringDeveloperReq {
     int64 repoId = 1; // repoId
 }
 
-message DelAllStaringDevResp {
+message DelAllStaringDeveloperResp {
     base.Base base = 1;
 }
 
@@ -289,13 +236,13 @@ message SearchStarredRepoResp {
     repeated int64 repoIds = 2; // repoId
 }
 
-message SearchStaringDevReq {
+message SearchStaringDeveloperReq {
     int64 page = 1; // page
     int64 limit = 2; // limit
     int64 repoId = 3; // repoId
 }
 
-message SearchStaringDevResp {
+message SearchStaringDeveloperResp {
     base.Base base = 1;
     repeated int64 developerIds = 2; // developerId
 }
@@ -308,15 +255,6 @@ message UpdateStarredRepoResp {
     base.Base base = 1;
 }
 
-message GetStarredRepoUpdatedAtReq {
-    int64 developerId = 1;
-}
-
-message GetStarredRepoUpdatedAtResp {
-    base.Base base = 1;
-    int64 updatedAt = 2;
-}
-
 service relation{ 
     //-----------------------CreateRepo-----------------------
     rpc AddCreateRepo(AddCreateRepoReq) returns (AddCreateRepoResp);
@@ -325,7 +263,6 @@ service relation{
     rpc UpdateCreateRepo(UpdateCreateRepoReq) returns (UpdateCreateRepoResp);
     //-----------------------Follow-----------------------
     rpc AddFollow(AddFollowReq) returns (AddFollowResp);
-    rpc DelFollow(DelFollowReq) returns (DelFollowResp);
     rpc DelAllFollower(DelAllFollowerReq) returns (DelAllFollowerResp);
     rpc DelAllFollowing(DelAllFollowingReq) returns (DelAllFollowingResp);
     rpc CheckIfFollow(CheckIfFollowReq) returns (CheckFollowResp);
@@ -333,24 +270,18 @@ service relation{
     rpc SearchFollowerByDeveloperId(SearchFollowerByDeveloperIdReq) returns (SearchFollowerByDeveloperIdResp);
     rpc UpdateFollowing(UpdateFollowingReq) returns (UpdateFollowingResp);
     rpc UpdateFollower(UpdateFollowerReq) returns (UpdateFollowerResp);
-    rpc GetFollowingUpdatedAt(GetFollowingUpdatedAtReq) returns (GetFollowingUpdatedAtResp);
-    rpc GetFollowerUpdatedAt(GetFollowerUpdatedAtReq) returns (GetFollowerUpdatedAtResp);
     //-----------------------Fork-----------------------
     rpc AddFork(AddForkReq) returns (AddForkResp);
-    rpc DelFork(DelForkReq) returns (DelForkResp);
     rpc DelAllFork(DelAllForkReq) returns (DelAllForkResp);
     rpc GetOrigin(GetOriginReq) returns (GetOriginResp);
     rpc SearchFork(SearchForkReq) returns (SearchForkResp);
     rpc UpdateFork(UpdateForkReq) returns (UpdateForkResp);
-    rpc GetForkUpdatedAt(GetForkUpdatedAtReq) returns (GetForkUpdatedAtResp);
     //-----------------------Star-----------------------
     rpc AddStar(AddStarReq) returns (AddStarResp);
-    rpc DelStar(DelStarReq) returns (DelStarResp);
     rpc DelAllStarredRepo(DelAllStarredRepoReq) returns (DelAllStarredRepoResp);
-    rpc DelAllStaringDev(DelAllStaringDevReq) returns (DelAllStaringDevResp);
+    rpc DelAllStaringDeveloper(DelAllStaringDeveloperReq) returns (DelAllStaringDeveloperResp);
     rpc CheckIfStar(CheckIfStarReq) returns (CheckIfStarResp);
     rpc SearchStarredRepo(SearchStarredRepoReq) returns (SearchStarredRepoResp);
-    rpc SearchStaringDev(SearchStaringDevReq) returns (SearchStaringDevResp);
+    rpc SearchStaringDeveloper(SearchStaringDeveloperReq) returns (SearchStaringDeveloperResp);
     rpc UpdateStarredRepo(UpdateStarredRepoReq) returns (UpdateStarredRepoResp);
-    rpc GetStarredRepoUpdatedAt(GetStarredRepoUpdatedAtReq) returns (GetStarredRepoUpdatedAtResp);
 }
