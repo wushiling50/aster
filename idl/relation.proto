@@ -24,29 +24,12 @@ message AddCreateRepoResp {
     base.Base base = 1;
 }
 
-message DelCreateRepoReq {
-    int64 repoId = 1; // repoId
-}
-
-message DelCreateRepoResp {
-    base.Base base = 1;
-}
-
 message DelAllCreatedRepoReq {
     int64 developerId = 1; // developerId
 }
 
 message DelAllCreatedRepoResp {
     base.Base base = 1;
-}
-
-message GetCreatorIdReq {
-    int64 repoId = 1; // repoId
-}
-
-message GetCreatorIdResp {
-    base.Base base = 1;
-    int64 developerId = 2; // developerId
 }
 
 message SearchCreatedRepoReq {
@@ -66,15 +49,6 @@ message UpdateCreateRepoReq {
 
 message UpdateCreateRepoResp {
     base.Base base = 1;
-}
-
-message GetCreatedRepoUpdatedAtReq {
-    int64 developerId = 1;
-}
-
-message GetCreatedRepoUpdatedAtResp {
-    base.Base base = 1;
-    int64 updatedAt = 2;
 }
 
 // ====== Follow ======
@@ -346,12 +320,9 @@ message GetStarredRepoUpdatedAtResp {
 service relation{ 
     //-----------------------CreateRepo-----------------------
     rpc AddCreateRepo(AddCreateRepoReq) returns (AddCreateRepoResp);
-    rpc DelCreateRepo(DelCreateRepoReq) returns (DelCreateRepoResp);
     rpc DelAllCreatedRepo(DelAllCreatedRepoReq) returns (DelAllCreatedRepoResp);
-    rpc GetCreatorId(GetCreatorIdReq) returns (GetCreatorIdResp);
     rpc SearchCreatedRepo(SearchCreatedRepoReq) returns (SearchCreatedRepoResp);
     rpc UpdateCreateRepo(UpdateCreateRepoReq) returns (UpdateCreateRepoResp);
-    rpc GetCreatedRepoUpdatedAt(GetCreatedRepoUpdatedAtReq) returns (GetCreatedRepoUpdatedAtResp);
     //-----------------------Follow-----------------------
     rpc AddFollow(AddFollowReq) returns (AddFollowResp);
     rpc DelFollow(DelFollowReq) returns (DelFollowResp);

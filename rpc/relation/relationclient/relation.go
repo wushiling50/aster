@@ -39,8 +39,6 @@ type (
 	DelAllStaringDevResp             = relation.DelAllStaringDevResp
 	DelAllStarredRepoReq             = relation.DelAllStarredRepoReq
 	DelAllStarredRepoResp            = relation.DelAllStarredRepoResp
-	DelCreateRepoReq                 = relation.DelCreateRepoReq
-	DelCreateRepoResp                = relation.DelCreateRepoResp
 	DelFollowReq                     = relation.DelFollowReq
 	DelFollowResp                    = relation.DelFollowResp
 	DelForkReq                       = relation.DelForkReq
@@ -49,10 +47,6 @@ type (
 	DelStarResp                      = relation.DelStarResp
 	Follow                           = relation.Follow
 	Fork                             = relation.Fork
-	GetCreatedRepoUpdatedAtReq       = relation.GetCreatedRepoUpdatedAtReq
-	GetCreatedRepoUpdatedAtResp      = relation.GetCreatedRepoUpdatedAtResp
-	GetCreatorIdReq                  = relation.GetCreatorIdReq
-	GetCreatorIdResp                 = relation.GetCreatorIdResp
 	GetFollowerUpdatedAtReq          = relation.GetFollowerUpdatedAtReq
 	GetFollowerUpdatedAtResp         = relation.GetFollowerUpdatedAtResp
 	GetFollowingUpdatedAtReq         = relation.GetFollowingUpdatedAtReq
@@ -90,12 +84,9 @@ type (
 	Relation interface {
 		// -----------------------CreateRepo-----------------------
 		AddCreateRepo(ctx context.Context, in *AddCreateRepoReq, opts ...grpc.CallOption) (*AddCreateRepoResp, error)
-		DelCreateRepo(ctx context.Context, in *DelCreateRepoReq, opts ...grpc.CallOption) (*DelCreateRepoResp, error)
 		DelAllCreatedRepo(ctx context.Context, in *DelAllCreatedRepoReq, opts ...grpc.CallOption) (*DelAllCreatedRepoResp, error)
-		GetCreatorId(ctx context.Context, in *GetCreatorIdReq, opts ...grpc.CallOption) (*GetCreatorIdResp, error)
 		SearchCreatedRepo(ctx context.Context, in *SearchCreatedRepoReq, opts ...grpc.CallOption) (*SearchCreatedRepoResp, error)
 		UpdateCreateRepo(ctx context.Context, in *UpdateCreateRepoReq, opts ...grpc.CallOption) (*UpdateCreateRepoResp, error)
-		GetCreatedRepoUpdatedAt(ctx context.Context, in *GetCreatedRepoUpdatedAtReq, opts ...grpc.CallOption) (*GetCreatedRepoUpdatedAtResp, error)
 		// -----------------------Follow-----------------------
 		AddFollow(ctx context.Context, in *AddFollowReq, opts ...grpc.CallOption) (*AddFollowResp, error)
 		DelFollow(ctx context.Context, in *DelFollowReq, opts ...grpc.CallOption) (*DelFollowResp, error)
@@ -145,19 +136,9 @@ func (m *defaultRelation) AddCreateRepo(ctx context.Context, in *AddCreateRepoRe
 	return client.AddCreateRepo(ctx, in, opts...)
 }
 
-func (m *defaultRelation) DelCreateRepo(ctx context.Context, in *DelCreateRepoReq, opts ...grpc.CallOption) (*DelCreateRepoResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.DelCreateRepo(ctx, in, opts...)
-}
-
 func (m *defaultRelation) DelAllCreatedRepo(ctx context.Context, in *DelAllCreatedRepoReq, opts ...grpc.CallOption) (*DelAllCreatedRepoResp, error) {
 	client := relation.NewRelationClient(m.cli.Conn())
 	return client.DelAllCreatedRepo(ctx, in, opts...)
-}
-
-func (m *defaultRelation) GetCreatorId(ctx context.Context, in *GetCreatorIdReq, opts ...grpc.CallOption) (*GetCreatorIdResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.GetCreatorId(ctx, in, opts...)
 }
 
 func (m *defaultRelation) SearchCreatedRepo(ctx context.Context, in *SearchCreatedRepoReq, opts ...grpc.CallOption) (*SearchCreatedRepoResp, error) {
@@ -168,11 +149,6 @@ func (m *defaultRelation) SearchCreatedRepo(ctx context.Context, in *SearchCreat
 func (m *defaultRelation) UpdateCreateRepo(ctx context.Context, in *UpdateCreateRepoReq, opts ...grpc.CallOption) (*UpdateCreateRepoResp, error) {
 	client := relation.NewRelationClient(m.cli.Conn())
 	return client.UpdateCreateRepo(ctx, in, opts...)
-}
-
-func (m *defaultRelation) GetCreatedRepoUpdatedAt(ctx context.Context, in *GetCreatedRepoUpdatedAtReq, opts ...grpc.CallOption) (*GetCreatedRepoUpdatedAtResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.GetCreatedRepoUpdatedAt(ctx, in, opts...)
 }
 
 // -----------------------Follow-----------------------

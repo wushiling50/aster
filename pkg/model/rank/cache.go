@@ -11,7 +11,7 @@ import (
 func (r *RankModel) GetScores(ctx context.Context, key string, start int64, stop int64) ([]redis.FloatPair, error) {
 	rank, err := r.cache.ZrevrangeWithScoresByFloatCtx(ctx, key, start, stop)
 	if err != nil {
-		logx.Errorf("model.GetScores: Get cache failed: %v", err.Error())
+		logx.Errorf("model.GetScores: Get Cache Failed: %v", err.Error())
 		return nil, errno.InternalRedisError.WithMessage(err.Error())
 	}
 
@@ -21,7 +21,7 @@ func (r *RankModel) GetScores(ctx context.Context, key string, start int64, stop
 func (r *RankModel) GetScoresTotal(ctx context.Context, key string) (int64, error) {
 	total, err := r.cache.ZcardCtx(ctx, key)
 	if err != nil {
-		logx.Errorf("model.GetScoresNum: Get cache failed: %v", err.Error())
+		logx.Errorf("model.GetScoresNum: Get Cache Failed: %v", err.Error())
 		return 0, errno.InternalRedisError.WithMessage(err.Error())
 	}
 

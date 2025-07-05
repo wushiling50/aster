@@ -57,9 +57,9 @@ func BuildReview(githubReviewWithRepoId *githubFunc.ReviewWithRepoId, developerI
 	}
 }
 
-func BuildCompletedContribution(dataId int, developerId int64) *contribution.Contribution {
+func BuildCompletedContribution(dataId int64, developerId int64) *contribution.Contribution {
 	return &contribution.Contribution{
-		DataId:      int64(dataId),
+		DataId:      dataId,
 		DeveloperId: developerId,
 	}
 }

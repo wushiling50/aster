@@ -40,7 +40,7 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 
 	// 获取分数排行 (DeveloperID - Score)
 	resp.Rank = make([]*types.DeveloperWithScore, 0, len(scoreList))
-	start := req.Limit * req.Offset
+	start := req.Limit * (req.Offset - 1)
 	stop := start + req.Limit - 1
 	if scoreList, err = l.svcCtx.RankModel.GetScores(l.ctx, constants.ScoreKey, start, stop); err != nil {
 		logx.Errorf("applet.GetScoreRank: Get Score List failed: %v", err.Error())

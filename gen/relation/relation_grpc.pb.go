@@ -20,12 +20,9 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Relation_AddCreateRepo_FullMethodName                = "/relation.relation/AddCreateRepo"
-	Relation_DelCreateRepo_FullMethodName                = "/relation.relation/DelCreateRepo"
 	Relation_DelAllCreatedRepo_FullMethodName            = "/relation.relation/DelAllCreatedRepo"
-	Relation_GetCreatorId_FullMethodName                 = "/relation.relation/GetCreatorId"
 	Relation_SearchCreatedRepo_FullMethodName            = "/relation.relation/SearchCreatedRepo"
 	Relation_UpdateCreateRepo_FullMethodName             = "/relation.relation/UpdateCreateRepo"
-	Relation_GetCreatedRepoUpdatedAt_FullMethodName      = "/relation.relation/GetCreatedRepoUpdatedAt"
 	Relation_AddFollow_FullMethodName                    = "/relation.relation/AddFollow"
 	Relation_DelFollow_FullMethodName                    = "/relation.relation/DelFollow"
 	Relation_DelAllFollower_FullMethodName               = "/relation.relation/DelAllFollower"
@@ -61,12 +58,9 @@ const (
 type RelationClient interface {
 	// -----------------------CreateRepo-----------------------
 	AddCreateRepo(ctx context.Context, in *AddCreateRepoReq, opts ...grpc.CallOption) (*AddCreateRepoResp, error)
-	DelCreateRepo(ctx context.Context, in *DelCreateRepoReq, opts ...grpc.CallOption) (*DelCreateRepoResp, error)
 	DelAllCreatedRepo(ctx context.Context, in *DelAllCreatedRepoReq, opts ...grpc.CallOption) (*DelAllCreatedRepoResp, error)
-	GetCreatorId(ctx context.Context, in *GetCreatorIdReq, opts ...grpc.CallOption) (*GetCreatorIdResp, error)
 	SearchCreatedRepo(ctx context.Context, in *SearchCreatedRepoReq, opts ...grpc.CallOption) (*SearchCreatedRepoResp, error)
 	UpdateCreateRepo(ctx context.Context, in *UpdateCreateRepoReq, opts ...grpc.CallOption) (*UpdateCreateRepoResp, error)
-	GetCreatedRepoUpdatedAt(ctx context.Context, in *GetCreatedRepoUpdatedAtReq, opts ...grpc.CallOption) (*GetCreatedRepoUpdatedAtResp, error)
 	// -----------------------Follow-----------------------
 	AddFollow(ctx context.Context, in *AddFollowReq, opts ...grpc.CallOption) (*AddFollowResp, error)
 	DelFollow(ctx context.Context, in *DelFollowReq, opts ...grpc.CallOption) (*DelFollowResp, error)
@@ -116,27 +110,9 @@ func (c *relationClient) AddCreateRepo(ctx context.Context, in *AddCreateRepoReq
 	return out, nil
 }
 
-func (c *relationClient) DelCreateRepo(ctx context.Context, in *DelCreateRepoReq, opts ...grpc.CallOption) (*DelCreateRepoResp, error) {
-	out := new(DelCreateRepoResp)
-	err := c.cc.Invoke(ctx, Relation_DelCreateRepo_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *relationClient) DelAllCreatedRepo(ctx context.Context, in *DelAllCreatedRepoReq, opts ...grpc.CallOption) (*DelAllCreatedRepoResp, error) {
 	out := new(DelAllCreatedRepoResp)
 	err := c.cc.Invoke(ctx, Relation_DelAllCreatedRepo_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *relationClient) GetCreatorId(ctx context.Context, in *GetCreatorIdReq, opts ...grpc.CallOption) (*GetCreatorIdResp, error) {
-	out := new(GetCreatorIdResp)
-	err := c.cc.Invoke(ctx, Relation_GetCreatorId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -155,15 +131,6 @@ func (c *relationClient) SearchCreatedRepo(ctx context.Context, in *SearchCreate
 func (c *relationClient) UpdateCreateRepo(ctx context.Context, in *UpdateCreateRepoReq, opts ...grpc.CallOption) (*UpdateCreateRepoResp, error) {
 	out := new(UpdateCreateRepoResp)
 	err := c.cc.Invoke(ctx, Relation_UpdateCreateRepo_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *relationClient) GetCreatedRepoUpdatedAt(ctx context.Context, in *GetCreatedRepoUpdatedAtReq, opts ...grpc.CallOption) (*GetCreatedRepoUpdatedAtResp, error) {
-	out := new(GetCreatedRepoUpdatedAtResp)
-	err := c.cc.Invoke(ctx, Relation_GetCreatedRepoUpdatedAt_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -419,12 +386,9 @@ func (c *relationClient) GetStarredRepoUpdatedAt(ctx context.Context, in *GetSta
 type RelationServer interface {
 	// -----------------------CreateRepo-----------------------
 	AddCreateRepo(context.Context, *AddCreateRepoReq) (*AddCreateRepoResp, error)
-	DelCreateRepo(context.Context, *DelCreateRepoReq) (*DelCreateRepoResp, error)
 	DelAllCreatedRepo(context.Context, *DelAllCreatedRepoReq) (*DelAllCreatedRepoResp, error)
-	GetCreatorId(context.Context, *GetCreatorIdReq) (*GetCreatorIdResp, error)
 	SearchCreatedRepo(context.Context, *SearchCreatedRepoReq) (*SearchCreatedRepoResp, error)
 	UpdateCreateRepo(context.Context, *UpdateCreateRepoReq) (*UpdateCreateRepoResp, error)
-	GetCreatedRepoUpdatedAt(context.Context, *GetCreatedRepoUpdatedAtReq) (*GetCreatedRepoUpdatedAtResp, error)
 	// -----------------------Follow-----------------------
 	AddFollow(context.Context, *AddFollowReq) (*AddFollowResp, error)
 	DelFollow(context.Context, *DelFollowReq) (*DelFollowResp, error)
@@ -465,23 +429,14 @@ type UnimplementedRelationServer struct {
 func (UnimplementedRelationServer) AddCreateRepo(context.Context, *AddCreateRepoReq) (*AddCreateRepoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddCreateRepo not implemented")
 }
-func (UnimplementedRelationServer) DelCreateRepo(context.Context, *DelCreateRepoReq) (*DelCreateRepoResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelCreateRepo not implemented")
-}
 func (UnimplementedRelationServer) DelAllCreatedRepo(context.Context, *DelAllCreatedRepoReq) (*DelAllCreatedRepoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelAllCreatedRepo not implemented")
-}
-func (UnimplementedRelationServer) GetCreatorId(context.Context, *GetCreatorIdReq) (*GetCreatorIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCreatorId not implemented")
 }
 func (UnimplementedRelationServer) SearchCreatedRepo(context.Context, *SearchCreatedRepoReq) (*SearchCreatedRepoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchCreatedRepo not implemented")
 }
 func (UnimplementedRelationServer) UpdateCreateRepo(context.Context, *UpdateCreateRepoReq) (*UpdateCreateRepoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCreateRepo not implemented")
-}
-func (UnimplementedRelationServer) GetCreatedRepoUpdatedAt(context.Context, *GetCreatedRepoUpdatedAtReq) (*GetCreatedRepoUpdatedAtResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCreatedRepoUpdatedAt not implemented")
 }
 func (UnimplementedRelationServer) AddFollow(context.Context, *AddFollowReq) (*AddFollowResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddFollow not implemented")
@@ -595,24 +550,6 @@ func _Relation_AddCreateRepo_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Relation_DelCreateRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelCreateRepoReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).DelCreateRepo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_DelCreateRepo_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).DelCreateRepo(ctx, req.(*DelCreateRepoReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Relation_DelAllCreatedRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DelAllCreatedRepoReq)
 	if err := dec(in); err != nil {
@@ -627,24 +564,6 @@ func _Relation_DelAllCreatedRepo_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RelationServer).DelAllCreatedRepo(ctx, req.(*DelAllCreatedRepoReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Relation_GetCreatorId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCreatorIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).GetCreatorId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_GetCreatorId_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).GetCreatorId(ctx, req.(*GetCreatorIdReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -681,24 +600,6 @@ func _Relation_UpdateCreateRepo_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RelationServer).UpdateCreateRepo(ctx, req.(*UpdateCreateRepoReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Relation_GetCreatedRepoUpdatedAt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCreatedRepoUpdatedAtReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).GetCreatedRepoUpdatedAt(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_GetCreatedRepoUpdatedAt_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).GetCreatedRepoUpdatedAt(ctx, req.(*GetCreatedRepoUpdatedAtReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1201,16 +1102,8 @@ var Relation_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Relation_AddCreateRepo_Handler,
 		},
 		{
-			MethodName: "DelCreateRepo",
-			Handler:    _Relation_DelCreateRepo_Handler,
-		},
-		{
 			MethodName: "DelAllCreatedRepo",
 			Handler:    _Relation_DelAllCreatedRepo_Handler,
-		},
-		{
-			MethodName: "GetCreatorId",
-			Handler:    _Relation_GetCreatorId_Handler,
 		},
 		{
 			MethodName: "SearchCreatedRepo",
@@ -1219,10 +1112,6 @@ var Relation_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateCreateRepo",
 			Handler:    _Relation_UpdateCreateRepo_Handler,
-		},
-		{
-			MethodName: "GetCreatedRepoUpdatedAt",
-			Handler:    _Relation_GetCreatedRepoUpdatedAt_Handler,
 		},
 		{
 			MethodName: "AddFollow",

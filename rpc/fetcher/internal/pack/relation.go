@@ -13,9 +13,9 @@ func BuildCreatedRepo(githubRepo *github.Repository, developerId int64) *relatio
 	}
 }
 
-func BuildCompletedCreatedRepo(dataId int, developerId int64) *relation.CreateRepo {
+func BuildCompletedCreatedRepo(dataId int64, developerId int64) *relation.CreateRepo {
 	return &relation.CreateRepo{
-		DataId:      int64(dataId),
+		DataId:      dataId,
 		DeveloperId: developerId,
 	}
 }
@@ -28,9 +28,9 @@ func BuildStarredRepo(githubStarredRepo *github.StarredRepository, developerId i
 	}
 }
 
-func BuildCompletedStarredRepo(dataId int, developerId int64) *relation.CreateRepo {
+func BuildCompletedStarredRepo(dataId int64, developerId int64) *relation.CreateRepo {
 	return &relation.CreateRepo{
-		DataId:      int64(dataId),
+		DataId:      dataId,
 		DeveloperId: developerId,
 	}
 }
@@ -43,9 +43,9 @@ func BuildFollow(followerId int64, followingId int64) *relation.Follow {
 	}
 }
 
-func BuildCompletedFollow(dataId int, developerId int64) *relation.Follow {
+func BuildCompletedFollow(dataId int64, developerId int64) *relation.Follow {
 	return &relation.Follow{
-		DataId:      int64(dataId),
+		DataId:      dataId,
 		FollowerId:  developerId,
 		FollowingId: 0,
 	}
@@ -59,9 +59,9 @@ func BuildFork(originalRepoId int64, forkRepoId int64) *relation.Fork {
 	}
 }
 
-func BuildCompletedFork(dataId int, originalRepoId int64) *relation.Fork {
+func BuildCompletedFork(dataId int64, originalRepoId int64) *relation.Fork {
 	return &relation.Fork{
-		DataId:         int64(dataId),
+		DataId:         dataId,
 		OriginalRepoId: originalRepoId,
 	}
 }

@@ -29,19 +29,9 @@ func (s *RelationServer) AddCreateRepo(ctx context.Context, in *relation.AddCrea
 	return l.AddCreateRepo(in)
 }
 
-func (s *RelationServer) DelCreateRepo(ctx context.Context, in *relation.DelCreateRepoReq) (*relation.DelCreateRepoResp, error) {
-	l := logic.NewDelCreateRepoLogic(ctx, s.svcCtx)
-	return l.DelCreateRepo(in)
-}
-
 func (s *RelationServer) DelAllCreatedRepo(ctx context.Context, in *relation.DelAllCreatedRepoReq) (*relation.DelAllCreatedRepoResp, error) {
 	l := logic.NewDelAllCreatedRepoLogic(ctx, s.svcCtx)
 	return l.DelAllCreatedRepo(in)
-}
-
-func (s *RelationServer) GetCreatorId(ctx context.Context, in *relation.GetCreatorIdReq) (*relation.GetCreatorIdResp, error) {
-	l := logic.NewGetCreatorIdLogic(ctx, s.svcCtx)
-	return l.GetCreatorId(in)
 }
 
 func (s *RelationServer) SearchCreatedRepo(ctx context.Context, in *relation.SearchCreatedRepoReq) (*relation.SearchCreatedRepoResp, error) {
@@ -52,11 +42,6 @@ func (s *RelationServer) SearchCreatedRepo(ctx context.Context, in *relation.Sea
 func (s *RelationServer) UpdateCreateRepo(ctx context.Context, in *relation.UpdateCreateRepoReq) (*relation.UpdateCreateRepoResp, error) {
 	l := logic.NewUpdateCreateRepoLogic(ctx, s.svcCtx)
 	return l.UpdateCreateRepo(in)
-}
-
-func (s *RelationServer) GetCreatedRepoUpdatedAt(ctx context.Context, in *relation.GetCreatedRepoUpdatedAtReq) (*relation.GetCreatedRepoUpdatedAtResp, error) {
-	l := logic.NewGetCreatedRepoUpdatedAtLogic(ctx, s.svcCtx)
-	return l.GetCreatedRepoUpdatedAt(in)
 }
 
 // -----------------------Follow-----------------------
