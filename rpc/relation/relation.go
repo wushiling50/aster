@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 
 	"github.com/wushiling50/aster/gen/relation"
 	"github.com/wushiling50/aster/rpc/relation/internal/config"
+	"github.com/wushiling50/aster/rpc/relation/internal/consumer"
 	"github.com/wushiling50/aster/rpc/relation/internal/server"
 	"github.com/wushiling50/aster/rpc/relation/internal/svc"
 
@@ -16,7 +18,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/relation.yaml", "the config file")
+var configFile = flag.String("f", "rpc/relation/etc/relation.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -25,6 +27,9 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 
+	serviceGroup := service.NewServiceGroup()
+	defer serviceGroup.Stop()
+
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		relation.RegisterRelationServer(grpcServer, server.NewRelationServer(ctx))
 
@@ -32,8 +37,12 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
-	defer s.Stop()
+	serviceGroup.Add(s)
+
+	for _, s := range consumer.Consumers(c, context.Background(), ctx) {
+		serviceGroup.Add(s)
+	}
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
-	s.Start()
+	serviceGroup.Start()
 }
