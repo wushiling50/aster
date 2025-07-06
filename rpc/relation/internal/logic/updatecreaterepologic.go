@@ -4,12 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/gen/relation"
-	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/github"
 	model_relation "github.com/wushiling50/aster/pkg/model/relation"
-	"github.com/wushiling50/aster/pkg/tasks"
 	"github.com/wushiling50/aster/rpc/relation/internal/pack"
 	"github.com/wushiling50/aster/rpc/relation/internal/svc"
 
@@ -33,17 +30,19 @@ func NewUpdateCreateRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 func (l *UpdateCreateRepoLogic) UpdateCreateRepo(in *relation.UpdateCreateRepoReq) (*relation.UpdateCreateRepoResp, error) {
 	resp := new(relation.UpdateCreateRepoResp)
 
-	needUpdate, err := l.checkIfNeedUpdateCreateRepo(in.DeveloperId)
+	need, err := l.checkIfNeedUpdate(in.CreateRepo.DeveloperId)
 	if err != nil {
+		logx.Errorf("service.UpdateCreateRepo: Update Create Repo Failed: %w", err)
 		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
 
-	if needUpdate {
-		err = l.pushCreateRepoTask(in.DeveloperId)
+	if need {
+		err = l.updateRepo(pack.BuildModelCreateRepo(in.CreateRepo))
 		if err != nil {
+			logx.Errorf("service.UpdateCreateRepo: Update Create Repo Failed: %w", err)
 			resp.Base = pack.BuildBaseResp(err)
-			return resp, err
+			return resp, nil
 		}
 	}
 
@@ -52,7 +51,7 @@ func (l *UpdateCreateRepoLogic) UpdateCreateRepo(in *relation.UpdateCreateRepoRe
 	return resp, nil
 }
 
-func (l *UpdateCreateRepoLogic) checkIfNeedUpdateCreateRepo(developerId int64) (bool, error) {
+func (l *UpdateCreateRepoLogic) checkIfNeedUpdate(developerId int64) (bool, error) {
 	createRepoUpdatedAt, err := l.svcCtx.CreatedRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 	if err != nil {
 		switch {
@@ -68,27 +67,19 @@ func (l *UpdateCreateRepoLogic) checkIfNeedUpdateCreateRepo(developerId int64) (
 	} else {
 		return false, nil
 	}
-
 }
 
-func (l *UpdateCreateRepoLogic) pushCreateRepoTask(id int64) (err error) {
-	var (
-		task   *asynq.Task
-		taskId string
-	)
-
-	if task, taskId, err = tasks.NewFetcherTask(constants.FetchCreatedRepo, id, "", 0); err != nil {
-		return
-	}
-
-	_, err = l.svcCtx.AsynqClient.Enqueue(
-		task,
-		asynq.TaskID(taskId),
-		asynq.Queue(constants.FetcherTaskQueue),
-		asynq.MaxRetry(constants.FetchMaxRetry))
+func (l *UpdateCreateRepoLogic) updateRepo(model *model_relation.CreateRepo) error {
+	createRepo, err := l.svcCtx.CreateRepoModel.FindOneByRepoId(l.ctx, model.RepoId)
 	if err != nil {
-		return
+		return err
 	}
 
-	return
+	model.DataId = createRepo.DataId
+	err = l.svcCtx.CreateRepoModel.Update(l.ctx, model)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -44,7 +44,7 @@ message SearchCreatedRepoResp {
 }
 
 message UpdateCreateRepoReq {
-    int64 developerId = 1;
+    CreateRepo createRepo = 1;
 }
 
 message UpdateCreateRepoResp {
