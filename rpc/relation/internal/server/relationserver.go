@@ -29,11 +29,6 @@ func (s *RelationServer) AddCreateRepo(ctx context.Context, in *relation.AddCrea
 	return l.AddCreateRepo(in)
 }
 
-func (s *RelationServer) DelAllCreatedRepo(ctx context.Context, in *relation.DelAllCreatedRepoReq) (*relation.DelAllCreatedRepoResp, error) {
-	l := logic.NewDelAllCreatedRepoLogic(ctx, s.svcCtx)
-	return l.DelAllCreatedRepo(in)
-}
-
 func (s *RelationServer) SearchCreatedRepo(ctx context.Context, in *relation.SearchCreatedRepoReq) (*relation.SearchCreatedRepoResp, error) {
 	l := logic.NewSearchCreatedRepoLogic(ctx, s.svcCtx)
 	return l.SearchCreatedRepo(in)

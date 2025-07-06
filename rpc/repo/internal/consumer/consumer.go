@@ -16,14 +16,14 @@ import (
 )
 
 type RepoConsumer struct {
-	ctx context.Context
-	svc *svc.ServiceContext
+	ctx    context.Context
+	svcCtx *svc.ServiceContext
 }
 
-func NewRepoConsumer(ctx context.Context, svc *svc.ServiceContext) *RepoConsumer {
+func NewRepoConsumer(ctx context.Context, svcCtx *svc.ServiceContext) *RepoConsumer {
 	return &RepoConsumer{
-		ctx: ctx,
-		svc: svc,
+		ctx:    ctx,
+		svcCtx: svcCtx,
 	}
 }
 
@@ -70,7 +70,7 @@ func (c *RepoConsumer) Consume(ctx context.Context, key string, value string) (e
 }
 
 func (c *RepoConsumer) getRepo(repoId int64) (*repo.Repo, bool, error) {
-	l := logic.NewGetRepoByIdLogic(c.ctx, c.svc)
+	l := logic.NewGetRepoByIdLogic(c.ctx, c.svcCtx)
 
 	resp, err := l.GetRepoById(&repo.GetRepoByIdReq{
 		Id: repoId,
@@ -95,7 +95,7 @@ func (c *RepoConsumer) getRepo(repoId int64) (*repo.Repo, bool, error) {
 }
 
 func (c *RepoConsumer) updateOldRepo(newRepo *repo.Repo) error {
-	l := logic.NewUpdateRepoLogic(c.ctx, c.svc)
+	l := logic.NewUpdateRepoLogic(c.ctx, c.svcCtx)
 
 	resp, err := l.UpdateRepo(&repo.UpdateRepoReq{
 		Repo: newRepo,
@@ -115,7 +115,7 @@ func (c *RepoConsumer) updateOldRepo(newRepo *repo.Repo) error {
 }
 
 func (c *RepoConsumer) addNewRepo(newRepo *repo.Repo) error {
-	l := logic.NewAddRepoLogic(c.ctx, c.svc)
+	l := logic.NewAddRepoLogic(c.ctx, c.svcCtx)
 
 	resp, err := l.AddRepo(&repo.AddRepoReq{
 		Repo: newRepo,

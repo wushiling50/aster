@@ -16,14 +16,14 @@ import (
 )
 
 type DeveloperConsumer struct {
-	ctx context.Context
-	svc *svc.ServiceContext
+	ctx    context.Context
+	svcCtx *svc.ServiceContext
 }
 
-func NewDeveloperConsumer(ctx context.Context, svc *svc.ServiceContext) *DeveloperConsumer {
+func NewDeveloperConsumer(ctx context.Context, svcCtx *svc.ServiceContext) *DeveloperConsumer {
 	return &DeveloperConsumer{
-		ctx: ctx,
-		svc: svc,
+		ctx:    ctx,
+		svcCtx: svcCtx,
 	}
 }
 
@@ -70,7 +70,7 @@ func (c *DeveloperConsumer) Consume(ctx context.Context, key string, value strin
 }
 
 func (c *DeveloperConsumer) getDeveloper(developerId int64) (*developer.Developer, bool, error) {
-	l := logic.NewGetDeveloperByIdLogic(c.ctx, c.svc)
+	l := logic.NewGetDeveloperByIdLogic(c.ctx, c.svcCtx)
 
 	resp, err := l.GetDeveloperById(&developer.GetDeveloperByIdReq{
 		Id: developerId,
@@ -95,7 +95,7 @@ func (c *DeveloperConsumer) getDeveloper(developerId int64) (*developer.Develope
 }
 
 func (c *DeveloperConsumer) updateOldDeveloper(newDeveloper *developer.Developer) error {
-	l := logic.NewUpdateDeveloperLogic(c.ctx, c.svc)
+	l := logic.NewUpdateDeveloperLogic(c.ctx, c.svcCtx)
 
 	resp, err := l.UpdateDeveloper(&developer.UpdateDeveloperReq{
 		Developer: newDeveloper,
@@ -115,7 +115,7 @@ func (c *DeveloperConsumer) updateOldDeveloper(newDeveloper *developer.Developer
 }
 
 func (c *DeveloperConsumer) addNewDeveloper(newDeveloper *developer.Developer) error {
-	l := logic.NewAddDeveloperLogic(c.ctx, c.svc)
+	l := logic.NewAddDeveloperLogic(c.ctx, c.svcCtx)
 
 	resp, err := l.AddDeveloper(&developer.AddDeveloperReq{
 		Developer: newDeveloper,

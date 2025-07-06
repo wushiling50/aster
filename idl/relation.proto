@@ -24,14 +24,6 @@ message AddCreateRepoResp {
     base.Base base = 1;
 }
 
-message DelAllCreatedRepoReq {
-    int64 developerId = 1; // developerId
-}
-
-message DelAllCreatedRepoResp {
-    base.Base base = 1;
-}
-
 message SearchCreatedRepoReq {
     int64 page = 1; // page
     int64 limit = 2; // limit
@@ -258,7 +250,6 @@ message UpdateStarredRepoResp {
 service relation{ 
     //-----------------------CreateRepo-----------------------
     rpc AddCreateRepo(AddCreateRepoReq) returns (AddCreateRepoResp);
-    rpc DelAllCreatedRepo(DelAllCreatedRepoReq) returns (DelAllCreatedRepoResp);
     rpc SearchCreatedRepo(SearchCreatedRepoReq) returns (SearchCreatedRepoResp);
     rpc UpdateCreateRepo(UpdateCreateRepoReq) returns (UpdateCreateRepoResp);
     //-----------------------Follow-----------------------

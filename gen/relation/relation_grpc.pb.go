@@ -20,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Relation_AddCreateRepo_FullMethodName                = "/relation.relation/AddCreateRepo"
-	Relation_DelAllCreatedRepo_FullMethodName            = "/relation.relation/DelAllCreatedRepo"
 	Relation_SearchCreatedRepo_FullMethodName            = "/relation.relation/SearchCreatedRepo"
 	Relation_UpdateCreateRepo_FullMethodName             = "/relation.relation/UpdateCreateRepo"
 	Relation_AddFollow_FullMethodName                    = "/relation.relation/AddFollow"
@@ -51,7 +50,6 @@ const (
 type RelationClient interface {
 	// -----------------------CreateRepo-----------------------
 	AddCreateRepo(ctx context.Context, in *AddCreateRepoReq, opts ...grpc.CallOption) (*AddCreateRepoResp, error)
-	DelAllCreatedRepo(ctx context.Context, in *DelAllCreatedRepoReq, opts ...grpc.CallOption) (*DelAllCreatedRepoResp, error)
 	SearchCreatedRepo(ctx context.Context, in *SearchCreatedRepoReq, opts ...grpc.CallOption) (*SearchCreatedRepoResp, error)
 	UpdateCreateRepo(ctx context.Context, in *UpdateCreateRepoReq, opts ...grpc.CallOption) (*UpdateCreateRepoResp, error)
 	// -----------------------Follow-----------------------
@@ -90,15 +88,6 @@ func NewRelationClient(cc grpc.ClientConnInterface) RelationClient {
 func (c *relationClient) AddCreateRepo(ctx context.Context, in *AddCreateRepoReq, opts ...grpc.CallOption) (*AddCreateRepoResp, error) {
 	out := new(AddCreateRepoResp)
 	err := c.cc.Invoke(ctx, Relation_AddCreateRepo_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *relationClient) DelAllCreatedRepo(ctx context.Context, in *DelAllCreatedRepoReq, opts ...grpc.CallOption) (*DelAllCreatedRepoResp, error) {
-	out := new(DelAllCreatedRepoResp)
-	err := c.cc.Invoke(ctx, Relation_DelAllCreatedRepo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -309,7 +298,6 @@ func (c *relationClient) UpdateStarredRepo(ctx context.Context, in *UpdateStarre
 type RelationServer interface {
 	// -----------------------CreateRepo-----------------------
 	AddCreateRepo(context.Context, *AddCreateRepoReq) (*AddCreateRepoResp, error)
-	DelAllCreatedRepo(context.Context, *DelAllCreatedRepoReq) (*DelAllCreatedRepoResp, error)
 	SearchCreatedRepo(context.Context, *SearchCreatedRepoReq) (*SearchCreatedRepoResp, error)
 	UpdateCreateRepo(context.Context, *UpdateCreateRepoReq) (*UpdateCreateRepoResp, error)
 	// -----------------------Follow-----------------------
@@ -344,9 +332,6 @@ type UnimplementedRelationServer struct {
 
 func (UnimplementedRelationServer) AddCreateRepo(context.Context, *AddCreateRepoReq) (*AddCreateRepoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddCreateRepo not implemented")
-}
-func (UnimplementedRelationServer) DelAllCreatedRepo(context.Context, *DelAllCreatedRepoReq) (*DelAllCreatedRepoResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelAllCreatedRepo not implemented")
 }
 func (UnimplementedRelationServer) SearchCreatedRepo(context.Context, *SearchCreatedRepoReq) (*SearchCreatedRepoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchCreatedRepo not implemented")
@@ -441,24 +426,6 @@ func _Relation_AddCreateRepo_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RelationServer).AddCreateRepo(ctx, req.(*AddCreateRepoReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Relation_DelAllCreatedRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAllCreatedRepoReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).DelAllCreatedRepo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_DelAllCreatedRepo_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).DelAllCreatedRepo(ctx, req.(*DelAllCreatedRepoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -869,10 +836,6 @@ var Relation_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddCreateRepo",
 			Handler:    _Relation_AddCreateRepo_Handler,
-		},
-		{
-			MethodName: "DelAllCreatedRepo",
-			Handler:    _Relation_DelAllCreatedRepo_Handler,
 		},
 		{
 			MethodName: "SearchCreatedRepo",

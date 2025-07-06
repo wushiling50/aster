@@ -27,8 +27,6 @@ type (
 	CheckIfStarReq                   = relation.CheckIfStarReq
 	CheckIfStarResp                  = relation.CheckIfStarResp
 	CreateRepo                       = relation.CreateRepo
-	DelAllCreatedRepoReq             = relation.DelAllCreatedRepoReq
-	DelAllCreatedRepoResp            = relation.DelAllCreatedRepoResp
 	DelAllFollowerReq                = relation.DelAllFollowerReq
 	DelAllFollowerResp               = relation.DelAllFollowerResp
 	DelAllFollowingReq               = relation.DelAllFollowingReq
@@ -70,7 +68,6 @@ type (
 	Relation interface {
 		// -----------------------CreateRepo-----------------------
 		AddCreateRepo(ctx context.Context, in *AddCreateRepoReq, opts ...grpc.CallOption) (*AddCreateRepoResp, error)
-		DelAllCreatedRepo(ctx context.Context, in *DelAllCreatedRepoReq, opts ...grpc.CallOption) (*DelAllCreatedRepoResp, error)
 		SearchCreatedRepo(ctx context.Context, in *SearchCreatedRepoReq, opts ...grpc.CallOption) (*SearchCreatedRepoResp, error)
 		UpdateCreateRepo(ctx context.Context, in *UpdateCreateRepoReq, opts ...grpc.CallOption) (*UpdateCreateRepoResp, error)
 		// -----------------------Follow-----------------------
@@ -113,11 +110,6 @@ func NewRelation(cli zrpc.Client) Relation {
 func (m *defaultRelation) AddCreateRepo(ctx context.Context, in *AddCreateRepoReq, opts ...grpc.CallOption) (*AddCreateRepoResp, error) {
 	client := relation.NewRelationClient(m.cli.Conn())
 	return client.AddCreateRepo(ctx, in, opts...)
-}
-
-func (m *defaultRelation) DelAllCreatedRepo(ctx context.Context, in *DelAllCreatedRepoReq, opts ...grpc.CallOption) (*DelAllCreatedRepoResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.DelAllCreatedRepo(ctx, in, opts...)
 }
 
 func (m *defaultRelation) SearchCreatedRepo(ctx context.Context, in *SearchCreatedRepoReq, opts ...grpc.CallOption) (*SearchCreatedRepoResp, error) {

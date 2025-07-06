@@ -83,3 +83,17 @@ func (l *UpdateCreateRepoLogic) updateRepo(model *model_relation.CreateRepo) err
 
 	return nil
 }
+
+func (l *UpdateCreateRepoLogic) CheckIfCreateRepoExist(repoId int64) (bool, error) {
+	_, err := l.svcCtx.CreateRepoModel.FindOneByRepoId(l.ctx, repoId)
+	if err != nil {
+		switch {
+		case errors.Is(err, model_relation.ErrNotFound):
+			return false, nil
+		default:
+			return false, err
+		}
+	}
+
+	return true, nil
+}
