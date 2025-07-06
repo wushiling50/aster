@@ -1,6 +1,8 @@
 package tasks
 
 import (
+	"errors"
+
 	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/pkg/constants"
 )
@@ -23,7 +25,11 @@ func FetcherTaskPusher(c *asynq.Client, fetchType int, id int64, updateAfter str
 	)
 
 	if err != nil {
-		return
+		if errors.Is(err, asynq.ErrTaskIDConflict) {
+			err = nil
+		} else {
+			return
+		}
 	}
 
 	return
