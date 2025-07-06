@@ -45,16 +45,6 @@ func (s *RelationServer) AddFollow(ctx context.Context, in *relation.AddFollowRe
 	return l.AddFollow(in)
 }
 
-func (s *RelationServer) DelAllFollower(ctx context.Context, in *relation.DelAllFollowerReq) (*relation.DelAllFollowerResp, error) {
-	l := logic.NewDelAllFollowerLogic(ctx, s.svcCtx)
-	return l.DelAllFollower(in)
-}
-
-func (s *RelationServer) DelAllFollowing(ctx context.Context, in *relation.DelAllFollowingReq) (*relation.DelAllFollowingResp, error) {
-	l := logic.NewDelAllFollowingLogic(ctx, s.svcCtx)
-	return l.DelAllFollowing(in)
-}
-
 func (s *RelationServer) CheckIfFollow(ctx context.Context, in *relation.CheckIfFollowReq) (*relation.CheckFollowResp, error) {
 	l := logic.NewCheckIfFollowLogic(ctx, s.svcCtx)
 	return l.CheckIfFollow(in)
@@ -86,11 +76,6 @@ func (s *RelationServer) AddFork(ctx context.Context, in *relation.AddForkReq) (
 	return l.AddFork(in)
 }
 
-func (s *RelationServer) DelAllFork(ctx context.Context, in *relation.DelAllForkReq) (*relation.DelAllForkResp, error) {
-	l := logic.NewDelAllForkLogic(ctx, s.svcCtx)
-	return l.DelAllFork(in)
-}
-
 func (s *RelationServer) GetOrigin(ctx context.Context, in *relation.GetOriginReq) (*relation.GetOriginResp, error) {
 	l := logic.NewGetOriginLogic(ctx, s.svcCtx)
 	return l.GetOrigin(in)
@@ -110,16 +95,6 @@ func (s *RelationServer) UpdateFork(ctx context.Context, in *relation.UpdateFork
 func (s *RelationServer) AddStar(ctx context.Context, in *relation.AddStarReq) (*relation.AddStarResp, error) {
 	l := logic.NewAddStarLogic(ctx, s.svcCtx)
 	return l.AddStar(in)
-}
-
-func (s *RelationServer) DelAllStarredRepo(ctx context.Context, in *relation.DelAllStarredRepoReq) (*relation.DelAllStarredRepoResp, error) {
-	l := logic.NewDelAllStarredRepoLogic(ctx, s.svcCtx)
-	return l.DelAllStarredRepo(in)
-}
-
-func (s *RelationServer) DelAllStaringDeveloper(ctx context.Context, in *relation.DelAllStaringDeveloperReq) (*relation.DelAllStaringDeveloperResp, error) {
-	l := logic.NewDelAllStaringDeveloperLogic(ctx, s.svcCtx)
-	return l.DelAllStaringDeveloper(in)
 }
 
 func (s *RelationServer) CheckIfStar(ctx context.Context, in *relation.CheckIfStarReq) (*relation.CheckIfStarResp, error) {

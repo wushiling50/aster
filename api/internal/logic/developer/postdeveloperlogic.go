@@ -3,15 +3,12 @@ package developer
 import (
 	"context"
 
-	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/api/internal/svc"
 	"github.com/wushiling50/aster/api/internal/types"
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/github"
 	"github.com/wushiling50/aster/pkg/tasks"
-	"github.com/wushiling50/aster/pkg/utils"
-	"github.com/wushiling50/aster/rpc/id_generator/idgenerator"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -30,9 +27,7 @@ func NewPostDeveloperLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pos
 	}
 }
 
-func (l *PostDeveloperLogic) PostDeveloper(req *types.PostTaskReq) (resp *types.PostTaskResp, err error) {
-	resp = new(types.PostTaskResp)
-
+func (l *PostDeveloperLogic) PostDeveloper(req *types.PostTaskReq) (err error) {
 	developerId, err := github.GetIdByLogin(l.ctx, req.Login)
 	if err != nil {
 		logx.Errorf("applet.PostLanguageUsageTask: Failed To Get Id By Login %v", err.Error())
@@ -40,55 +35,13 @@ func (l *PostDeveloperLogic) PostDeveloper(req *types.PostTaskReq) (resp *types.
 		return
 	}
 
-	reqId, err := l.rpcGetId()
-	if err != nil {
-		logx.Error(err)
-		return
-	}
+	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchDeveloper, developerId, "", 0)
 
-	task, taskId, err := tasks.NewFetcherTask(constants.FetchDeveloper, developerId, "", 0)
-	if err != nil {
-		logx.Errorf("applet.PostDeveloper: Failed To Create Task: %v", err.Error())
-		err = errno.InternalAsynqError.WithError(err)
-		return
-	}
-
-	_, err = l.svcCtx.AsynqClient.Enqueue(
-		task,
-		asynq.TaskID(taskId),
-		asynq.Retention(constants.FetchExpireTime),
-		asynq.MaxRetry(constants.FetchMaxRetry),
-		asynq.Queue(constants.FetcherTaskQueue),
-	)
 	if err != nil {
 		logx.Errorf("applet.PostDeveloper: Failed To Enqueue Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
-
-	resp.TaskId = types.TaskId{
-		TaskId: reqId,
-	}
-
-	return
-}
-
-func (l *PostDeveloperLogic) rpcGetId() (id string, err error) {
-	var resp *idgenerator.GetIdResp
-
-	resp, err = l.svcCtx.IdGeneratorRpcClient.GetId(l.ctx, &idgenerator.GetIdReq{})
-	if err != nil {
-		logx.Errorf("IdGeneratorRpc: RPC Called Failed: %v", err.Error())
-		err = errno.InternalServiceError.WithError(err)
-		return
-	}
-
-	if !utils.IsSuccess(resp.Base) {
-		err = errno.BizError.WithMessage(resp.Base.Message)
-		return
-	}
-
-	id = resp.Id
 
 	return
 }

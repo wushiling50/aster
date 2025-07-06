@@ -59,22 +59,6 @@ message AddFollowResp {
     base.Base base = 1;
 }
 
-message DelAllFollowerReq {
-    int64 developerId = 1; // developerId
-}
-
-message DelAllFollowerResp {
-    base.Base base = 1;
-}
-
-message DelAllFollowingReq {
-    int64 developerId = 1; // developerId
-}
-
-message DelAllFollowingResp {
-    base.Base base = 1;
-}
-
 message CheckIfFollowReq {
     int64 followerId = 1; // followerId
     int64 followingId = 2; // followingId
@@ -139,14 +123,6 @@ message AddForkResp {
     base.Base base = 1;
 }
 
-message DelAllForkReq {
-    int64 originalRepoId = 1; // originalRepoId
-}
-
-message DelAllForkResp {
-    base.Base base = 1;
-}
-
 message GetOriginReq {
     int64 forkRepoId = 1; // forkRepoId
 }
@@ -188,22 +164,6 @@ message AddStarReq {
 }
 
 message AddStarResp {
-    base.Base base = 1;
-}
-
-message DelAllStarredRepoReq {
-    int64 developerId = 1; // developerId
-}
-
-message DelAllStarredRepoResp {
-    base.Base base = 1;
-}
-
-message DelAllStaringDeveloperReq {
-    int64 repoId = 1; // repoId
-}
-
-message DelAllStaringDeveloperResp {
     base.Base base = 1;
 }
 
@@ -254,8 +214,6 @@ service relation{
     rpc UpdateCreateRepo(UpdateCreateRepoReq) returns (UpdateCreateRepoResp);
     //-----------------------Follow-----------------------
     rpc AddFollow(AddFollowReq) returns (AddFollowResp);
-    rpc DelAllFollower(DelAllFollowerReq) returns (DelAllFollowerResp);
-    rpc DelAllFollowing(DelAllFollowingReq) returns (DelAllFollowingResp);
     rpc CheckIfFollow(CheckIfFollowReq) returns (CheckFollowResp);
     rpc SearchFollowingByDeveloperId(SearchFollowingByDeveloperIdReq) returns (SearchFollowingByDeveloperIdResp);
     rpc SearchFollowerByDeveloperId(SearchFollowerByDeveloperIdReq) returns (SearchFollowerByDeveloperIdResp);
@@ -263,14 +221,11 @@ service relation{
     rpc UpdateFollower(UpdateFollowerReq) returns (UpdateFollowerResp);
     //-----------------------Fork-----------------------
     rpc AddFork(AddForkReq) returns (AddForkResp);
-    rpc DelAllFork(DelAllForkReq) returns (DelAllForkResp);
     rpc GetOrigin(GetOriginReq) returns (GetOriginResp);
     rpc SearchFork(SearchForkReq) returns (SearchForkResp);
     rpc UpdateFork(UpdateForkReq) returns (UpdateForkResp);
     //-----------------------Star-----------------------
     rpc AddStar(AddStarReq) returns (AddStarResp);
-    rpc DelAllStarredRepo(DelAllStarredRepoReq) returns (DelAllStarredRepoResp);
-    rpc DelAllStaringDeveloper(DelAllStaringDeveloperReq) returns (DelAllStaringDeveloperResp);
     rpc CheckIfStar(CheckIfStarReq) returns (CheckIfStarResp);
     rpc SearchStarredRepo(SearchStarredRepoReq) returns (SearchStarredRepoResp);
     rpc SearchStaringDeveloper(SearchStaringDeveloperReq) returns (SearchStaringDeveloperResp);

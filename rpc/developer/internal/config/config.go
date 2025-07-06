@@ -11,7 +11,7 @@ type Config struct {
 	zrpc.RpcServerConf
 	Snowflake               config.Snowflake
 	Mysql                   config.MysqlConf
-	Redis                   cache.CacheConf
+	Cache                   cache.CacheConf
 	AsynqRedisConf          config.AsynqRedisConf
 	KqDeveloperConsumerConf kq.KqConf
 }

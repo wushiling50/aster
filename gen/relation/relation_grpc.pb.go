@@ -23,21 +23,16 @@ const (
 	Relation_SearchCreatedRepo_FullMethodName            = "/relation.relation/SearchCreatedRepo"
 	Relation_UpdateCreateRepo_FullMethodName             = "/relation.relation/UpdateCreateRepo"
 	Relation_AddFollow_FullMethodName                    = "/relation.relation/AddFollow"
-	Relation_DelAllFollower_FullMethodName               = "/relation.relation/DelAllFollower"
-	Relation_DelAllFollowing_FullMethodName              = "/relation.relation/DelAllFollowing"
 	Relation_CheckIfFollow_FullMethodName                = "/relation.relation/CheckIfFollow"
 	Relation_SearchFollowingByDeveloperId_FullMethodName = "/relation.relation/SearchFollowingByDeveloperId"
 	Relation_SearchFollowerByDeveloperId_FullMethodName  = "/relation.relation/SearchFollowerByDeveloperId"
 	Relation_UpdateFollowing_FullMethodName              = "/relation.relation/UpdateFollowing"
 	Relation_UpdateFollower_FullMethodName               = "/relation.relation/UpdateFollower"
 	Relation_AddFork_FullMethodName                      = "/relation.relation/AddFork"
-	Relation_DelAllFork_FullMethodName                   = "/relation.relation/DelAllFork"
 	Relation_GetOrigin_FullMethodName                    = "/relation.relation/GetOrigin"
 	Relation_SearchFork_FullMethodName                   = "/relation.relation/SearchFork"
 	Relation_UpdateFork_FullMethodName                   = "/relation.relation/UpdateFork"
 	Relation_AddStar_FullMethodName                      = "/relation.relation/AddStar"
-	Relation_DelAllStarredRepo_FullMethodName            = "/relation.relation/DelAllStarredRepo"
-	Relation_DelAllStaringDeveloper_FullMethodName       = "/relation.relation/DelAllStaringDeveloper"
 	Relation_CheckIfStar_FullMethodName                  = "/relation.relation/CheckIfStar"
 	Relation_SearchStarredRepo_FullMethodName            = "/relation.relation/SearchStarredRepo"
 	Relation_SearchStaringDeveloper_FullMethodName       = "/relation.relation/SearchStaringDeveloper"
@@ -54,8 +49,6 @@ type RelationClient interface {
 	UpdateCreateRepo(ctx context.Context, in *UpdateCreateRepoReq, opts ...grpc.CallOption) (*UpdateCreateRepoResp, error)
 	// -----------------------Follow-----------------------
 	AddFollow(ctx context.Context, in *AddFollowReq, opts ...grpc.CallOption) (*AddFollowResp, error)
-	DelAllFollower(ctx context.Context, in *DelAllFollowerReq, opts ...grpc.CallOption) (*DelAllFollowerResp, error)
-	DelAllFollowing(ctx context.Context, in *DelAllFollowingReq, opts ...grpc.CallOption) (*DelAllFollowingResp, error)
 	CheckIfFollow(ctx context.Context, in *CheckIfFollowReq, opts ...grpc.CallOption) (*CheckFollowResp, error)
 	SearchFollowingByDeveloperId(ctx context.Context, in *SearchFollowingByDeveloperIdReq, opts ...grpc.CallOption) (*SearchFollowingByDeveloperIdResp, error)
 	SearchFollowerByDeveloperId(ctx context.Context, in *SearchFollowerByDeveloperIdReq, opts ...grpc.CallOption) (*SearchFollowerByDeveloperIdResp, error)
@@ -63,14 +56,11 @@ type RelationClient interface {
 	UpdateFollower(ctx context.Context, in *UpdateFollowerReq, opts ...grpc.CallOption) (*UpdateFollowerResp, error)
 	// -----------------------Fork-----------------------
 	AddFork(ctx context.Context, in *AddForkReq, opts ...grpc.CallOption) (*AddForkResp, error)
-	DelAllFork(ctx context.Context, in *DelAllForkReq, opts ...grpc.CallOption) (*DelAllForkResp, error)
 	GetOrigin(ctx context.Context, in *GetOriginReq, opts ...grpc.CallOption) (*GetOriginResp, error)
 	SearchFork(ctx context.Context, in *SearchForkReq, opts ...grpc.CallOption) (*SearchForkResp, error)
 	UpdateFork(ctx context.Context, in *UpdateForkReq, opts ...grpc.CallOption) (*UpdateForkResp, error)
 	// -----------------------Star-----------------------
 	AddStar(ctx context.Context, in *AddStarReq, opts ...grpc.CallOption) (*AddStarResp, error)
-	DelAllStarredRepo(ctx context.Context, in *DelAllStarredRepoReq, opts ...grpc.CallOption) (*DelAllStarredRepoResp, error)
-	DelAllStaringDeveloper(ctx context.Context, in *DelAllStaringDeveloperReq, opts ...grpc.CallOption) (*DelAllStaringDeveloperResp, error)
 	CheckIfStar(ctx context.Context, in *CheckIfStarReq, opts ...grpc.CallOption) (*CheckIfStarResp, error)
 	SearchStarredRepo(ctx context.Context, in *SearchStarredRepoReq, opts ...grpc.CallOption) (*SearchStarredRepoResp, error)
 	SearchStaringDeveloper(ctx context.Context, in *SearchStaringDeveloperReq, opts ...grpc.CallOption) (*SearchStaringDeveloperResp, error)
@@ -115,24 +105,6 @@ func (c *relationClient) UpdateCreateRepo(ctx context.Context, in *UpdateCreateR
 func (c *relationClient) AddFollow(ctx context.Context, in *AddFollowReq, opts ...grpc.CallOption) (*AddFollowResp, error) {
 	out := new(AddFollowResp)
 	err := c.cc.Invoke(ctx, Relation_AddFollow_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *relationClient) DelAllFollower(ctx context.Context, in *DelAllFollowerReq, opts ...grpc.CallOption) (*DelAllFollowerResp, error) {
-	out := new(DelAllFollowerResp)
-	err := c.cc.Invoke(ctx, Relation_DelAllFollower_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *relationClient) DelAllFollowing(ctx context.Context, in *DelAllFollowingReq, opts ...grpc.CallOption) (*DelAllFollowingResp, error) {
-	out := new(DelAllFollowingResp)
-	err := c.cc.Invoke(ctx, Relation_DelAllFollowing_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -193,15 +165,6 @@ func (c *relationClient) AddFork(ctx context.Context, in *AddForkReq, opts ...gr
 	return out, nil
 }
 
-func (c *relationClient) DelAllFork(ctx context.Context, in *DelAllForkReq, opts ...grpc.CallOption) (*DelAllForkResp, error) {
-	out := new(DelAllForkResp)
-	err := c.cc.Invoke(ctx, Relation_DelAllFork_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *relationClient) GetOrigin(ctx context.Context, in *GetOriginReq, opts ...grpc.CallOption) (*GetOriginResp, error) {
 	out := new(GetOriginResp)
 	err := c.cc.Invoke(ctx, Relation_GetOrigin_FullMethodName, in, out, opts...)
@@ -232,24 +195,6 @@ func (c *relationClient) UpdateFork(ctx context.Context, in *UpdateForkReq, opts
 func (c *relationClient) AddStar(ctx context.Context, in *AddStarReq, opts ...grpc.CallOption) (*AddStarResp, error) {
 	out := new(AddStarResp)
 	err := c.cc.Invoke(ctx, Relation_AddStar_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *relationClient) DelAllStarredRepo(ctx context.Context, in *DelAllStarredRepoReq, opts ...grpc.CallOption) (*DelAllStarredRepoResp, error) {
-	out := new(DelAllStarredRepoResp)
-	err := c.cc.Invoke(ctx, Relation_DelAllStarredRepo_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *relationClient) DelAllStaringDeveloper(ctx context.Context, in *DelAllStaringDeveloperReq, opts ...grpc.CallOption) (*DelAllStaringDeveloperResp, error) {
-	out := new(DelAllStaringDeveloperResp)
-	err := c.cc.Invoke(ctx, Relation_DelAllStaringDeveloper_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -302,8 +247,6 @@ type RelationServer interface {
 	UpdateCreateRepo(context.Context, *UpdateCreateRepoReq) (*UpdateCreateRepoResp, error)
 	// -----------------------Follow-----------------------
 	AddFollow(context.Context, *AddFollowReq) (*AddFollowResp, error)
-	DelAllFollower(context.Context, *DelAllFollowerReq) (*DelAllFollowerResp, error)
-	DelAllFollowing(context.Context, *DelAllFollowingReq) (*DelAllFollowingResp, error)
 	CheckIfFollow(context.Context, *CheckIfFollowReq) (*CheckFollowResp, error)
 	SearchFollowingByDeveloperId(context.Context, *SearchFollowingByDeveloperIdReq) (*SearchFollowingByDeveloperIdResp, error)
 	SearchFollowerByDeveloperId(context.Context, *SearchFollowerByDeveloperIdReq) (*SearchFollowerByDeveloperIdResp, error)
@@ -311,14 +254,11 @@ type RelationServer interface {
 	UpdateFollower(context.Context, *UpdateFollowerReq) (*UpdateFollowerResp, error)
 	// -----------------------Fork-----------------------
 	AddFork(context.Context, *AddForkReq) (*AddForkResp, error)
-	DelAllFork(context.Context, *DelAllForkReq) (*DelAllForkResp, error)
 	GetOrigin(context.Context, *GetOriginReq) (*GetOriginResp, error)
 	SearchFork(context.Context, *SearchForkReq) (*SearchForkResp, error)
 	UpdateFork(context.Context, *UpdateForkReq) (*UpdateForkResp, error)
 	// -----------------------Star-----------------------
 	AddStar(context.Context, *AddStarReq) (*AddStarResp, error)
-	DelAllStarredRepo(context.Context, *DelAllStarredRepoReq) (*DelAllStarredRepoResp, error)
-	DelAllStaringDeveloper(context.Context, *DelAllStaringDeveloperReq) (*DelAllStaringDeveloperResp, error)
 	CheckIfStar(context.Context, *CheckIfStarReq) (*CheckIfStarResp, error)
 	SearchStarredRepo(context.Context, *SearchStarredRepoReq) (*SearchStarredRepoResp, error)
 	SearchStaringDeveloper(context.Context, *SearchStaringDeveloperReq) (*SearchStaringDeveloperResp, error)
@@ -342,12 +282,6 @@ func (UnimplementedRelationServer) UpdateCreateRepo(context.Context, *UpdateCrea
 func (UnimplementedRelationServer) AddFollow(context.Context, *AddFollowReq) (*AddFollowResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddFollow not implemented")
 }
-func (UnimplementedRelationServer) DelAllFollower(context.Context, *DelAllFollowerReq) (*DelAllFollowerResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelAllFollower not implemented")
-}
-func (UnimplementedRelationServer) DelAllFollowing(context.Context, *DelAllFollowingReq) (*DelAllFollowingResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelAllFollowing not implemented")
-}
 func (UnimplementedRelationServer) CheckIfFollow(context.Context, *CheckIfFollowReq) (*CheckFollowResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckIfFollow not implemented")
 }
@@ -366,9 +300,6 @@ func (UnimplementedRelationServer) UpdateFollower(context.Context, *UpdateFollow
 func (UnimplementedRelationServer) AddFork(context.Context, *AddForkReq) (*AddForkResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddFork not implemented")
 }
-func (UnimplementedRelationServer) DelAllFork(context.Context, *DelAllForkReq) (*DelAllForkResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelAllFork not implemented")
-}
 func (UnimplementedRelationServer) GetOrigin(context.Context, *GetOriginReq) (*GetOriginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrigin not implemented")
 }
@@ -380,12 +311,6 @@ func (UnimplementedRelationServer) UpdateFork(context.Context, *UpdateForkReq) (
 }
 func (UnimplementedRelationServer) AddStar(context.Context, *AddStarReq) (*AddStarResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddStar not implemented")
-}
-func (UnimplementedRelationServer) DelAllStarredRepo(context.Context, *DelAllStarredRepoReq) (*DelAllStarredRepoResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelAllStarredRepo not implemented")
-}
-func (UnimplementedRelationServer) DelAllStaringDeveloper(context.Context, *DelAllStaringDeveloperReq) (*DelAllStaringDeveloperResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelAllStaringDeveloper not implemented")
 }
 func (UnimplementedRelationServer) CheckIfStar(context.Context, *CheckIfStarReq) (*CheckIfStarResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckIfStar not implemented")
@@ -480,42 +405,6 @@ func _Relation_AddFollow_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RelationServer).AddFollow(ctx, req.(*AddFollowReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Relation_DelAllFollower_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAllFollowerReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).DelAllFollower(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_DelAllFollower_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).DelAllFollower(ctx, req.(*DelAllFollowerReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Relation_DelAllFollowing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAllFollowingReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).DelAllFollowing(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_DelAllFollowing_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).DelAllFollowing(ctx, req.(*DelAllFollowingReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -628,24 +517,6 @@ func _Relation_AddFork_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Relation_DelAllFork_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAllForkReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).DelAllFork(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_DelAllFork_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).DelAllFork(ctx, req.(*DelAllForkReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Relation_GetOrigin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetOriginReq)
 	if err := dec(in); err != nil {
@@ -714,42 +585,6 @@ func _Relation_AddStar_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RelationServer).AddStar(ctx, req.(*AddStarReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Relation_DelAllStarredRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAllStarredRepoReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).DelAllStarredRepo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_DelAllStarredRepo_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).DelAllStarredRepo(ctx, req.(*DelAllStarredRepoReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Relation_DelAllStaringDeveloper_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAllStaringDeveloperReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RelationServer).DelAllStaringDeveloper(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Relation_DelAllStaringDeveloper_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RelationServer).DelAllStaringDeveloper(ctx, req.(*DelAllStaringDeveloperReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -850,14 +685,6 @@ var Relation_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Relation_AddFollow_Handler,
 		},
 		{
-			MethodName: "DelAllFollower",
-			Handler:    _Relation_DelAllFollower_Handler,
-		},
-		{
-			MethodName: "DelAllFollowing",
-			Handler:    _Relation_DelAllFollowing_Handler,
-		},
-		{
 			MethodName: "CheckIfFollow",
 			Handler:    _Relation_CheckIfFollow_Handler,
 		},
@@ -882,10 +709,6 @@ var Relation_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Relation_AddFork_Handler,
 		},
 		{
-			MethodName: "DelAllFork",
-			Handler:    _Relation_DelAllFork_Handler,
-		},
-		{
 			MethodName: "GetOrigin",
 			Handler:    _Relation_GetOrigin_Handler,
 		},
@@ -900,14 +723,6 @@ var Relation_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddStar",
 			Handler:    _Relation_AddStar_Handler,
-		},
-		{
-			MethodName: "DelAllStarredRepo",
-			Handler:    _Relation_DelAllStarredRepo_Handler,
-		},
-		{
-			MethodName: "DelAllStaringDeveloper",
-			Handler:    _Relation_DelAllStaringDeveloper_Handler,
 		},
 		{
 			MethodName: "CheckIfStar",

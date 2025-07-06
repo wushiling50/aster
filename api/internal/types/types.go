@@ -3,11 +3,6 @@
 
 package types
 
-type BaseResp struct {
-	Code int64  `json:"code"`
-	Msg  string `json:"msg"`
-}
-
 type Developer struct {
 	Id        int64  `json:"id"`
 	Name      string `json:"name"`
@@ -37,7 +32,6 @@ type GetDeveloperReq struct {
 }
 
 type GetDeveloperResp struct {
-	BaseResp  BaseResp   `json:"base"`
 	Developer *Developer `json:"developer"`
 	TaskState TaskState  `json:"task_state"`
 }
@@ -48,7 +42,6 @@ type GetLanguageUsageReq struct {
 }
 
 type GetLanguageUsageResp struct {
-	BaseResp      BaseResp       `json:"base"`
 	LanguageUsage *LanguageUsage `json:"language_usage"`
 	TaskState     TaskState      `json:"task_state"`
 }
@@ -57,7 +50,6 @@ type GetLanguagesReq struct {
 }
 
 type GetLanguagesResp struct {
-	BaseResp     BaseResp   `json:"base"`
 	LanguageList []Language `json:"language_list"`
 }
 
@@ -67,7 +59,6 @@ type GetNationReq struct {
 }
 
 type GetNationResp struct {
-	BaseResp  BaseResp  `json:"base"`
 	Nation    *Nation   `json:"nation"`
 	TaskState TaskState `json:"task_state"`
 }
@@ -80,9 +71,8 @@ type GetScoreRankReq struct {
 }
 
 type GetScoreRankResp struct {
-	BaseResp BaseResp              `json:"base"`
-	Rank     []*DeveloperWithScore `json:"rank"`
-	Total    int64                 `json:"total"`
+	Rank  []*DeveloperWithScore `json:"rank"`
+	Total int64                 `json:"total"`
 }
 
 type GetScoreReq struct {
@@ -91,7 +81,6 @@ type GetScoreReq struct {
 }
 
 type GetScoreResp struct {
-	BaseResp  BaseResp  `json:"base"`
 	Score     *Score    `json:"score"`
 	TaskState TaskState `json:"task_state"`
 }
@@ -102,7 +91,6 @@ type GetSummaryReq struct {
 }
 
 type GetSummaryResp struct {
-	BaseResp  BaseResp  `json:"base"`
 	Summary   *Summary  `json:"summary"`
 	TaskState TaskState `json:"task_state"`
 }
@@ -135,8 +123,7 @@ type PostTaskReq struct {
 }
 
 type PostTaskResp struct {
-	BaseResp BaseResp `json:"base"`
-	TaskId   TaskId   `json:"task_id"`
+	TaskId TaskId `json:"task_id"`
 }
 
 type Score struct {

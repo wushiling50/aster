@@ -19,7 +19,9 @@ func FetcherTaskPusher(c *asynq.Client, fetchType int, id int64, updateAfter str
 		task,
 		asynq.TaskID(taskId),
 		asynq.Queue(constants.FetcherTaskQueue),
-		asynq.MaxRetry(constants.FetchMaxRetry))
+		asynq.MaxRetry(constants.FetchMaxRetry),
+	)
+
 	if err != nil {
 		return
 	}

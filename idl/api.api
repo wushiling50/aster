@@ -3,11 +3,6 @@ syntax = "v1"
 // ----------------------------------------------------------------------------
 // common 通用
 // ----------------------------------------------------------------------------
-type BaseResp {
-	Code int64  `json:"code"`
-	Msg  string `json:"msg"`
-}
-
 type Developer {
 	Id        int64  `json:"id"`
 	Name      string `json:"name"`
@@ -78,9 +73,8 @@ type GetScoreRankReq {
 }
 
 type GetScoreRankResp {
-	BaseResp BaseResp              `json:"base"`
-	Rank     []*DeveloperWithScore `json:"rank"`
-	Total    int64                 `json:"total"`
+	Rank  []*DeveloperWithScore `json:"rank"`
+	Total int64                 `json:"total"`
 }
 
 @server (
@@ -109,8 +103,7 @@ type PostTaskReq {
 }
 
 type PostTaskResp {
-	BaseResp BaseResp `json:"base"`
-	TaskId   TaskId   `json:"task_id"`
+	TaskId TaskId `json:"task_id"`
 }
 
 type GetDeveloperReq {
@@ -118,7 +111,6 @@ type GetDeveloperReq {
 }
 
 type GetDeveloperResp {
-	BaseResp  BaseResp   `json:"base"`
 	Developer *Developer `json:"developer"`
 	TaskState TaskState  `json:"task_state"`
 }
@@ -129,7 +121,6 @@ type GetScoreReq {
 }
 
 type GetScoreResp {
-	BaseResp  BaseResp  `json:"base"`
 	Score     *Score    `json:"score"`
 	TaskState TaskState `json:"task_state"`
 }
@@ -140,7 +131,6 @@ type GetLanguageUsageReq {
 }
 
 type GetLanguageUsageResp {
-	BaseResp      BaseResp       `json:"base"`
 	LanguageUsage *LanguageUsage `json:"language_usage"`
 	TaskState     TaskState      `json:"task_state"`
 }
@@ -151,7 +141,6 @@ type GetNationReq {
 }
 
 type GetNationResp {
-	BaseResp  BaseResp  `json:"base"`
 	Nation    *Nation   `json:"nation"`
 	TaskState TaskState `json:"task_state"`
 }
@@ -162,7 +151,6 @@ type GetSummaryReq {
 }
 
 type GetSummaryResp {
-	BaseResp  BaseResp  `json:"base"`
 	Summary   *Summary  `json:"summary"`
 	TaskState TaskState `json:"task_state"`
 }
@@ -173,7 +161,7 @@ type GetSummaryResp {
 )
 service Applet {
 	@handler postDeveloper
-	post /:login (PostTaskReq) returns (PostTaskResp)
+	post /:login (PostTaskReq)
 
 	@handler postScoreTask
 	post /:login/score (PostTaskReq) returns (PostTaskResp)
@@ -209,7 +197,6 @@ service Applet {
 type GetLanguagesReq {}
 
 type GetLanguagesResp {
-	BaseResp     BaseResp   `json:"base"`
 	LanguageList []Language `json:"language_list"`
 }
 

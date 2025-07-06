@@ -27,16 +27,6 @@ type (
 	CheckIfStarReq                   = relation.CheckIfStarReq
 	CheckIfStarResp                  = relation.CheckIfStarResp
 	CreateRepo                       = relation.CreateRepo
-	DelAllFollowerReq                = relation.DelAllFollowerReq
-	DelAllFollowerResp               = relation.DelAllFollowerResp
-	DelAllFollowingReq               = relation.DelAllFollowingReq
-	DelAllFollowingResp              = relation.DelAllFollowingResp
-	DelAllForkReq                    = relation.DelAllForkReq
-	DelAllForkResp                   = relation.DelAllForkResp
-	DelAllStaringDeveloperReq        = relation.DelAllStaringDeveloperReq
-	DelAllStaringDeveloperResp       = relation.DelAllStaringDeveloperResp
-	DelAllStarredRepoReq             = relation.DelAllStarredRepoReq
-	DelAllStarredRepoResp            = relation.DelAllStarredRepoResp
 	Follow                           = relation.Follow
 	Fork                             = relation.Fork
 	GetOriginReq                     = relation.GetOriginReq
@@ -72,8 +62,6 @@ type (
 		UpdateCreateRepo(ctx context.Context, in *UpdateCreateRepoReq, opts ...grpc.CallOption) (*UpdateCreateRepoResp, error)
 		// -----------------------Follow-----------------------
 		AddFollow(ctx context.Context, in *AddFollowReq, opts ...grpc.CallOption) (*AddFollowResp, error)
-		DelAllFollower(ctx context.Context, in *DelAllFollowerReq, opts ...grpc.CallOption) (*DelAllFollowerResp, error)
-		DelAllFollowing(ctx context.Context, in *DelAllFollowingReq, opts ...grpc.CallOption) (*DelAllFollowingResp, error)
 		CheckIfFollow(ctx context.Context, in *CheckIfFollowReq, opts ...grpc.CallOption) (*CheckFollowResp, error)
 		SearchFollowingByDeveloperId(ctx context.Context, in *SearchFollowingByDeveloperIdReq, opts ...grpc.CallOption) (*SearchFollowingByDeveloperIdResp, error)
 		SearchFollowerByDeveloperId(ctx context.Context, in *SearchFollowerByDeveloperIdReq, opts ...grpc.CallOption) (*SearchFollowerByDeveloperIdResp, error)
@@ -81,14 +69,11 @@ type (
 		UpdateFollower(ctx context.Context, in *UpdateFollowerReq, opts ...grpc.CallOption) (*UpdateFollowerResp, error)
 		// -----------------------Fork-----------------------
 		AddFork(ctx context.Context, in *AddForkReq, opts ...grpc.CallOption) (*AddForkResp, error)
-		DelAllFork(ctx context.Context, in *DelAllForkReq, opts ...grpc.CallOption) (*DelAllForkResp, error)
 		GetOrigin(ctx context.Context, in *GetOriginReq, opts ...grpc.CallOption) (*GetOriginResp, error)
 		SearchFork(ctx context.Context, in *SearchForkReq, opts ...grpc.CallOption) (*SearchForkResp, error)
 		UpdateFork(ctx context.Context, in *UpdateForkReq, opts ...grpc.CallOption) (*UpdateForkResp, error)
 		// -----------------------Star-----------------------
 		AddStar(ctx context.Context, in *AddStarReq, opts ...grpc.CallOption) (*AddStarResp, error)
-		DelAllStarredRepo(ctx context.Context, in *DelAllStarredRepoReq, opts ...grpc.CallOption) (*DelAllStarredRepoResp, error)
-		DelAllStaringDeveloper(ctx context.Context, in *DelAllStaringDeveloperReq, opts ...grpc.CallOption) (*DelAllStaringDeveloperResp, error)
 		CheckIfStar(ctx context.Context, in *CheckIfStarReq, opts ...grpc.CallOption) (*CheckIfStarResp, error)
 		SearchStarredRepo(ctx context.Context, in *SearchStarredRepoReq, opts ...grpc.CallOption) (*SearchStarredRepoResp, error)
 		SearchStaringDeveloper(ctx context.Context, in *SearchStaringDeveloperReq, opts ...grpc.CallOption) (*SearchStaringDeveloperResp, error)
@@ -128,16 +113,6 @@ func (m *defaultRelation) AddFollow(ctx context.Context, in *AddFollowReq, opts 
 	return client.AddFollow(ctx, in, opts...)
 }
 
-func (m *defaultRelation) DelAllFollower(ctx context.Context, in *DelAllFollowerReq, opts ...grpc.CallOption) (*DelAllFollowerResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.DelAllFollower(ctx, in, opts...)
-}
-
-func (m *defaultRelation) DelAllFollowing(ctx context.Context, in *DelAllFollowingReq, opts ...grpc.CallOption) (*DelAllFollowingResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.DelAllFollowing(ctx, in, opts...)
-}
-
 func (m *defaultRelation) CheckIfFollow(ctx context.Context, in *CheckIfFollowReq, opts ...grpc.CallOption) (*CheckFollowResp, error) {
 	client := relation.NewRelationClient(m.cli.Conn())
 	return client.CheckIfFollow(ctx, in, opts...)
@@ -169,11 +144,6 @@ func (m *defaultRelation) AddFork(ctx context.Context, in *AddForkReq, opts ...g
 	return client.AddFork(ctx, in, opts...)
 }
 
-func (m *defaultRelation) DelAllFork(ctx context.Context, in *DelAllForkReq, opts ...grpc.CallOption) (*DelAllForkResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.DelAllFork(ctx, in, opts...)
-}
-
 func (m *defaultRelation) GetOrigin(ctx context.Context, in *GetOriginReq, opts ...grpc.CallOption) (*GetOriginResp, error) {
 	client := relation.NewRelationClient(m.cli.Conn())
 	return client.GetOrigin(ctx, in, opts...)
@@ -193,16 +163,6 @@ func (m *defaultRelation) UpdateFork(ctx context.Context, in *UpdateForkReq, opt
 func (m *defaultRelation) AddStar(ctx context.Context, in *AddStarReq, opts ...grpc.CallOption) (*AddStarResp, error) {
 	client := relation.NewRelationClient(m.cli.Conn())
 	return client.AddStar(ctx, in, opts...)
-}
-
-func (m *defaultRelation) DelAllStarredRepo(ctx context.Context, in *DelAllStarredRepoReq, opts ...grpc.CallOption) (*DelAllStarredRepoResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.DelAllStarredRepo(ctx, in, opts...)
-}
-
-func (m *defaultRelation) DelAllStaringDeveloper(ctx context.Context, in *DelAllStaringDeveloperReq, opts ...grpc.CallOption) (*DelAllStaringDeveloperResp, error) {
-	client := relation.NewRelationClient(m.cli.Conn())
-	return client.DelAllStaringDeveloper(ctx, in, opts...)
 }
 
 func (m *defaultRelation) CheckIfStar(ctx context.Context, in *CheckIfStarReq, opts ...grpc.CallOption) (*CheckIfStarResp, error) {

@@ -20,11 +20,11 @@ func PostDeveloperHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := developer.NewPostDeveloperLogic(r.Context(), svcCtx)
-		resp, err := l.PostDeveloper(&req)
+		err := l.PostDeveloper(&req)
 		if err != nil {
 			httpx.OkJsonCtx(r.Context(), w, pack.RespError(err))
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, pack.RespData(pack.BuildTaskId(resp.TaskId)))
+			httpx.OkJsonCtx(r.Context(), w, pack.RespSuccess())
 		}
 	}
 }
