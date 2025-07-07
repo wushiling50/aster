@@ -57,7 +57,6 @@ const (
 	FetchCreatedRepoCompletedDataId int64 = -iota - 1
 
 	FetchStarredRepoCompletedDataId
-	FetchStarringDeveloperCompletedDataId
 
 	FetchFollowingCompletedDataId
 	FetchFollowerCompletedDataId
