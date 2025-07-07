@@ -41,8 +41,8 @@ type (
 	}
 
 	ForkUpdatedAt struct {
-		DataId        int64     `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
-		DeveloperId   int64     `db:"developer_id"` // Unique GitHub User ID
+		DataId        int64     `db:"data_id"` // Generated Primary Key, Must Not Be Changed
+		RepoId        int64     `db:"repo_id"` // Repo ID
 		DataCreatedAt time.Time `db:"data_created_at"`
 		DataUpdatedAt time.Time `db:"data_updated_at"` // update data time
 	}
@@ -85,7 +85,7 @@ func (m *defaultForkUpdatedAtModel) Insert(ctx context.Context, data *ForkUpdate
 	forkUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheForkUpdatedAtDataIdPrefix, data.DataId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, forkUpdatedAtRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.DataCreatedAt, data.DataUpdatedAt)
+		return conn.ExecCtx(ctx, query, data.DataId, data.RepoId, data.DataCreatedAt, data.DataUpdatedAt)
 	}, forkUpdatedAtDataIdKey)
 	return ret, err
 }
@@ -94,7 +94,7 @@ func (m *defaultForkUpdatedAtModel) Update(ctx context.Context, data *ForkUpdate
 	forkUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheForkUpdatedAtDataIdPrefix, data.DataId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, forkUpdatedAtRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.DataCreatedAt, data.DataUpdatedAt, data.DataId)
+		return conn.ExecCtx(ctx, query, data.RepoId, data.DataCreatedAt, data.DataUpdatedAt, data.DataId)
 	}, forkUpdatedAtDataIdKey)
 	return err
 }

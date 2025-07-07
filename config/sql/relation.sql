@@ -71,7 +71,7 @@ create table `aster`.`follower_updated_at` (
 
 create table `aster`.`fork_updated_at` (
     `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
+    `repo_id`               bigint          not null            comment 'Repo ID',
     `data_created_at`            timestamp       not null default  current_timestamp,
     `data_updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     constraint `pk_data_id`
