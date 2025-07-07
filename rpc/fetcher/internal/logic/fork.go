@@ -4,9 +4,11 @@ import (
 	"context"
 
 	"github.com/google/go-github/v66/github"
+	"github.com/wushiling50/aster/gen/relation"
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	githubFunc "github.com/wushiling50/aster/pkg/github"
+	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/fetcher/internal/pack"
 	"github.com/wushiling50/aster/rpc/fetcher/internal/svc"
 	"github.com/zeromicro/go-zero/core/jsonx"
@@ -40,6 +42,11 @@ func (l *FetchForkLogic) FetchFork(repoId int64) (err error) {
 	}
 
 	if allForks, err = githubFunc.GetAllForksByRepo(l.ctx, originalRepo.GetOwner().GetLogin(), originalRepo.GetName()); err != nil {
+		logx.Error(err)
+		return
+	}
+
+	if err = l.rpcDelAllFork(repoId); err != nil {
 		logx.Error(err)
 		return
 	}
@@ -80,6 +87,27 @@ func (l *FetchForkLogic) FetchFork(repoId int64) (err error) {
 	if err = l.svcCtx.KqForkPusher.Push(l.ctx, completedStr); err != nil {
 		logx.Error(err)
 		err = errno.InternalKafkaError.WithError(err)
+		return
+	}
+
+	return
+}
+
+func (l *FetchForkLogic) rpcDelAllFork(repoId int64) (err error) {
+	var resp *relation.DelAllForkResp
+
+	resp, err = l.svcCtx.RelationRpcClient.DelAllFork(l.ctx, &relation.DelAllForkReq{
+		OriginalRepoId: repoId,
+	})
+
+	if err != nil {
+		logx.Errorf("DelAllFork: RPC called failed: %v", err.Error())
+		err = errno.InternalServiceError.WithError(err)
+		return
+	}
+
+	if !utils.IsSuccess(resp.Base) {
+		err = errno.BizError.WithMessage(resp.Base.Message)
 		return
 	}
 

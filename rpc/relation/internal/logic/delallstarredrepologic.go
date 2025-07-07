@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UpdateStarredRepoLogic struct {
+type DelAllStarredRepoLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewUpdateStarredRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateStarredRepoLogic {
-	return &UpdateStarredRepoLogic{
+func NewDelAllStarredRepoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelAllStarredRepoLogic {
+	return &DelAllStarredRepoLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *UpdateStarredRepoLogic) UpdateStarredRepo(in *relation.UpdateStarredRepoReq) (*relation.UpdateStarredRepoResp, error) {
+func (l *DelAllStarredRepoLogic) DelAllStarredRepo(in *relation.DelAllStarredRepoReq) (*relation.DelAllStarredRepoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation.UpdateStarredRepoResp{}, nil
+	return &relation.DelAllStarredRepoResp{}, nil
 }

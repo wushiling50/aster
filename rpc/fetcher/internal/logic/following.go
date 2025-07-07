@@ -4,9 +4,11 @@ import (
 	"context"
 
 	"github.com/google/go-github/v66/github"
+	"github.com/wushiling50/aster/gen/relation"
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	githubFunc "github.com/wushiling50/aster/pkg/github"
+	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/fetcher/internal/pack"
 	"github.com/wushiling50/aster/rpc/fetcher/internal/svc"
 	"github.com/zeromicro/go-zero/core/jsonx"
@@ -40,6 +42,11 @@ func (l *FetchFollowingLogic) FetchFollowing(userId int64) (err error) {
 	}
 
 	if allFollowing, err = githubFunc.GetAllFollowingByLogin(l.ctx, githubUser.GetLogin()); err != nil {
+		logx.Error(err)
+		return
+	}
+
+	if err = l.rpcDelAllFollowing(userId); err != nil {
 		logx.Error(err)
 		return
 	}
@@ -80,6 +87,27 @@ func (l *FetchFollowingLogic) FetchFollowing(userId int64) (err error) {
 	if err = l.svcCtx.KqFollowPusher.Push(l.ctx, completedStr); err != nil {
 		logx.Error(err)
 		err = errno.InternalKafkaError.WithError(err)
+		return
+	}
+
+	return
+}
+
+func (l *FetchFollowingLogic) rpcDelAllFollowing(developerId int64) (err error) {
+	var resp *relation.DelAllFollowingResp
+
+	resp, err = l.svcCtx.RelationRpcClient.DelAllFollowing(l.ctx, &relation.DelAllFollowingReq{
+		DeveloperId: developerId,
+	})
+
+	if err != nil {
+		logx.Errorf("DelAllFollowing: RPC called failed: %v", err.Error())
+		err = errno.InternalServiceError.WithError(err)
+		return
+	}
+
+	if !utils.IsSuccess(resp.Base) {
+		err = errno.BizError.WithMessage(resp.Base.Message)
 		return
 	}
 

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/wushiling50/aster/gen/relation"
+	"github.com/wushiling50/aster/rpc/relation/internal/pack"
 	"github.com/wushiling50/aster/rpc/relation/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -24,7 +25,35 @@ func NewSearchFollowerByDeveloperIdLogic(ctx context.Context, svcCtx *svc.Servic
 }
 
 func (l *SearchFollowerByDeveloperIdLogic) SearchFollowerByDeveloperId(in *relation.SearchFollowerByDeveloperIdReq) (*relation.SearchFollowerByDeveloperIdResp, error) {
-	// todo: add your logic here and delete this line
+	resp := new(relation.SearchFollowerByDeveloperIdResp)
 
-	return &relation.SearchFollowerByDeveloperIdResp{}, nil
+	followerIds, err := l.searchFollower(in.DeveloperId, in.Page, in.Limit)
+	if err != nil {
+		logx.Errorf("service.SearchFollowerByDeveloperId: Search Follower Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	if len(followerIds) == 0 {
+		logx.Info("service.SearchFollowerByDeveloperId: No Found Follower")
+	}
+
+	resp.FollowerIds = followerIds
+	resp.Base = pack.BuildSuccessResp()
+
+	return resp, nil
+}
+
+func (l *SearchFollowerByDeveloperIdLogic) searchFollower(developerId, page, limit int64) ([]int64, error) {
+	followers, err := l.svcCtx.FollowModel.SearchFollowerByDeveloperId(l.ctx, developerId, page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	followerIds := make([]int64, len(followers))
+	for i, follower := range followers {
+		followerIds[i] = follower.FollowerId
+	}
+
+	return followerIds, nil
 }

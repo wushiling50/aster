@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type CheckIfFollowLogic struct {
+type DelAllForkLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewCheckIfFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CheckIfFollowLogic {
-	return &CheckIfFollowLogic{
+func NewDelAllForkLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelAllForkLogic {
+	return &DelAllForkLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *CheckIfFollowLogic) CheckIfFollow(in *relation.CheckIfFollowReq) (*relation.CheckFollowResp, error) {
+func (l *DelAllForkLogic) DelAllFork(in *relation.DelAllForkReq) (*relation.DelAllForkResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation.CheckFollowResp{}, nil
+	return &relation.DelAllForkResp{}, nil
 }

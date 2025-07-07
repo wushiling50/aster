@@ -35,7 +35,7 @@ func (l *SearchCreatedRepoLogic) SearchCreatedRepo(in *relation.SearchCreatedRep
 	}
 
 	if len(repoIds) == 0 {
-		logx.Info("service.SearchCreatedRepo:No Found Created Repo")
+		logx.Info("service.SearchCreatedRepo: No Found Created Repo")
 	}
 
 	resp.RepoIds = repoIds

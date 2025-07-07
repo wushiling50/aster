@@ -45,7 +45,7 @@ func (c *CreateRepoConsumer) Consume(ctx context.Context, key string, value stri
 			return
 		}
 	} else {
-		err = c.updateCreateRepo(newCreateRepo)
+		err = c.addNewCreateRepo(newCreateRepo)
 		if err != nil {
 			logx.Error(err)
 			return
@@ -75,6 +75,8 @@ func (c *CreateRepoConsumer) updateCreateRepoUpdatedAt(developerId int64) error 
 				err = errno.InternalServiceError.WithError(err)
 				return err
 			}
+
+			return nil
 		default:
 			err = errno.InternalServiceError.WithError(err)
 			return err
@@ -84,36 +86,6 @@ func (c *CreateRepoConsumer) updateCreateRepoUpdatedAt(developerId int64) error 
 	err = c.svcCtx.CreatedRepoUpdatedAtModel.Update(c.ctx, createRepoUpdatedAt)
 	if err != nil {
 		err = errno.InternalServiceError.WithError(err)
-		return err
-	}
-
-	return nil
-}
-
-func (c *CreateRepoConsumer) updateCreateRepo(createRepo *relation.CreateRepo) error {
-	l := logic.NewUpdateCreateRepoLogic(c.ctx, c.svcCtx)
-
-	exist, err := l.CheckIfCreateRepoExist(createRepo.RepoId)
-	if err != nil {
-		err = errno.InternalServiceError.WithError(err)
-		return err
-	}
-
-	if !exist {
-		return c.addNewCreateRepo(createRepo)
-	}
-
-	resp, err := l.UpdateCreateRepo(&relation.UpdateCreateRepoReq{
-		CreateRepo: createRepo,
-	})
-
-	if err != nil {
-		err = errno.InternalServiceError.WithError(err)
-		return err
-	}
-
-	if !utils.IsSuccess(resp.Base) {
-		err = errno.BizError.WithMessage(resp.Base.Message)
 		return err
 	}
 

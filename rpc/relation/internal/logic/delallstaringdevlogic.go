@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UpdateFollowerLogic struct {
+type DelAllStaringDevLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewUpdateFollowerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateFollowerLogic {
-	return &UpdateFollowerLogic{
+func NewDelAllStaringDevLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelAllStaringDevLogic {
+	return &DelAllStaringDevLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *UpdateFollowerLogic) UpdateFollower(in *relation.UpdateFollowerReq) (*relation.UpdateFollowerResp, error) {
+func (l *DelAllStaringDevLogic) DelAllStaringDev(in *relation.DelAllStaringDevReq) (*relation.DelAllStaringDevResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &relation.UpdateFollowerResp{}, nil
+	return &relation.DelAllStaringDevResp{}, nil
 }
