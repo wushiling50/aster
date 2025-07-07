@@ -33,8 +33,8 @@ type (
 	DelAllFollowingResp              = relation.DelAllFollowingResp
 	DelAllForkReq                    = relation.DelAllForkReq
 	DelAllForkResp                   = relation.DelAllForkResp
-	DelAllStaringDevReq              = relation.DelAllStaringDevReq
-	DelAllStaringDevResp             = relation.DelAllStaringDevResp
+	DelAllStaringDeveloperReq        = relation.DelAllStaringDeveloperReq
+	DelAllStaringDeveloperResp       = relation.DelAllStaringDeveloperResp
 	DelAllStarredRepoReq             = relation.DelAllStarredRepoReq
 	DelAllStarredRepoResp            = relation.DelAllStarredRepoResp
 	Follow                           = relation.Follow
@@ -76,7 +76,7 @@ type (
 		SearchStarredRepo(ctx context.Context, in *SearchStarredRepoReq, opts ...grpc.CallOption) (*SearchStarredRepoResp, error)
 		SearchStaringDeveloper(ctx context.Context, in *SearchStaringDeveloperReq, opts ...grpc.CallOption) (*SearchStaringDeveloperResp, error)
 		DelAllStarredRepo(ctx context.Context, in *DelAllStarredRepoReq, opts ...grpc.CallOption) (*DelAllStarredRepoResp, error)
-		DelAllStaringDev(ctx context.Context, in *DelAllStaringDevReq, opts ...grpc.CallOption) (*DelAllStaringDevResp, error)
+		DelAllStaringDeveloper(ctx context.Context, in *DelAllStaringDeveloperReq, opts ...grpc.CallOption) (*DelAllStaringDeveloperResp, error)
 	}
 
 	defaultRelation struct {
@@ -174,7 +174,7 @@ func (m *defaultRelation) DelAllStarredRepo(ctx context.Context, in *DelAllStarr
 	return client.DelAllStarredRepo(ctx, in, opts...)
 }
 
-func (m *defaultRelation) DelAllStaringDev(ctx context.Context, in *DelAllStaringDevReq, opts ...grpc.CallOption) (*DelAllStaringDevResp, error) {
+func (m *defaultRelation) DelAllStaringDeveloper(ctx context.Context, in *DelAllStaringDeveloperReq, opts ...grpc.CallOption) (*DelAllStaringDeveloperResp, error) {
 	client := relation.NewRelationClient(m.cli.Conn())
-	return client.DelAllStaringDev(ctx, in, opts...)
+	return client.DelAllStaringDeveloper(ctx, in, opts...)
 }

@@ -46,9 +46,9 @@ func (m *customFollowerUpdatedAtModel) CreateDataId() (int64, error) {
 }
 
 func (m *customFollowerUpdatedAtModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*FollowerUpdatedAt, error) {
-	cacheFollowerUpdatedAtDeveloperIdPrefix := fmt.Sprintf("%s%v", "cache:followerUpdatedAt:developerId:", developerId)
+	cacheFollowerUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", "cache:followerUpdatedAt:developerId:", developerId)
 	var resp FollowerUpdatedAt
-	err := m.QueryRowIndexCtx(ctx, &resp, cacheFollowerUpdatedAtDeveloperIdPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+	err := m.QueryRowIndexCtx(ctx, &resp, cacheFollowerUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
 		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", followerUpdatedAtRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err

@@ -42,9 +42,9 @@ func NewFollowingUpdatedAtModel(conn sqlx.SqlConn, c cache.CacheConf, Datancente
 }
 
 func (m *customFollowingUpdatedAtModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*FollowingUpdatedAt, error) {
-	cacheFollowingUpdatedAtDeveloperIdPrefix := fmt.Sprintf("%s%v", "cache:followingUpdatedAt:developerId:", developerId)
+	cacheFollowingUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", "cache:followingUpdatedAt:developerId:", developerId)
 	var resp FollowingUpdatedAt
-	err := m.QueryRowIndexCtx(ctx, &resp, cacheFollowingUpdatedAtDeveloperIdPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+	err := m.QueryRowIndexCtx(ctx, &resp, cacheFollowingUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
 		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", followingUpdatedAtRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err

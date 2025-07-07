@@ -42,9 +42,9 @@ func NewForkUpdatedAtModel(conn sqlx.SqlConn, c cache.CacheConf, DatancenterId, 
 }
 
 func (m *customForkUpdatedAtModel) FindOneByRepoId(ctx context.Context, repoId int64) (*ForkUpdatedAt, error) {
-	cacheForkUpdatedAtRepoIdPrefix := fmt.Sprintf("%s%v", "cache:forkUpdatedAt:repoId:", repoId)
+	cacheForkUpdatedAtRepoIdKey := fmt.Sprintf("%s%v", "cache:forkUpdatedAt:repoId:", repoId)
 	var resp ForkUpdatedAt
-	err := m.QueryRowIndexCtx(ctx, &resp, cacheForkUpdatedAtRepoIdPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+	err := m.QueryRowIndexCtx(ctx, &resp, cacheForkUpdatedAtRepoIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
 		query := fmt.Sprintf("select %s from %s where repo_id = $1 limit 1", forkUpdatedAtRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, repoId); err != nil {
 			return nil, err

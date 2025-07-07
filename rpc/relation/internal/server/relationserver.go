@@ -107,7 +107,7 @@ func (s *RelationServer) DelAllStarredRepo(ctx context.Context, in *relation.Del
 	return l.DelAllStarredRepo(in)
 }
 
-func (s *RelationServer) DelAllStaringDev(ctx context.Context, in *relation.DelAllStaringDevReq) (*relation.DelAllStaringDevResp, error) {
-	l := logic.NewDelAllStaringDevLogic(ctx, s.svcCtx)
-	return l.DelAllStaringDev(in)
+func (s *RelationServer) DelAllStaringDeveloper(ctx context.Context, in *relation.DelAllStaringDeveloperReq) (*relation.DelAllStaringDeveloperResp, error) {
+	l := logic.NewDelAllStaringDeveloperLogic(ctx, s.svcCtx)
+	return l.DelAllStaringDeveloper(in)
 }

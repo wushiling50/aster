@@ -197,11 +197,11 @@ message DelAllStarredRepoResp {
     base.Base base = 1;
 }
   
-message DelAllStaringDevReq {
+message DelAllStaringDeveloperReq {
     int64 repoId = 1; //repoId
 }
   
-message DelAllStaringDevResp {
+message DelAllStaringDeveloperResp {
     base.Base base = 1;
 }
 
@@ -226,5 +226,5 @@ service relation{
     rpc SearchStarredRepo(SearchStarredRepoReq) returns (SearchStarredRepoResp);
     rpc SearchStaringDeveloper(SearchStaringDeveloperReq) returns (SearchStaringDeveloperResp);
     rpc DelAllStarredRepo(DelAllStarredRepoReq) returns (DelAllStarredRepoResp);
-    rpc DelAllStaringDev(DelAllStaringDevReq) returns (DelAllStaringDevResp);
+    rpc DelAllStaringDeveloper(DelAllStaringDeveloperReq) returns (DelAllStaringDeveloperResp);
 }
