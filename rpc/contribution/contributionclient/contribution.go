@@ -19,46 +19,19 @@ type (
 	Contribution                                  = contribution.Contribution
 	DelAllContributionInCategoryByDeveloperIdReq  = contribution.DelAllContributionInCategoryByDeveloperIdReq
 	DelAllContributionInCategoryByDeveloperIdResp = contribution.DelAllContributionInCategoryByDeveloperIdResp
-	DelContributionReq                            = contribution.DelContributionReq
-	DelContributionResp                           = contribution.DelContributionResp
-	GetCommentOfUserUpdatedAtReq                  = contribution.GetCommentOfUserUpdatedAtReq
-	GetCommentOfUserUpdatedAtResp                 = contribution.GetCommentOfUserUpdatedAtResp
-	GetContributionReq                            = contribution.GetContributionReq
-	GetContributionResp                           = contribution.GetContributionResp
-	GetIssuePROfUserUpdatedAtReq                  = contribution.GetIssuePROfUserUpdatedAtReq
-	GetIssuePROfUserUpdatedAtResp                 = contribution.GetIssuePROfUserUpdatedAtResp
-	GetReviewOfUserUpdatedAtReq                   = contribution.GetReviewOfUserUpdatedAtReq
-	GetReviewOfUserUpdatedAtResp                  = contribution.GetReviewOfUserUpdatedAtResp
 	SearchByCategoryReq                           = contribution.SearchByCategoryReq
 	SearchByCategoryResp                          = contribution.SearchByCategoryResp
 	SearchByDeveloperIdReq                        = contribution.SearchByDeveloperIdReq
 	SearchByDeveloperIdResp                       = contribution.SearchByDeveloperIdResp
 	SearchByRepoIdReq                             = contribution.SearchByRepoIdReq
 	SearchByRepoIdResp                            = contribution.SearchByRepoIdResp
-	UpdateCommentOfUserReq                        = contribution.UpdateCommentOfUserReq
-	UpdateCommentOfUserResp                       = contribution.UpdateCommentOfUserResp
-	UpdateContributionOfUserReq                   = contribution.UpdateContributionOfUserReq
-	UpdateContributionOfUserResp                  = contribution.UpdateContributionOfUserResp
-	UpdateIssuePROfUserReq                        = contribution.UpdateIssuePROfUserReq
-	UpdateIssuePROfUserResp                       = contribution.UpdateIssuePROfUserResp
-	UpdateReviewOfUserReq                         = contribution.UpdateReviewOfUserReq
-	UpdateReviewOfUserResp                        = contribution.UpdateReviewOfUserResp
 
 	ContributionZrpcClient interface {
 		AddContribution(ctx context.Context, in *AddContributionReq, opts ...grpc.CallOption) (*AddContributionResp, error)
-		DelContribution(ctx context.Context, in *DelContributionReq, opts ...grpc.CallOption) (*DelContributionResp, error)
 		DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *DelAllContributionInCategoryByDeveloperIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByDeveloperIdResp, error)
-		GetContribution(ctx context.Context, in *GetContributionReq, opts ...grpc.CallOption) (*GetContributionResp, error)
 		SearchByCategory(ctx context.Context, in *SearchByCategoryReq, opts ...grpc.CallOption) (*SearchByCategoryResp, error)
 		SearchByDeveloperId(ctx context.Context, in *SearchByDeveloperIdReq, opts ...grpc.CallOption) (*SearchByDeveloperIdResp, error)
 		SearchByRepoId(ctx context.Context, in *SearchByRepoIdReq, opts ...grpc.CallOption) (*SearchByRepoIdResp, error)
-		UpdateContributionOfUser(ctx context.Context, in *UpdateContributionOfUserReq, opts ...grpc.CallOption) (*UpdateContributionOfUserResp, error)
-		UpdateIssuePROfUser(ctx context.Context, in *UpdateIssuePROfUserReq, opts ...grpc.CallOption) (*UpdateIssuePROfUserResp, error)
-		UpdateCommentOfUser(ctx context.Context, in *UpdateCommentOfUserReq, opts ...grpc.CallOption) (*UpdateCommentOfUserResp, error)
-		UpdateReviewOfUser(ctx context.Context, in *UpdateReviewOfUserReq, opts ...grpc.CallOption) (*UpdateReviewOfUserResp, error)
-		GetIssuePROfUserUpdatedAt(ctx context.Context, in *GetIssuePROfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetIssuePROfUserUpdatedAtResp, error)
-		GetCommentOfUserUpdatedAt(ctx context.Context, in *GetCommentOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetCommentOfUserUpdatedAtResp, error)
-		GetReviewOfUserUpdatedAt(ctx context.Context, in *GetReviewOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetReviewOfUserUpdatedAtResp, error)
 	}
 
 	defaultContributionZrpcClient struct {
@@ -77,19 +50,9 @@ func (m *defaultContributionZrpcClient) AddContribution(ctx context.Context, in 
 	return client.AddContribution(ctx, in, opts...)
 }
 
-func (m *defaultContributionZrpcClient) DelContribution(ctx context.Context, in *DelContributionReq, opts ...grpc.CallOption) (*DelContributionResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.DelContribution(ctx, in, opts...)
-}
-
 func (m *defaultContributionZrpcClient) DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *DelAllContributionInCategoryByDeveloperIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByDeveloperIdResp, error) {
 	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.DelAllContributionInCategoryByDeveloperId(ctx, in, opts...)
-}
-
-func (m *defaultContributionZrpcClient) GetContribution(ctx context.Context, in *GetContributionReq, opts ...grpc.CallOption) (*GetContributionResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.GetContribution(ctx, in, opts...)
 }
 
 func (m *defaultContributionZrpcClient) SearchByCategory(ctx context.Context, in *SearchByCategoryReq, opts ...grpc.CallOption) (*SearchByCategoryResp, error) {
@@ -105,39 +68,4 @@ func (m *defaultContributionZrpcClient) SearchByDeveloperId(ctx context.Context,
 func (m *defaultContributionZrpcClient) SearchByRepoId(ctx context.Context, in *SearchByRepoIdReq, opts ...grpc.CallOption) (*SearchByRepoIdResp, error) {
 	client := contribution.NewContributionClient(m.cli.Conn())
 	return client.SearchByRepoId(ctx, in, opts...)
-}
-
-func (m *defaultContributionZrpcClient) UpdateContributionOfUser(ctx context.Context, in *UpdateContributionOfUserReq, opts ...grpc.CallOption) (*UpdateContributionOfUserResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.UpdateContributionOfUser(ctx, in, opts...)
-}
-
-func (m *defaultContributionZrpcClient) UpdateIssuePROfUser(ctx context.Context, in *UpdateIssuePROfUserReq, opts ...grpc.CallOption) (*UpdateIssuePROfUserResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.UpdateIssuePROfUser(ctx, in, opts...)
-}
-
-func (m *defaultContributionZrpcClient) UpdateCommentOfUser(ctx context.Context, in *UpdateCommentOfUserReq, opts ...grpc.CallOption) (*UpdateCommentOfUserResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.UpdateCommentOfUser(ctx, in, opts...)
-}
-
-func (m *defaultContributionZrpcClient) UpdateReviewOfUser(ctx context.Context, in *UpdateReviewOfUserReq, opts ...grpc.CallOption) (*UpdateReviewOfUserResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.UpdateReviewOfUser(ctx, in, opts...)
-}
-
-func (m *defaultContributionZrpcClient) GetIssuePROfUserUpdatedAt(ctx context.Context, in *GetIssuePROfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetIssuePROfUserUpdatedAtResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.GetIssuePROfUserUpdatedAt(ctx, in, opts...)
-}
-
-func (m *defaultContributionZrpcClient) GetCommentOfUserUpdatedAt(ctx context.Context, in *GetCommentOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetCommentOfUserUpdatedAtResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.GetCommentOfUserUpdatedAt(ctx, in, opts...)
-}
-
-func (m *defaultContributionZrpcClient) GetReviewOfUserUpdatedAt(ctx context.Context, in *GetReviewOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetReviewOfUserUpdatedAtResp, error) {
-	client := contribution.NewContributionClient(m.cli.Conn())
-	return client.GetReviewOfUserUpdatedAt(ctx, in, opts...)
 }

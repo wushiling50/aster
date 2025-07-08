@@ -20,19 +20,10 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Contribution_AddContribution_FullMethodName                           = "/contribution.contribution/AddContribution"
-	Contribution_DelContribution_FullMethodName                           = "/contribution.contribution/DelContribution"
 	Contribution_DelAllContributionInCategoryByDeveloperId_FullMethodName = "/contribution.contribution/DelAllContributionInCategoryByDeveloperId"
-	Contribution_GetContribution_FullMethodName                           = "/contribution.contribution/GetContribution"
 	Contribution_SearchByCategory_FullMethodName                          = "/contribution.contribution/SearchByCategory"
 	Contribution_SearchByDeveloperId_FullMethodName                       = "/contribution.contribution/SearchByDeveloperId"
 	Contribution_SearchByRepoId_FullMethodName                            = "/contribution.contribution/SearchByRepoId"
-	Contribution_UpdateContributionOfUser_FullMethodName                  = "/contribution.contribution/UpdateContributionOfUser"
-	Contribution_UpdateIssuePROfUser_FullMethodName                       = "/contribution.contribution/UpdateIssuePROfUser"
-	Contribution_UpdateCommentOfUser_FullMethodName                       = "/contribution.contribution/UpdateCommentOfUser"
-	Contribution_UpdateReviewOfUser_FullMethodName                        = "/contribution.contribution/UpdateReviewOfUser"
-	Contribution_GetIssuePROfUserUpdatedAt_FullMethodName                 = "/contribution.contribution/GetIssuePROfUserUpdatedAt"
-	Contribution_GetCommentOfUserUpdatedAt_FullMethodName                 = "/contribution.contribution/GetCommentOfUserUpdatedAt"
-	Contribution_GetReviewOfUserUpdatedAt_FullMethodName                  = "/contribution.contribution/GetReviewOfUserUpdatedAt"
 )
 
 // ContributionClient is the client API for Contribution service.
@@ -40,19 +31,10 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ContributionClient interface {
 	AddContribution(ctx context.Context, in *AddContributionReq, opts ...grpc.CallOption) (*AddContributionResp, error)
-	DelContribution(ctx context.Context, in *DelContributionReq, opts ...grpc.CallOption) (*DelContributionResp, error)
 	DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *DelAllContributionInCategoryByDeveloperIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByDeveloperIdResp, error)
-	GetContribution(ctx context.Context, in *GetContributionReq, opts ...grpc.CallOption) (*GetContributionResp, error)
 	SearchByCategory(ctx context.Context, in *SearchByCategoryReq, opts ...grpc.CallOption) (*SearchByCategoryResp, error)
 	SearchByDeveloperId(ctx context.Context, in *SearchByDeveloperIdReq, opts ...grpc.CallOption) (*SearchByDeveloperIdResp, error)
 	SearchByRepoId(ctx context.Context, in *SearchByRepoIdReq, opts ...grpc.CallOption) (*SearchByRepoIdResp, error)
-	UpdateContributionOfUser(ctx context.Context, in *UpdateContributionOfUserReq, opts ...grpc.CallOption) (*UpdateContributionOfUserResp, error)
-	UpdateIssuePROfUser(ctx context.Context, in *UpdateIssuePROfUserReq, opts ...grpc.CallOption) (*UpdateIssuePROfUserResp, error)
-	UpdateCommentOfUser(ctx context.Context, in *UpdateCommentOfUserReq, opts ...grpc.CallOption) (*UpdateCommentOfUserResp, error)
-	UpdateReviewOfUser(ctx context.Context, in *UpdateReviewOfUserReq, opts ...grpc.CallOption) (*UpdateReviewOfUserResp, error)
-	GetIssuePROfUserUpdatedAt(ctx context.Context, in *GetIssuePROfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetIssuePROfUserUpdatedAtResp, error)
-	GetCommentOfUserUpdatedAt(ctx context.Context, in *GetCommentOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetCommentOfUserUpdatedAtResp, error)
-	GetReviewOfUserUpdatedAt(ctx context.Context, in *GetReviewOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetReviewOfUserUpdatedAtResp, error)
 }
 
 type contributionClient struct {
@@ -72,27 +54,9 @@ func (c *contributionClient) AddContribution(ctx context.Context, in *AddContrib
 	return out, nil
 }
 
-func (c *contributionClient) DelContribution(ctx context.Context, in *DelContributionReq, opts ...grpc.CallOption) (*DelContributionResp, error) {
-	out := new(DelContributionResp)
-	err := c.cc.Invoke(ctx, Contribution_DelContribution_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *contributionClient) DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *DelAllContributionInCategoryByDeveloperIdReq, opts ...grpc.CallOption) (*DelAllContributionInCategoryByDeveloperIdResp, error) {
 	out := new(DelAllContributionInCategoryByDeveloperIdResp)
 	err := c.cc.Invoke(ctx, Contribution_DelAllContributionInCategoryByDeveloperId_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contributionClient) GetContribution(ctx context.Context, in *GetContributionReq, opts ...grpc.CallOption) (*GetContributionResp, error) {
-	out := new(GetContributionResp)
-	err := c.cc.Invoke(ctx, Contribution_GetContribution_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -126,87 +90,15 @@ func (c *contributionClient) SearchByRepoId(ctx context.Context, in *SearchByRep
 	return out, nil
 }
 
-func (c *contributionClient) UpdateContributionOfUser(ctx context.Context, in *UpdateContributionOfUserReq, opts ...grpc.CallOption) (*UpdateContributionOfUserResp, error) {
-	out := new(UpdateContributionOfUserResp)
-	err := c.cc.Invoke(ctx, Contribution_UpdateContributionOfUser_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contributionClient) UpdateIssuePROfUser(ctx context.Context, in *UpdateIssuePROfUserReq, opts ...grpc.CallOption) (*UpdateIssuePROfUserResp, error) {
-	out := new(UpdateIssuePROfUserResp)
-	err := c.cc.Invoke(ctx, Contribution_UpdateIssuePROfUser_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contributionClient) UpdateCommentOfUser(ctx context.Context, in *UpdateCommentOfUserReq, opts ...grpc.CallOption) (*UpdateCommentOfUserResp, error) {
-	out := new(UpdateCommentOfUserResp)
-	err := c.cc.Invoke(ctx, Contribution_UpdateCommentOfUser_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contributionClient) UpdateReviewOfUser(ctx context.Context, in *UpdateReviewOfUserReq, opts ...grpc.CallOption) (*UpdateReviewOfUserResp, error) {
-	out := new(UpdateReviewOfUserResp)
-	err := c.cc.Invoke(ctx, Contribution_UpdateReviewOfUser_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contributionClient) GetIssuePROfUserUpdatedAt(ctx context.Context, in *GetIssuePROfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetIssuePROfUserUpdatedAtResp, error) {
-	out := new(GetIssuePROfUserUpdatedAtResp)
-	err := c.cc.Invoke(ctx, Contribution_GetIssuePROfUserUpdatedAt_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contributionClient) GetCommentOfUserUpdatedAt(ctx context.Context, in *GetCommentOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetCommentOfUserUpdatedAtResp, error) {
-	out := new(GetCommentOfUserUpdatedAtResp)
-	err := c.cc.Invoke(ctx, Contribution_GetCommentOfUserUpdatedAt_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contributionClient) GetReviewOfUserUpdatedAt(ctx context.Context, in *GetReviewOfUserUpdatedAtReq, opts ...grpc.CallOption) (*GetReviewOfUserUpdatedAtResp, error) {
-	out := new(GetReviewOfUserUpdatedAtResp)
-	err := c.cc.Invoke(ctx, Contribution_GetReviewOfUserUpdatedAt_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ContributionServer is the server API for Contribution service.
 // All implementations must embed UnimplementedContributionServer
 // for forward compatibility
 type ContributionServer interface {
 	AddContribution(context.Context, *AddContributionReq) (*AddContributionResp, error)
-	DelContribution(context.Context, *DelContributionReq) (*DelContributionResp, error)
 	DelAllContributionInCategoryByDeveloperId(context.Context, *DelAllContributionInCategoryByDeveloperIdReq) (*DelAllContributionInCategoryByDeveloperIdResp, error)
-	GetContribution(context.Context, *GetContributionReq) (*GetContributionResp, error)
 	SearchByCategory(context.Context, *SearchByCategoryReq) (*SearchByCategoryResp, error)
 	SearchByDeveloperId(context.Context, *SearchByDeveloperIdReq) (*SearchByDeveloperIdResp, error)
 	SearchByRepoId(context.Context, *SearchByRepoIdReq) (*SearchByRepoIdResp, error)
-	UpdateContributionOfUser(context.Context, *UpdateContributionOfUserReq) (*UpdateContributionOfUserResp, error)
-	UpdateIssuePROfUser(context.Context, *UpdateIssuePROfUserReq) (*UpdateIssuePROfUserResp, error)
-	UpdateCommentOfUser(context.Context, *UpdateCommentOfUserReq) (*UpdateCommentOfUserResp, error)
-	UpdateReviewOfUser(context.Context, *UpdateReviewOfUserReq) (*UpdateReviewOfUserResp, error)
-	GetIssuePROfUserUpdatedAt(context.Context, *GetIssuePROfUserUpdatedAtReq) (*GetIssuePROfUserUpdatedAtResp, error)
-	GetCommentOfUserUpdatedAt(context.Context, *GetCommentOfUserUpdatedAtReq) (*GetCommentOfUserUpdatedAtResp, error)
-	GetReviewOfUserUpdatedAt(context.Context, *GetReviewOfUserUpdatedAtReq) (*GetReviewOfUserUpdatedAtResp, error)
 	mustEmbedUnimplementedContributionServer()
 }
 
@@ -217,14 +109,8 @@ type UnimplementedContributionServer struct {
 func (UnimplementedContributionServer) AddContribution(context.Context, *AddContributionReq) (*AddContributionResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddContribution not implemented")
 }
-func (UnimplementedContributionServer) DelContribution(context.Context, *DelContributionReq) (*DelContributionResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelContribution not implemented")
-}
 func (UnimplementedContributionServer) DelAllContributionInCategoryByDeveloperId(context.Context, *DelAllContributionInCategoryByDeveloperIdReq) (*DelAllContributionInCategoryByDeveloperIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelAllContributionInCategoryByDeveloperId not implemented")
-}
-func (UnimplementedContributionServer) GetContribution(context.Context, *GetContributionReq) (*GetContributionResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetContribution not implemented")
 }
 func (UnimplementedContributionServer) SearchByCategory(context.Context, *SearchByCategoryReq) (*SearchByCategoryResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchByCategory not implemented")
@@ -234,27 +120,6 @@ func (UnimplementedContributionServer) SearchByDeveloperId(context.Context, *Sea
 }
 func (UnimplementedContributionServer) SearchByRepoId(context.Context, *SearchByRepoIdReq) (*SearchByRepoIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchByRepoId not implemented")
-}
-func (UnimplementedContributionServer) UpdateContributionOfUser(context.Context, *UpdateContributionOfUserReq) (*UpdateContributionOfUserResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateContributionOfUser not implemented")
-}
-func (UnimplementedContributionServer) UpdateIssuePROfUser(context.Context, *UpdateIssuePROfUserReq) (*UpdateIssuePROfUserResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateIssuePROfUser not implemented")
-}
-func (UnimplementedContributionServer) UpdateCommentOfUser(context.Context, *UpdateCommentOfUserReq) (*UpdateCommentOfUserResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateCommentOfUser not implemented")
-}
-func (UnimplementedContributionServer) UpdateReviewOfUser(context.Context, *UpdateReviewOfUserReq) (*UpdateReviewOfUserResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateReviewOfUser not implemented")
-}
-func (UnimplementedContributionServer) GetIssuePROfUserUpdatedAt(context.Context, *GetIssuePROfUserUpdatedAtReq) (*GetIssuePROfUserUpdatedAtResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetIssuePROfUserUpdatedAt not implemented")
-}
-func (UnimplementedContributionServer) GetCommentOfUserUpdatedAt(context.Context, *GetCommentOfUserUpdatedAtReq) (*GetCommentOfUserUpdatedAtResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCommentOfUserUpdatedAt not implemented")
-}
-func (UnimplementedContributionServer) GetReviewOfUserUpdatedAt(context.Context, *GetReviewOfUserUpdatedAtReq) (*GetReviewOfUserUpdatedAtResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetReviewOfUserUpdatedAt not implemented")
 }
 func (UnimplementedContributionServer) mustEmbedUnimplementedContributionServer() {}
 
@@ -287,24 +152,6 @@ func _Contribution_AddContribution_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Contribution_DelContribution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelContributionReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).DelContribution(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_DelContribution_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).DelContribution(ctx, req.(*DelContributionReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Contribution_DelAllContributionInCategoryByDeveloperId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DelAllContributionInCategoryByDeveloperIdReq)
 	if err := dec(in); err != nil {
@@ -319,24 +166,6 @@ func _Contribution_DelAllContributionInCategoryByDeveloperId_Handler(srv interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ContributionServer).DelAllContributionInCategoryByDeveloperId(ctx, req.(*DelAllContributionInCategoryByDeveloperIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Contribution_GetContribution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetContributionReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).GetContribution(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_GetContribution_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).GetContribution(ctx, req.(*GetContributionReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -395,132 +224,6 @@ func _Contribution_SearchByRepoId_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Contribution_UpdateContributionOfUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateContributionOfUserReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).UpdateContributionOfUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_UpdateContributionOfUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).UpdateContributionOfUser(ctx, req.(*UpdateContributionOfUserReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Contribution_UpdateIssuePROfUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateIssuePROfUserReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).UpdateIssuePROfUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_UpdateIssuePROfUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).UpdateIssuePROfUser(ctx, req.(*UpdateIssuePROfUserReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Contribution_UpdateCommentOfUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateCommentOfUserReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).UpdateCommentOfUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_UpdateCommentOfUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).UpdateCommentOfUser(ctx, req.(*UpdateCommentOfUserReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Contribution_UpdateReviewOfUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateReviewOfUserReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).UpdateReviewOfUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_UpdateReviewOfUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).UpdateReviewOfUser(ctx, req.(*UpdateReviewOfUserReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Contribution_GetIssuePROfUserUpdatedAt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetIssuePROfUserUpdatedAtReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).GetIssuePROfUserUpdatedAt(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_GetIssuePROfUserUpdatedAt_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).GetIssuePROfUserUpdatedAt(ctx, req.(*GetIssuePROfUserUpdatedAtReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Contribution_GetCommentOfUserUpdatedAt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCommentOfUserUpdatedAtReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).GetCommentOfUserUpdatedAt(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_GetCommentOfUserUpdatedAt_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).GetCommentOfUserUpdatedAt(ctx, req.(*GetCommentOfUserUpdatedAtReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Contribution_GetReviewOfUserUpdatedAt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetReviewOfUserUpdatedAtReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContributionServer).GetReviewOfUserUpdatedAt(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Contribution_GetReviewOfUserUpdatedAt_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContributionServer).GetReviewOfUserUpdatedAt(ctx, req.(*GetReviewOfUserUpdatedAtReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Contribution_ServiceDesc is the grpc.ServiceDesc for Contribution service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -533,16 +236,8 @@ var Contribution_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Contribution_AddContribution_Handler,
 		},
 		{
-			MethodName: "DelContribution",
-			Handler:    _Contribution_DelContribution_Handler,
-		},
-		{
 			MethodName: "DelAllContributionInCategoryByDeveloperId",
 			Handler:    _Contribution_DelAllContributionInCategoryByDeveloperId_Handler,
-		},
-		{
-			MethodName: "GetContribution",
-			Handler:    _Contribution_GetContribution_Handler,
 		},
 		{
 			MethodName: "SearchByCategory",
@@ -555,34 +250,6 @@ var Contribution_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchByRepoId",
 			Handler:    _Contribution_SearchByRepoId_Handler,
-		},
-		{
-			MethodName: "UpdateContributionOfUser",
-			Handler:    _Contribution_UpdateContributionOfUser_Handler,
-		},
-		{
-			MethodName: "UpdateIssuePROfUser",
-			Handler:    _Contribution_UpdateIssuePROfUser_Handler,
-		},
-		{
-			MethodName: "UpdateCommentOfUser",
-			Handler:    _Contribution_UpdateCommentOfUser_Handler,
-		},
-		{
-			MethodName: "UpdateReviewOfUser",
-			Handler:    _Contribution_UpdateReviewOfUser_Handler,
-		},
-		{
-			MethodName: "GetIssuePROfUserUpdatedAt",
-			Handler:    _Contribution_GetIssuePROfUserUpdatedAt_Handler,
-		},
-		{
-			MethodName: "GetCommentOfUserUpdatedAt",
-			Handler:    _Contribution_GetCommentOfUserUpdatedAt_Handler,
-		},
-		{
-			MethodName: "GetReviewOfUserUpdatedAt",
-			Handler:    _Contribution_GetReviewOfUserUpdatedAt_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

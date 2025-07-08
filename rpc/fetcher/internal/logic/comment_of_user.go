@@ -76,7 +76,7 @@ func (l *FetchCommentOfUserLogic) FetchCommentOfUser(userId int64, createAfter s
 		}
 	}
 
-	completedContribution := pack.BuildCompletedContribution(constants.FetchReviewOfUserCompletedDataId, userId)
+	completedContribution := pack.BuildCompletedContribution(constants.FetchCommentOfUserCompletedDataId, userId)
 
 	var completedStr string
 	if completedStr, err = jsonx.MarshalToString(completedContribution); err != nil {

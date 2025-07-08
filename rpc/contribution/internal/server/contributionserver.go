@@ -28,19 +28,9 @@ func (s *ContributionServer) AddContribution(ctx context.Context, in *contributi
 	return l.AddContribution(in)
 }
 
-func (s *ContributionServer) DelContribution(ctx context.Context, in *contribution.DelContributionReq) (*contribution.DelContributionResp, error) {
-	l := logic.NewDelContributionLogic(ctx, s.svcCtx)
-	return l.DelContribution(in)
-}
-
 func (s *ContributionServer) DelAllContributionInCategoryByDeveloperId(ctx context.Context, in *contribution.DelAllContributionInCategoryByDeveloperIdReq) (*contribution.DelAllContributionInCategoryByDeveloperIdResp, error) {
 	l := logic.NewDelAllContributionInCategoryByDeveloperIdLogic(ctx, s.svcCtx)
 	return l.DelAllContributionInCategoryByDeveloperId(in)
-}
-
-func (s *ContributionServer) GetContribution(ctx context.Context, in *contribution.GetContributionReq) (*contribution.GetContributionResp, error) {
-	l := logic.NewGetContributionLogic(ctx, s.svcCtx)
-	return l.GetContribution(in)
 }
 
 func (s *ContributionServer) SearchByCategory(ctx context.Context, in *contribution.SearchByCategoryReq) (*contribution.SearchByCategoryResp, error) {
@@ -56,39 +46,4 @@ func (s *ContributionServer) SearchByDeveloperId(ctx context.Context, in *contri
 func (s *ContributionServer) SearchByRepoId(ctx context.Context, in *contribution.SearchByRepoIdReq) (*contribution.SearchByRepoIdResp, error) {
 	l := logic.NewSearchByRepoIdLogic(ctx, s.svcCtx)
 	return l.SearchByRepoId(in)
-}
-
-func (s *ContributionServer) UpdateContributionOfUser(ctx context.Context, in *contribution.UpdateContributionOfUserReq) (*contribution.UpdateContributionOfUserResp, error) {
-	l := logic.NewUpdateContributionOfUserLogic(ctx, s.svcCtx)
-	return l.UpdateContributionOfUser(in)
-}
-
-func (s *ContributionServer) UpdateIssuePROfUser(ctx context.Context, in *contribution.UpdateIssuePROfUserReq) (*contribution.UpdateIssuePROfUserResp, error) {
-	l := logic.NewUpdateIssuePROfUserLogic(ctx, s.svcCtx)
-	return l.UpdateIssuePROfUser(in)
-}
-
-func (s *ContributionServer) UpdateCommentOfUser(ctx context.Context, in *contribution.UpdateCommentOfUserReq) (*contribution.UpdateCommentOfUserResp, error) {
-	l := logic.NewUpdateCommentOfUserLogic(ctx, s.svcCtx)
-	return l.UpdateCommentOfUser(in)
-}
-
-func (s *ContributionServer) UpdateReviewOfUser(ctx context.Context, in *contribution.UpdateReviewOfUserReq) (*contribution.UpdateReviewOfUserResp, error) {
-	l := logic.NewUpdateReviewOfUserLogic(ctx, s.svcCtx)
-	return l.UpdateReviewOfUser(in)
-}
-
-func (s *ContributionServer) GetIssuePROfUserUpdatedAt(ctx context.Context, in *contribution.GetIssuePROfUserUpdatedAtReq) (*contribution.GetIssuePROfUserUpdatedAtResp, error) {
-	l := logic.NewGetIssuePROfUserUpdatedAtLogic(ctx, s.svcCtx)
-	return l.GetIssuePROfUserUpdatedAt(in)
-}
-
-func (s *ContributionServer) GetCommentOfUserUpdatedAt(ctx context.Context, in *contribution.GetCommentOfUserUpdatedAtReq) (*contribution.GetCommentOfUserUpdatedAtResp, error) {
-	l := logic.NewGetCommentOfUserUpdatedAtLogic(ctx, s.svcCtx)
-	return l.GetCommentOfUserUpdatedAt(in)
-}
-
-func (s *ContributionServer) GetReviewOfUserUpdatedAt(ctx context.Context, in *contribution.GetReviewOfUserUpdatedAtReq) (*contribution.GetReviewOfUserUpdatedAtResp, error) {
-	l := logic.NewGetReviewOfUserUpdatedAtLogic(ctx, s.svcCtx)
-	return l.GetReviewOfUserUpdatedAt(in)
 }

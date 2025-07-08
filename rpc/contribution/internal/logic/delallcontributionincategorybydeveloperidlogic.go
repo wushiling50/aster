@@ -2,8 +2,10 @@ package logic
 
 import (
 	"context"
+	"math"
 
 	"github.com/wushiling50/aster/gen/contribution"
+	"github.com/wushiling50/aster/rpc/contribution/internal/pack"
 	"github.com/wushiling50/aster/rpc/contribution/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -24,7 +26,36 @@ func NewDelAllContributionInCategoryByDeveloperIdLogic(ctx context.Context, svcC
 }
 
 func (l *DelAllContributionInCategoryByDeveloperIdLogic) DelAllContributionInCategoryByDeveloperId(in *contribution.DelAllContributionInCategoryByDeveloperIdReq) (*contribution.DelAllContributionInCategoryByDeveloperIdResp, error) {
-	// todo: add your logic here and delete this line
+	resp := new(contribution.DelAllContributionInCategoryByDeveloperIdResp)
 
-	return &contribution.DelAllContributionInCategoryByDeveloperIdResp{}, nil
+	err := l.delAllContributionInCategoryByDeveloperIdLogic(in.Category, in.DeveloperId, 1, math.MaxInt64)
+	if err != nil {
+		logx.Errorf("service.DelAllContributionInCategoryByDeveloperId: Del All Contribution In Category By DeveloperId Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	resp.Base = pack.BuildSuccessResp()
+
+	return resp, nil
+}
+
+func (l *DelAllContributionInCategoryByDeveloperIdLogic) delAllContributionInCategoryByDeveloperIdLogic(category string, developerId, page, limit int64) error {
+	contributions, err := l.svcCtx.ContributionModel.SearchByDeveloperId(l.ctx, developerId, page, limit)
+	if err != nil {
+		return err
+	}
+
+	for _, contribution := range contributions {
+		if contribution.Category != category {
+			continue
+		}
+
+		err := l.svcCtx.ContributionModel.Delete(l.ctx, contribution.DataId)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

@@ -39,18 +39,21 @@ const (
 
 const (
 	FetchDeveloper int = iota
+
+	FetchRepo
+
 	FetchCreatedRepo
+
 	FetchStarredRepo
 
 	FetchFollowing
 	FetchFollower
 
+	FetchFork
+
 	FetchIssuePROfUser
 	FetchCommentOfUser
 	FetchReviewOfUser
-
-	FetchRepo
-	FetchFork
 )
 
 const (
@@ -61,9 +64,9 @@ const (
 	FetchFollowingCompletedDataId
 	FetchFollowerCompletedDataId
 
+	FetchForkCompletedDataId
+
 	FetchIssuePROfUserCompletedDataId
 	FetchCommentOfUserCompletedDataId
 	FetchReviewOfUserCompletedDataId
-
-	FetchForkCompletedDataId
 )

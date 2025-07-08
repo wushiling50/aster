@@ -33,57 +33,7 @@ message AddContributionReq {
 message AddContributionResp {
     base.Base base = 1;
 }
-  
-message UpdateContributionOfUserReq {
-    int64 developerId = 1;
-    string updateAfter = 2;
-    int64 searchLimit = 3;
-}
-  
-message UpdateContributionOfUserResp {
-    base.Base base = 1;
-}
-  
-message UpdateIssuePROfUserReq {
-    int64 developerId = 1;
-    string updateAfter = 2;
-    int64 searchLimit = 3;
-}
-  
-message UpdateIssuePROfUserResp {
-    base.Base base = 1;
-}
-  
-message UpdateCommentOfUserReq {
-    int64 developerId = 1;
-    string updateAfter = 2;
-    int64 searchLimit = 3;
-}
-  
-message UpdateCommentOfUserResp {
-    base.Base base = 1;
-}
-  
-message UpdateReviewOfUserReq {
-    int64 developerId = 1;
-    string updateAfter = 2;
-    int64 searchLimit = 3;
-}
-  
-message UpdateReviewOfUserResp {
-    base.Base base = 1;
-}
-  
-message DelContributionReq {
-    int64 repoId = 1; // repoId
-    string category = 2; // category
-    int64 contributionId = 3; // contributionId
-}
-  
-message DelContributionResp {
-    base.Base base = 1;
-}
-  
+
 message DelAllContributionInCategoryByDeveloperIdReq {
     string category = 1; // category
     int64 developerId = 2; // developerId
@@ -91,17 +41,6 @@ message DelAllContributionInCategoryByDeveloperIdReq {
   
 message DelAllContributionInCategoryByDeveloperIdResp {
     base.Base base = 1;
-}
-  
-message GetContributionReq {
-    int64 repoId = 1; // repoId
-    string category = 2; // category
-    int64 contributionId = 3; // contributionId
-}
-  
-message GetContributionResp {
-    base.Base base = 1;
-    Contribution contribution = 2; // contribution
 }
   
 message SearchByCategoryReq {
@@ -136,47 +75,11 @@ message SearchByRepoIdResp {
     base.Base base = 1;
     repeated Contribution contributions = 2; // contributions
 }
-  
-message GetIssuePROfUserUpdatedAtReq {
-    int64 developerId = 1;
-}
-  
-message GetIssuePROfUserUpdatedAtResp {
-    base.Base base = 1;
-    int64 updatedAt = 2;
-}
-  
-message GetCommentOfUserUpdatedAtReq {
-    int64 developerId = 1;
-}
-  
-message GetCommentOfUserUpdatedAtResp {
-    base.Base base = 1;
-    int64 updatedAt = 2;
-}
-  
-message GetReviewOfUserUpdatedAtReq {
-    int64 developerId = 1;
-}
-  
-message GetReviewOfUserUpdatedAtResp {
-    base.Base base = 1;
-    int64 updatedAt = 2;
-}
-  
+    
 service contribution{ 
     rpc AddContribution(AddContributionReq) returns (AddContributionResp);
-    rpc DelContribution(DelContributionReq) returns (DelContributionResp);
     rpc DelAllContributionInCategoryByDeveloperId(DelAllContributionInCategoryByDeveloperIdReq) returns (DelAllContributionInCategoryByDeveloperIdResp);
-    rpc GetContribution(GetContributionReq) returns (GetContributionResp);
     rpc SearchByCategory(SearchByCategoryReq) returns (SearchByCategoryResp);
     rpc SearchByDeveloperId(SearchByDeveloperIdReq) returns (SearchByDeveloperIdResp);
     rpc SearchByRepoId(SearchByRepoIdReq) returns (SearchByRepoIdResp);
-    rpc UpdateContributionOfUser(UpdateContributionOfUserReq) returns (UpdateContributionOfUserResp);
-    rpc UpdateIssuePROfUser(UpdateIssuePROfUserReq) returns (UpdateIssuePROfUserResp);
-    rpc UpdateCommentOfUser(UpdateCommentOfUserReq) returns (UpdateCommentOfUserResp);
-    rpc UpdateReviewOfUser(UpdateReviewOfUserReq) returns (UpdateReviewOfUserResp);
-    rpc GetIssuePROfUserUpdatedAt(GetIssuePROfUserUpdatedAtReq) returns (GetIssuePROfUserUpdatedAtResp);
-    rpc GetCommentOfUserUpdatedAt(GetCommentOfUserUpdatedAtReq) returns (GetCommentOfUserUpdatedAtResp);
-    rpc GetReviewOfUserUpdatedAt(GetReviewOfUserUpdatedAtReq) returns (GetReviewOfUserUpdatedAtResp);
 }
