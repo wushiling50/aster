@@ -14,8 +14,6 @@ import (
 )
 
 type (
-	DelAnalysisReq     = analysis.DelAnalysisReq
-	DelAnalysisResp    = analysis.DelAnalysisResp
 	GetAnalysisReq     = analysis.GetAnalysisReq
 	GetLanguagesResp   = analysis.GetLanguagesResp
 	GetNationResp      = analysis.GetNationResp
@@ -29,10 +27,6 @@ type (
 	UpdateAnalysisResp = analysis.UpdateAnalysisResp
 
 	Analysis interface {
-		DelLanguage(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
-		DelNation(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
-		DelScore(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
-		DelSummary(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
 		UpdateLanguage(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error)
 		UpdateNation(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error)
 		UpdateScore(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error)
@@ -52,26 +46,6 @@ func NewAnalysis(cli zrpc.Client) Analysis {
 	return &defaultAnalysis{
 		cli: cli,
 	}
-}
-
-func (m *defaultAnalysis) DelLanguage(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	client := analysis.NewAnalysisClient(m.cli.Conn())
-	return client.DelLanguage(ctx, in, opts...)
-}
-
-func (m *defaultAnalysis) DelNation(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	client := analysis.NewAnalysisClient(m.cli.Conn())
-	return client.DelNation(ctx, in, opts...)
-}
-
-func (m *defaultAnalysis) DelScore(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	client := analysis.NewAnalysisClient(m.cli.Conn())
-	return client.DelScore(ctx, in, opts...)
-}
-
-func (m *defaultAnalysis) DelSummary(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	client := analysis.NewAnalysisClient(m.cli.Conn())
-	return client.DelSummary(ctx, in, opts...)
 }
 
 func (m *defaultAnalysis) UpdateLanguage(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error) {

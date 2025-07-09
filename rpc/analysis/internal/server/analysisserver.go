@@ -23,26 +23,6 @@ func NewAnalysisServer(svcCtx *svc.ServiceContext) *AnalysisServer {
 	}
 }
 
-func (s *AnalysisServer) DelLanguage(ctx context.Context, in *analysis.DelAnalysisReq) (*analysis.DelAnalysisResp, error) {
-	l := logic.NewDelLanguageLogic(ctx, s.svcCtx)
-	return l.DelLanguage(in)
-}
-
-func (s *AnalysisServer) DelNation(ctx context.Context, in *analysis.DelAnalysisReq) (*analysis.DelAnalysisResp, error) {
-	l := logic.NewDelNationLogic(ctx, s.svcCtx)
-	return l.DelNation(in)
-}
-
-func (s *AnalysisServer) DelScore(ctx context.Context, in *analysis.DelAnalysisReq) (*analysis.DelAnalysisResp, error) {
-	l := logic.NewDelScoreLogic(ctx, s.svcCtx)
-	return l.DelScore(in)
-}
-
-func (s *AnalysisServer) DelSummary(ctx context.Context, in *analysis.DelAnalysisReq) (*analysis.DelAnalysisResp, error) {
-	l := logic.NewDelSummaryLogic(ctx, s.svcCtx)
-	return l.DelSummary(in)
-}
-
 func (s *AnalysisServer) UpdateLanguage(ctx context.Context, in *analysis.UpdateAnalysisReq) (*analysis.UpdateAnalysisResp, error) {
 	l := logic.NewUpdateLanguageLogic(ctx, s.svcCtx)
 	return l.UpdateLanguage(in)

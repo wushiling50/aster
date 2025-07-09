@@ -13,6 +13,7 @@ create table `aster`.`nation` (
     `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
     `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
     `nation`                     varchar(255)    not null       comment 'Nation',
+    `confidence`                 double          not null       comment 'Confidence',
     `data_created_at`            timestamp       not null default  current_timestamp,
     `data_updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     `data_deleted_at`            timestamp       null     default null,

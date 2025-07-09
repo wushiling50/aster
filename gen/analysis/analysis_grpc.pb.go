@@ -19,10 +19,6 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Analysis_DelLanguage_FullMethodName    = "/analysis.analysis/DelLanguage"
-	Analysis_DelNation_FullMethodName      = "/analysis.analysis/DelNation"
-	Analysis_DelScore_FullMethodName       = "/analysis.analysis/DelScore"
-	Analysis_DelSummary_FullMethodName     = "/analysis.analysis/DelSummary"
 	Analysis_UpdateLanguage_FullMethodName = "/analysis.analysis/UpdateLanguage"
 	Analysis_UpdateNation_FullMethodName   = "/analysis.analysis/UpdateNation"
 	Analysis_UpdateScore_FullMethodName    = "/analysis.analysis/UpdateScore"
@@ -37,10 +33,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AnalysisClient interface {
-	DelLanguage(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
-	DelNation(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
-	DelScore(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
-	DelSummary(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error)
 	UpdateLanguage(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error)
 	UpdateNation(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error)
 	UpdateScore(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error)
@@ -57,42 +49,6 @@ type analysisClient struct {
 
 func NewAnalysisClient(cc grpc.ClientConnInterface) AnalysisClient {
 	return &analysisClient{cc}
-}
-
-func (c *analysisClient) DelLanguage(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	out := new(DelAnalysisResp)
-	err := c.cc.Invoke(ctx, Analysis_DelLanguage_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *analysisClient) DelNation(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	out := new(DelAnalysisResp)
-	err := c.cc.Invoke(ctx, Analysis_DelNation_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *analysisClient) DelScore(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	out := new(DelAnalysisResp)
-	err := c.cc.Invoke(ctx, Analysis_DelScore_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *analysisClient) DelSummary(ctx context.Context, in *DelAnalysisReq, opts ...grpc.CallOption) (*DelAnalysisResp, error) {
-	out := new(DelAnalysisResp)
-	err := c.cc.Invoke(ctx, Analysis_DelSummary_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *analysisClient) UpdateLanguage(ctx context.Context, in *UpdateAnalysisReq, opts ...grpc.CallOption) (*UpdateAnalysisResp, error) {
@@ -171,10 +127,6 @@ func (c *analysisClient) GetSummary(ctx context.Context, in *GetAnalysisReq, opt
 // All implementations must embed UnimplementedAnalysisServer
 // for forward compatibility
 type AnalysisServer interface {
-	DelLanguage(context.Context, *DelAnalysisReq) (*DelAnalysisResp, error)
-	DelNation(context.Context, *DelAnalysisReq) (*DelAnalysisResp, error)
-	DelScore(context.Context, *DelAnalysisReq) (*DelAnalysisResp, error)
-	DelSummary(context.Context, *DelAnalysisReq) (*DelAnalysisResp, error)
 	UpdateLanguage(context.Context, *UpdateAnalysisReq) (*UpdateAnalysisResp, error)
 	UpdateNation(context.Context, *UpdateAnalysisReq) (*UpdateAnalysisResp, error)
 	UpdateScore(context.Context, *UpdateAnalysisReq) (*UpdateAnalysisResp, error)
@@ -190,18 +142,6 @@ type AnalysisServer interface {
 type UnimplementedAnalysisServer struct {
 }
 
-func (UnimplementedAnalysisServer) DelLanguage(context.Context, *DelAnalysisReq) (*DelAnalysisResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelLanguage not implemented")
-}
-func (UnimplementedAnalysisServer) DelNation(context.Context, *DelAnalysisReq) (*DelAnalysisResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelNation not implemented")
-}
-func (UnimplementedAnalysisServer) DelScore(context.Context, *DelAnalysisReq) (*DelAnalysisResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelScore not implemented")
-}
-func (UnimplementedAnalysisServer) DelSummary(context.Context, *DelAnalysisReq) (*DelAnalysisResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelSummary not implemented")
-}
 func (UnimplementedAnalysisServer) UpdateLanguage(context.Context, *UpdateAnalysisReq) (*UpdateAnalysisResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateLanguage not implemented")
 }
@@ -237,78 +177,6 @@ type UnsafeAnalysisServer interface {
 
 func RegisterAnalysisServer(s grpc.ServiceRegistrar, srv AnalysisServer) {
 	s.RegisterService(&Analysis_ServiceDesc, srv)
-}
-
-func _Analysis_DelLanguage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAnalysisReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AnalysisServer).DelLanguage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Analysis_DelLanguage_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AnalysisServer).DelLanguage(ctx, req.(*DelAnalysisReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Analysis_DelNation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAnalysisReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AnalysisServer).DelNation(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Analysis_DelNation_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AnalysisServer).DelNation(ctx, req.(*DelAnalysisReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Analysis_DelScore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAnalysisReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AnalysisServer).DelScore(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Analysis_DelScore_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AnalysisServer).DelScore(ctx, req.(*DelAnalysisReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Analysis_DelSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelAnalysisReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AnalysisServer).DelSummary(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Analysis_DelSummary_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AnalysisServer).DelSummary(ctx, req.(*DelAnalysisReq))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Analysis_UpdateLanguage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -462,22 +330,6 @@ var Analysis_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "analysis.analysis",
 	HandlerType: (*AnalysisServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "DelLanguage",
-			Handler:    _Analysis_DelLanguage_Handler,
-		},
-		{
-			MethodName: "DelNation",
-			Handler:    _Analysis_DelNation_Handler,
-		},
-		{
-			MethodName: "DelScore",
-			Handler:    _Analysis_DelScore_Handler,
-		},
-		{
-			MethodName: "DelSummary",
-			Handler:    _Analysis_DelSummary_Handler,
-		},
 		{
 			MethodName: "UpdateLanguage",
 			Handler:    _Analysis_UpdateLanguage_Handler,

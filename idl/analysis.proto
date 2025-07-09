@@ -36,14 +36,6 @@ message Summary {
     string summary = 4; //summary
 }
 
-message DelAnalysisReq {
-    int64 developerId = 1; //developerId
-}
-
-message DelAnalysisResp {
-    base.Base base = 1;
-}
-
 message GetAnalysisReq {
     int64 developerId = 1; //developerId
 }
@@ -77,10 +69,6 @@ message UpdateAnalysisResp {
 }
 
 service analysis{
-    rpc DelLanguage(DelAnalysisReq) returns (DelAnalysisResp);
-    rpc DelNation(DelAnalysisReq) returns (DelAnalysisResp);
-    rpc DelScore(DelAnalysisReq) returns (DelAnalysisResp);
-    rpc DelSummary(DelAnalysisReq) returns (DelAnalysisResp);
     rpc UpdateLanguage(UpdateAnalysisReq) returns (UpdateAnalysisResp);
     rpc UpdateNation(UpdateAnalysisReq) returns (UpdateAnalysisResp);
     rpc UpdateScore(UpdateAnalysisReq) returns (UpdateAnalysisResp);

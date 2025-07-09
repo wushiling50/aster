@@ -27,3 +27,11 @@ type KqPusherConf struct {
 	Brokers []string
 	Topic   string
 }
+
+type DeepSeekModel struct {
+	Endpoint    string
+	Model       string
+	MaxTokens   int
+	Temperature float64
+	TopP        float64
+}

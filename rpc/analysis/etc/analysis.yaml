@@ -7,3 +7,75 @@ Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: analysis.rpc
+
+# dev 环境模式配置
+DevServer:
+  Enabled: true
+  Port: 5003
+
+# 日志配置
+Log:
+  ServiceName: analysis.rpc
+  Mode: file
+  Encoding: json
+  Path: log/analysis_rpc/
+
+# 链路追踪​
+Telemetry:
+  Name: analysis.rpc
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Snowflake:
+  WorkerId: 0
+  DatancenterId: 0
+
+Mysql:
+  Addr: 127.0.0.1:3306
+  Database: aster
+  Username: aster
+  Password: aster
+  Charset: utf8mb4
+
+Cache:
+  Host: 127.0.0.1:6379
+  Pass: aster
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Pass: aster
+
+DeepSeek:
+  Endpoint: https://api.deepseek.com/chat/completions
+	Model: deepseek-reasoner  
+	MaxTokens: 4096
+	Temperature: 1.0
+	TopP: 0.9
+
+# RPC 服务配置
+Services:
+  Developer:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: developer.rpc
+
+  Relation:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: relation.rpc
+
+  Contribution:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: contribution.rpc
+  
+  Repo:
+    Etcd:
+      Hosts:
+      - 127.0.0.1:2379
+      Key: repo.rpc

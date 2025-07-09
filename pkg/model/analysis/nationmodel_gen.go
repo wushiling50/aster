@@ -44,6 +44,7 @@ type (
 		DataId        int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
 		DeveloperId   int64        `db:"developer_id"` // Unique GitHub User ID
 		Nation        string       `db:"nation"`       // Nation
+		Confidence    float64      `db:"confidence"`   // Confidence
 		DataCreatedAt time.Time    `db:"data_created_at"`
 		DataUpdatedAt time.Time    `db:"data_updated_at"` // update data time
 		DataDeletedAt sql.NullTime `db:"data_deleted_at"`
@@ -86,8 +87,8 @@ func (m *defaultNationModel) FindOne(ctx context.Context, dataId int64) (*Nation
 func (m *defaultNationModel) Insert(ctx context.Context, data *Nation) (sql.Result, error) {
 	nationDataIdKey := fmt.Sprintf("%s%v", cacheNationDataIdPrefix, data.DataId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, nationRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Nation, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, nationRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Nation, data.Confidence, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
 	}, nationDataIdKey)
 	return ret, err
 }
@@ -96,7 +97,7 @@ func (m *defaultNationModel) Update(ctx context.Context, data *Nation) error {
 	nationDataIdKey := fmt.Sprintf("%s%v", cacheNationDataIdPrefix, data.DataId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, nationRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.Nation, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
+		return conn.ExecCtx(ctx, query, data.DeveloperId, data.Nation, data.Confidence, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
 	}, nationDataIdKey)
 	return err
 }
