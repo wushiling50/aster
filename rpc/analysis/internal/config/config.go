@@ -8,10 +8,11 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
-	Snowflake config.Snowflake
-	Mysql     config.MysqlConf
-	Cache     cache.CacheConf
-	DeepSeek  config.DeepSeekModel
+	Snowflake      config.Snowflake
+	Mysql          config.MysqlConf
+	Cache          cache.CacheConf
+	AsynqRedisConf config.AsynqRedisConf
+	DeepSeek       config.DeepSeekModel
 
 	Services struct {
 		Developer    zrpc.RpcClientConf

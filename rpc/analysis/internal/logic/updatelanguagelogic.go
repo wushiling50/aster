@@ -2,8 +2,19 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 
 	"github.com/wushiling50/aster/gen/analysis"
+	"github.com/wushiling50/aster/gen/relation"
+	"github.com/wushiling50/aster/gen/repo"
+	"github.com/wushiling50/aster/pkg/constants"
+	"github.com/wushiling50/aster/pkg/errno"
+	"github.com/wushiling50/aster/pkg/github"
+	model_analysis "github.com/wushiling50/aster/pkg/model/analysis"
+	"github.com/wushiling50/aster/pkg/tasks"
+	"github.com/wushiling50/aster/pkg/utils"
+	"github.com/wushiling50/aster/rpc/analysis/internal/pack"
 	"github.com/wushiling50/aster/rpc/analysis/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -24,7 +35,193 @@ func NewUpdateLanguageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Up
 }
 
 func (l *UpdateLanguageLogic) UpdateLanguage(in *analysis.UpdateAnalysisReq) (*analysis.UpdateAnalysisResp, error) {
-	// todo: add your logic here and delete this line
+	resp := new(analysis.UpdateAnalysisResp)
 
-	return &analysis.UpdateAnalysisResp{}, nil
+	var (
+		allLanguageBytes = make(map[string]int64) // 使用该 language 的 byte 数
+		allMetrics       = make(map[string]float64)
+		totalBytes       int64
+	)
+
+	need, err := l.checkIfNeedUpdate(in.DeveloperId)
+	if err != nil {
+		logx.Errorf("service.UpdateLanguage: Update Language Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	if !need {
+		resp.Base = pack.BuildSuccessResp()
+		return resp, nil
+	}
+
+	err = l.pushCreatedRepoTask(in.DeveloperId)
+	if err != nil {
+		logx.Errorf("service.UpdateLanguage: Failed To Enqueue Task: %v", err.Error())
+		err = errno.InternalAsynqError.WithError(err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	createRepoIds, err := l.rpcSearchCreatedRepo(in.DeveloperId, 1000, 1)
+	if err != nil {
+		logx.Error(err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	for _, repoId := range createRepoIds {
+		var languageBytes map[string]int64
+
+		repoLanguages, err := l.rpcGetRepoById(repoId)
+		if err != nil {
+			logx.Error(err)
+			continue
+		}
+
+		err = json.Unmarshal([]byte(repoLanguages), &languageBytes)
+		if err != nil {
+			logx.Error(err)
+			continue
+		}
+
+		for language, bytes := range languageBytes {
+			allLanguageBytes[language] += bytes
+			totalBytes += bytes
+		}
+	}
+
+	total := float64(totalBytes)
+	for language, bytes := range allLanguageBytes {
+		allMetrics[language] = (float64(bytes) / total) * 100
+	}
+
+	jsonBytes, err := json.Marshal(allMetrics)
+	if err != nil {
+		logx.Error(err)
+
+		err = errno.InternalJSONError.WithError(err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	err = l.updateLanguage(&model_analysis.Languages{
+		DeveloperId: in.DeveloperId,
+		Language:    string(jsonBytes),
+	})
+
+	if err != nil {
+		logx.Errorf("service.UpdateLanguage: Update Language Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	return resp, nil
+}
+
+func (l *UpdateLanguageLogic) checkIfNeedUpdate(developerId int64) (bool, error) {
+	langauge, err := l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil {
+		switch {
+		case errors.Is(err, model_analysis.ErrNotFound):
+			return true, nil
+		default:
+			return false, err
+		}
+	}
+
+	if github.CheckIfDataExpired(langauge.DataUpdatedAt) {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
+func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
+	err := tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCreatedRepo, developerId, "", 0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (l *UpdateLanguageLogic) rpcSearchCreatedRepo(developerId, limit, page int64) (createRepoIds []int64, err error) {
+	var resp *relation.SearchCreatedRepoResp
+
+	resp, err = l.svcCtx.RelationRpcClient.SearchCreatedRepo(l.ctx, &relation.SearchCreatedRepoReq{
+		DeveloperId: developerId,
+		Limit:       limit,
+		Page:        page,
+	})
+	if err != nil {
+		logx.Errorf("SearchCreatedRepoRPC: RPC Called Failed: %v", err.Error())
+		err = errno.InternalServiceError.WithError(err)
+		return
+	}
+
+	if !utils.IsSuccess(resp.Base) {
+		err = errno.BizError.WithMessage(resp.Base.Message)
+		return
+	}
+
+	createRepoIds = resp.RepoIds
+
+	return
+}
+
+func (l *UpdateLanguageLogic) rpcGetRepoById(repodId int64) (languages string, err error) {
+	var resp *repo.GetRepoByIdResp
+
+	resp, err = l.svcCtx.RepoRpcClient.GetRepoById(l.ctx, &repo.GetRepoByIdReq{
+		Id: repodId,
+	})
+	if err != nil {
+		logx.Errorf("GetRepoByIdRPC: RPC Called Failed: %v", err.Error())
+		err = errno.InternalServiceError.WithError(err)
+		return
+	}
+
+	if !utils.IsSuccess(resp.Base) {
+		err = errno.BizError.WithMessage(resp.Base.Message)
+		return
+	}
+
+	languages = resp.GetRepo().GetLanguage()
+
+	return
+}
+
+func (l *UpdateLanguageLogic) updateLanguage(model *model_analysis.Languages) error {
+	repo, err := l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, model.DeveloperId)
+	if err != nil {
+		switch {
+		case errors.Is(err, model_analysis.ErrNotFound):
+			logx.Info("No Found This Data!")
+
+			dataId, err := l.svcCtx.LanguagesModel.CreateDataId()
+			if err != nil {
+				return err
+			}
+
+			model.DataId = dataId
+			_, err = l.svcCtx.LanguagesModel.Insert(l.ctx, model)
+			if err != nil {
+				return err
+			}
+
+			return nil
+		default:
+			return err
+		}
+	}
+
+	model.DataId = repo.DataId
+	err = l.svcCtx.LanguagesModel.Update(l.ctx, model)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

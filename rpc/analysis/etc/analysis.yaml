@@ -47,6 +47,11 @@ Redis:
   Type: node
   Pass: aster
 
+AsynqRedisConf:
+  Addr: 127.0.0.1:6379
+  Pass: aster
+  DB: 0
+
 DeepSeek:
   Endpoint: https://api.deepseek.com/chat/completions
 	Model: deepseek-reasoner  
