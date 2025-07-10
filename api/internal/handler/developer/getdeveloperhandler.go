@@ -23,10 +23,8 @@ func GetDeveloperHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		resp, err := l.GetDeveloper(&req)
 		if err != nil {
 			httpx.OkJsonCtx(r.Context(), w, pack.RespError(err))
-		} else if resp.Developer != nil {
-			httpx.OkJsonCtx(r.Context(), w, pack.RespData(pack.BuildDeveloper(resp)))
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, pack.RespData(resp.TaskState))
+			httpx.OkJsonCtx(r.Context(), w, pack.RespData(pack.BuildDeveloper(resp)))
 		}
 	}
 }

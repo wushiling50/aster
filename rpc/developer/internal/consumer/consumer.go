@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/wushiling50/aster/gen/developer"
+	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/developer/internal/config"
@@ -64,6 +65,13 @@ func (c *DeveloperConsumer) Consume(ctx context.Context, key string, value strin
 			logx.Error(err)
 			return
 		}
+	}
+
+	locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, newDeveloper.Id)
+	err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+	if err != nil {
+		logx.Error(err)
+		return
 	}
 
 	return

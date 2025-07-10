@@ -1,7 +1,7 @@
 Name: contribution.rpc
 ListenOn: 0.0.0.0:20003
 Mode: dev
-Timeout: 30000
+Timeout: 3000
 
 Etcd:
   Hosts:

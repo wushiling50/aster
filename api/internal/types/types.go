@@ -33,7 +33,6 @@ type GetDeveloperReq struct {
 
 type GetDeveloperResp struct {
 	Developer *Developer `json:"developer"`
-	TaskState TaskState  `json:"task_state"`
 }
 
 type GetLanguageUsageReq struct {

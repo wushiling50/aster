@@ -137,9 +137,20 @@ func (l *UpdateLanguageLogic) checkIfNeedUpdate(developerId int64) (bool, error)
 	}
 }
 
-func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
-	err := tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCreatedRepo, developerId, "", 0)
+func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) (err error) {
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCreatedRepo, developerId)
 
+	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
+	if err != nil {
+		return err
+	}
+
+	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCreatedRepo, developerId, "", 0)
+	if err != nil {
+		return err
+	}
+
+	err = l.svcCtx.Locks.Block(l.ctx, locksKey)
 	if err != nil {
 		return err
 	}

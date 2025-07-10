@@ -16,8 +16,8 @@ type FetchPayload struct {
 }
 
 func GetNewFetcherTaskKey(fetchType int, id int64) string {
-	return constants.FetcherTaskName + constants.Separator + strconv.Itoa((fetchType)) +
-		constants.Separator + strconv.Itoa(int(id))
+	return constants.FetcherTaskName + constants.TaskSeparator + strconv.Itoa((fetchType)) +
+		constants.TaskSeparator + strconv.Itoa(int(id))
 }
 
 func NewFetcherTask(fetchType int, id int64, updateAfter string, searchLimit int64) (*asynq.Task, string, error) {

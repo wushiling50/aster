@@ -2,7 +2,7 @@ package constants
 
 import "time"
 
-const Separator = "|"
+const TaskSeparator = "|"
 
 // ------ APITask ------
 const (

@@ -112,7 +112,6 @@ type GetDeveloperReq {
 
 type GetDeveloperResp {
 	Developer *Developer `json:"developer"`
-	TaskState TaskState  `json:"task_state"`
 }
 
 type GetScoreReq {
@@ -160,9 +159,6 @@ type GetSummaryResp {
 	group:  developer
 )
 service Applet {
-	@handler postDeveloper
-	post /:login (PostTaskReq)
-
 	@handler postScoreTask
 	post /:login/score (PostTaskReq) returns (PostTaskResp)
 

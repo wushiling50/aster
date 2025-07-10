@@ -1,7 +1,7 @@
 Name: repo.rpc
 ListenOn: 0.0.0.0:20007
 Mode: dev
-Timeout: 30000
+Timeout: 3000
 
 Etcd:
   Hosts:

@@ -2,6 +2,7 @@ package svc
 
 import (
 	"github.com/hibiken/asynq"
+	"github.com/wushiling50/aster/pkg/locks"
 	"github.com/wushiling50/aster/pkg/model/analysis"
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/analysis/internal/config"
@@ -17,7 +18,7 @@ import (
 type ServiceContext struct {
 	Config config.Config
 
-	Redis       *redis.Redis
+	Locks       *locks.BLock
 	AsynqClient *asynq.Client
 
 	NationModel    analysis.NationModel
@@ -34,7 +35,7 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
-		Redis:  redis.MustNewRedis(c.Redis.RedisConf),
+		Locks:  locks.NewBLock(redis.MustNewRedis(c.Redis.RedisConf), c.Timeout),
 		AsynqClient: asynq.NewClient(asynq.RedisClientOpt{
 			Addr:     c.AsynqRedisConf.Addr,
 			Password: c.AsynqRedisConf.Pass,

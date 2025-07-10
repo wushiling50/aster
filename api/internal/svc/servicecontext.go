@@ -4,6 +4,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/api/internal/config"
+	"github.com/wushiling50/aster/pkg/locks"
 	"github.com/wushiling50/aster/pkg/model/rank"
 	"github.com/wushiling50/aster/pkg/utils"
 	analysis "github.com/wushiling50/aster/rpc/analysis/analysisclient"
@@ -19,6 +20,7 @@ type ServiceContext struct {
 	AsynqClient    *asynq.Client
 	AsynqInspector *asynq.Inspector
 	RankModel      *rank.RankModel
+	Locks          *locks.BLock
 
 	DeveloperRpcClient   developer.DeveloperZrpcClient
 	AnalysisRpcClient    analysis.Analysis
@@ -40,6 +42,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		}),
 		RankModel: rank.NewRankModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			redis.MustNewRedis(c.Redis), c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
+		Locks: locks.NewBLock(redis.MustNewRedis(c.Redis), c.Timeout),
 
 		DeveloperRpcClient:   developer.NewDeveloperZrpcClient(zrpc.MustNewClient(c.Services.Developer)),
 		AnalysisRpcClient:    analysis.NewAnalysis(zrpc.MustNewClient(c.Services.Analysis)),

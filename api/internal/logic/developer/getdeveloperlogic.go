@@ -6,8 +6,10 @@ import (
 	"github.com/wushiling50/aster/api/internal/pack"
 	"github.com/wushiling50/aster/api/internal/svc"
 	"github.com/wushiling50/aster/api/internal/types"
+	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/github"
+	"github.com/wushiling50/aster/pkg/tasks"
 	"github.com/wushiling50/aster/pkg/utils"
 	developer "github.com/wushiling50/aster/rpc/developer/developerclient"
 
@@ -38,6 +40,13 @@ func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *type
 		return
 	}
 
+	err = l.pushDeveloperTask(developerId)
+	if err != nil {
+		logx.Errorf("applet.PostDeveloper: Failed To Enqueue Task: %v", err.Error())
+		err = errno.InternalAsynqError.WithError(err)
+		return
+	}
+
 	var rpcResp *types.Developer
 
 	rpcResp, err = l.rpcGetDeveloperById(developerId)
@@ -49,6 +58,27 @@ func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *type
 	resp.Developer = rpcResp
 
 	logx.Info("Successfully Get Developer")
+	return
+}
+
+func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCreatedRepo, developerId)
+
+	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
+	if err != nil {
+		return err
+	}
+
+	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchDeveloper, developerId, "", 0)
+	if err != nil {
+		return
+	}
+
+	err = l.svcCtx.Locks.Block(l.ctx, locksKey)
+	if err != nil {
+		return
+	}
+
 	return
 }
 

@@ -15,8 +15,8 @@ type APIPayload struct {
 }
 
 func GetNewAPITaskKey(fetchType int, id int64, reqId string) string {
-	return constants.APITaskName + constants.Separator + strconv.Itoa(fetchType) +
-		constants.Separator + strconv.Itoa(int(id)) + constants.Separator + reqId
+	return constants.APITaskName + constants.TaskSeparator + strconv.Itoa(fetchType) +
+		constants.TaskSeparator + strconv.Itoa(int(id)) + constants.TaskSeparator + reqId
 }
 
 func NewAPITask(fetchType int, id int64, reqId string) (*asynq.Task, string, error) {
