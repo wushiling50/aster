@@ -38,8 +38,8 @@ func (l *UpdateLanguageLogic) UpdateLanguage(in *analysis.UpdateAnalysisReq) (*a
 	resp := new(analysis.UpdateAnalysisResp)
 
 	var (
-		allLanguageBytes = make(map[string]int64) // 使用该 language 的 byte 数
-		allMetrics       = make(map[string]float64)
+		allLanguageBytes = make(map[string]int64)   // 使用该 language 的 byte 数
+		allMetrics       = make(map[string]float64) // 某个 language 的占比
 		totalBytes       int64
 	)
 
