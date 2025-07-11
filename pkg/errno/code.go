@@ -25,4 +25,6 @@ const (
 	InternalGithubErrorCode    = 50006 // Github 错误
 	InternalAsynqErrorCode     = 50007 // Asynq 错误
 	InternalKafkaErrorCode     = 50008 // Kafka 错误
+	InternalScriptErrorCode    = 50009 // Script 错误
+	InternalLLMErrorCode       = 50010 // LLM 错误
 )

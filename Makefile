@@ -11,10 +11,6 @@ GO_MODULE := github.com/wushiling50/aster
 SERVICES := analysis contribution developer id_generator relation repo
 NO_DB_SERVICES := id_generator
 
-.PHONY: init
-init:
-	sh ./hack/init.sh
-	
 .PHONY: env-up
 env-up:
 	sudo rm -f ./docker/data//mysql/mysql.sock
@@ -24,12 +20,9 @@ env-up:
 env-down:
 	@ cd ./docker && docker compose down
 
-.PHONY: api-format
-api-format:
-	goctl api format --dir ${IDL_PATH}
-
 .PHONY: api-go
 api-go:
+	goctl api format --dir ${IDL_PATH}
 	goctl api go --dir=${API_PATH} --api ${IDL_PATH}/api.api
 
 .PHONY: api-run

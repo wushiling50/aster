@@ -2,6 +2,7 @@ package svc
 
 import (
 	"github.com/hibiken/asynq"
+	"github.com/wushiling50/aster/pkg/locks"
 	"github.com/wushiling50/aster/pkg/model/contribution"
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/contribution/internal/config"
@@ -18,7 +19,7 @@ type ServiceContext struct {
 	ReviewOfUserUpdatedAtModel  contribution.ReviewOfUserUpdatedAtModel
 	CommentOfUserUpdatedAtModel contribution.CommentOfUserUpdatedAtModel
 
-	Redis       *redis.Redis
+	Locks       *locks.BLock
 	AsynqClient *asynq.Client
 }
 
@@ -35,7 +36,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		CommentOfUserUpdatedAtModel: contribution.NewCommentOfUserUpdatedAtModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 
-		Redis: redis.MustNewRedis(c.Redis.RedisConf),
+		Locks: locks.NewBLock(redis.MustNewRedis(c.Redis.RedisConf), c.Timeout),
 		AsynqClient: asynq.NewClient(asynq.RedisClientOpt{
 			Addr:     c.AsynqRedisConf.Addr,
 			Password: c.AsynqRedisConf.Pass,

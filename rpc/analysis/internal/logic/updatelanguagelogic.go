@@ -205,7 +205,7 @@ func (l *UpdateLanguageLogic) rpcGetRepoById(repodId int64) (languages string, e
 }
 
 func (l *UpdateLanguageLogic) updateLanguage(model *model_analysis.Languages) error {
-	repo, err := l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, model.DeveloperId)
+	language, err := l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, model.DeveloperId)
 	if err != nil {
 		switch {
 		case errors.Is(err, model_analysis.ErrNotFound):
@@ -228,7 +228,7 @@ func (l *UpdateLanguageLogic) updateLanguage(model *model_analysis.Languages) er
 		}
 	}
 
-	model.DataId = repo.DataId
+	model.DataId = language.DataId
 	err = l.svcCtx.LanguagesModel.Update(l.ctx, model)
 	if err != nil {
 		return err

@@ -2,6 +2,8 @@ package svc
 
 import (
 	"github.com/hibiken/asynq"
+	"github.com/sashabaranov/go-openai"
+	"github.com/wushiling50/aster/pkg/llm"
 	"github.com/wushiling50/aster/pkg/locks"
 	"github.com/wushiling50/aster/pkg/model/analysis"
 	"github.com/wushiling50/aster/pkg/utils"
@@ -18,8 +20,9 @@ import (
 type ServiceContext struct {
 	Config config.Config
 
-	Locks       *locks.BLock
-	AsynqClient *asynq.Client
+	Locks          *locks.BLock
+	AsynqClient    *asynq.Client
+	DeepSeekClient *openai.Client
 
 	NationModel    analysis.NationModel
 	LanguagesModel analysis.LanguagesModel
@@ -41,6 +44,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 			Password: c.AsynqRedisConf.Pass,
 			DB:       c.AsynqRedisConf.DB,
 		}),
+		DeepSeekClient: llm.NewDeepSeekClient(c.DeepSeek),
 
 		NationModel: analysis.NewNationModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),

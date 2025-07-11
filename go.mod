@@ -4,10 +4,12 @@ go 1.23.1
 
 require (
 	github.com/NDoolan360/github-langs-go v1.0.2
+	github.com/biter777/countries v1.7.5
 	github.com/go-sql-driver/mysql v1.9.0
 	github.com/google/go-github/v66 v66.0.0
 	github.com/hibiken/asynq v0.25.1
 	github.com/matoous/go-nanoid v1.5.1
+	github.com/sashabaranov/go-openai v1.40.4
 	github.com/zeromicro/go-queue v1.2.2
 	github.com/zeromicro/go-zero v1.8.4
 	google.golang.org/grpc v1.65.0

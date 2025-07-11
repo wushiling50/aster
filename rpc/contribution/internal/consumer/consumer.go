@@ -53,14 +53,35 @@ func (c *ContributionConsumer) Consume(ctx context.Context, key string, value st
 		if err != nil {
 			return
 		}
+
+		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, newContribution.DeveloperId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		if err != nil {
+			logx.Error(err)
+			return
+		}
 	case constants.FetchCommentOfUserCompletedDataId:
 		err = c.updateCommentOfUserUpdatedAt(newContribution.DeveloperId)
 		if err != nil {
 			return
 		}
+
+		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, newContribution.DeveloperId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		if err != nil {
+			logx.Error(err)
+			return
+		}
 	case constants.FetchReviewOfUserCompletedDataId:
 		err = c.updateReviewOfUserUpdatedAt(newContribution.DeveloperId)
 		if err != nil {
+			return
+		}
+
+		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, newContribution.DeveloperId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		if err != nil {
+			logx.Error(err)
 			return
 		}
 	default:

@@ -35,8 +35,7 @@ func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *type
 
 	developerId, err := github.GetIdByLogin(l.ctx, req.Login)
 	if err != nil {
-		logx.Errorf("applet.GetDeveloper: Failed To Get Id By Login %v", err.Error())
-		err = errno.InternalLanguagesError.WithError(err)
+		logx.Errorf("applet.GetDeveloper: Failed To Get Id By Login :%v", err.Error())
 		return
 	}
 

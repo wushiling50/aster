@@ -35,8 +35,7 @@ func (l *PostLanguageUsageTaskLogic) PostLanguageUsageTask(req *types.PostTaskRe
 
 	developerId, err := github.GetIdByLogin(l.ctx, req.Login)
 	if err != nil {
-		logx.Errorf("applet.PostLanguageUsageTask: Failed To Get Id By Login %v", err.Error())
-		err = errno.InternalLanguagesError.WithError(err)
+		logx.Errorf("applet.PostLanguageUsageTask: Failed To Get Id By Login :%v", err.Error())
 		return
 	}
 

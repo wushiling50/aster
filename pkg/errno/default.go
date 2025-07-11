@@ -16,4 +16,6 @@ var (
 	InternalGithubError    = NewErrNo(InternalGithubErrorCode, "Github 错误")
 	InternalAsynqError     = NewErrNo(InternalAsynqErrorCode, "Asynq 错误")
 	InternalKafkaError     = NewErrNo(InternalKafkaErrorCode, "Kafka 错误")
+	InternalScriptError    = NewErrNo(InternalScriptErrorCode, "Script 错误")
+	InternalLLMError       = NewErrNo(InternalScriptErrorCode, "LLM 错误")
 )

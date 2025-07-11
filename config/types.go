@@ -32,6 +32,6 @@ type DeepSeekModel struct {
 	Endpoint    string
 	Model       string
 	MaxTokens   int
-	Temperature float64
-	TopP        float64
+	Temperature float32
+	TopP        float32
 }
