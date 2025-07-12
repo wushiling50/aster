@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/wushiling50/aster/config"
+	"github.com/wushiling50/aster/gen/analysis"
 	"github.com/wushiling50/aster/gen/contribution"
 	"github.com/wushiling50/aster/gen/developer"
 )
@@ -38,12 +39,18 @@ func GetTextFromContribution(contributions []*contribution.Contribution) string 
 		}
 	}
 
-	strings.ReplaceAll(text, "\n", " ")
+	text = strings.ReplaceAll(text, "\n", " ")
 	if len(text) > limitCharacterCount {
 		text = text[:limitCharacterCount]
 	}
 
 	text += "|Contribution End|"
+
+	return text
+}
+
+func GetTextFromLanguages(languages *analysis.Languages) string {
+	text := "|Language Usage Start|" + languages.Languages + "|Language Usage End|"
 
 	return text
 }
