@@ -2,6 +2,7 @@ package svc
 
 import (
 	"github.com/hibiken/asynq"
+	"github.com/wushiling50/aster/pkg/locks"
 	"github.com/wushiling50/aster/pkg/model/repo"
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/repo/internal/config"
@@ -12,7 +13,7 @@ import (
 type ServiceContext struct {
 	Config      config.Config
 	RepoModel   repo.RepoModel
-	Redis       *redis.Redis
+	Locks       *locks.BLock
 	AsynqClient *asynq.Client
 }
 
@@ -21,7 +22,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Config: c,
 		RepoModel: repo.NewRepoModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
-		Redis: redis.MustNewRedis(c.Redis.RedisConf),
+		Locks: locks.NewBLock(redis.MustNewRedis(c.Redis.RedisConf), c.Timeout),
 		AsynqClient: asynq.NewClient(asynq.RedisClientOpt{
 			Addr:     c.AsynqRedisConf.Addr,
 			Password: c.AsynqRedisConf.Pass,

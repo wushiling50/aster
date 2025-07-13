@@ -44,9 +44,23 @@ func (c *FollowConsumer) Consume(ctx context.Context, key string, value string) 
 		if err != nil {
 			return
 		}
+
+		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockFollowing, newFollow.FollowerId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		if err != nil {
+			logx.Error(err)
+			return
+		}
 	case constants.FetchFollowerCompletedDataId:
 		err = c.updateFollowerUpdatedAt(newFollow.FollowingId)
 		if err != nil {
+			return
+		}
+
+		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockFollower, newFollow.FollowingId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		if err != nil {
+			logx.Error(err)
 			return
 		}
 	default:

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/wushiling50/aster/gen/repo"
+	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/repo/internal/config"
@@ -64,6 +65,13 @@ func (c *RepoConsumer) Consume(ctx context.Context, key string, value string) (e
 			logx.Error(err)
 			return
 		}
+	}
+
+	locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockRepo, newRepo.Id)
+	err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+	if err != nil {
+		logx.Error(err)
+		return
 	}
 
 	return
