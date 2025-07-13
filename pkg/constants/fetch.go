@@ -1,9 +1,9 @@
 package constants
 
 const (
-	CategoryOpenIssue       = "OpenIssue"
-	CategoryOpenPullRequest = "OpenPullRequest"
-	CategoryComment         = "Comment"
-	CategoryReview          = "Review"
-	CategoryMerge           = "Merge"
+	CategoryIssue            = "OpenIssue"
+	CategoryOpenPullRequest  = "OpenPullRequest"
+	CategoryComment          = "Comment"
+	CategoryReview           = "Review"
+	CategoryMergePullRequest = "MergePullRequest"
 )

@@ -48,7 +48,7 @@ func (l *FetchIssuePROfUserLogic) FetchIssuePROfUser(userId int64, createAfter s
 		return
 	}
 
-	if err = l.rpcDelAllContributionInCategory(userId, constants.CategoryOpenIssue); err != nil {
+	if err = l.rpcDelAllContributionInCategory(userId, constants.CategoryIssue); err != nil {
 		logx.Error(err)
 		return
 	}
@@ -58,7 +58,7 @@ func (l *FetchIssuePROfUserLogic) FetchIssuePROfUser(userId int64, createAfter s
 		return
 	}
 
-	if err = l.rpcDelAllContributionInCategory(userId, constants.CategoryMerge); err != nil {
+	if err = l.rpcDelAllContributionInCategory(userId, constants.CategoryMergePullRequest); err != nil {
 		logx.Error(err)
 		return
 	}
@@ -81,12 +81,12 @@ func (l *FetchIssuePROfUserLogic) FetchIssuePROfUser(userId int64, createAfter s
 
 		if issuePR.IsPullRequest() {
 			if merged {
-				category = constants.CategoryMerge
+				category = constants.CategoryMergePullRequest
 			} else {
 				category = constants.CategoryOpenPullRequest
 			}
 		} else {
-			category = constants.CategoryOpenIssue
+			category = constants.CategoryIssue
 		}
 
 		genIssuePR := pack.BuildIssuePR(issuePR, userId, category, merged, repo)
