@@ -18,6 +18,5 @@ type Config struct {
 		KqCreateRepoConsumerConf kq.KqConf
 		KqFollowConsumerConf     kq.KqConf
 		KqStarConsumerConf       kq.KqConf
-		KqForkConsumerConf       kq.KqConf
 	}
 }

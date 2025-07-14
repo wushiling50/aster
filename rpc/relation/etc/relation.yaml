@@ -59,14 +59,7 @@ KafkaQueue:
       - 127.0.0.1:9092
     Group: create-repo
     Topic: create-repo-update
-
-  KqForkConsumerConf:
-    Name: fork-consumer
-    Brokers:
-      - 127.0.0.1:9092
-    Group: fork
-    Topic: fork-update
-
+    
   KqStarConsumerConf:
     Name: star-consumer
     Brokers:

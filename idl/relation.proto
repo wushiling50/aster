@@ -97,50 +97,6 @@ message DelAllFollowingResp {
     base.Base base = 1;
 }
 
-// ====== Fork ======
-message Fork {
-    int64 dataId = 1; // dataId
-    int64 originalRepoId = 2; // originalRepoId
-    int64 forkRepoId = 3; // forkRepoId
-}
-
-message AddForkReq {
-    int64 originalRepoId = 1; // originalRepoId
-    int64 forkRepoId = 2; // forkRepoId
-}
-
-message AddForkResp {
-    base.Base base = 1;
-}
-
-message GetOriginReq {
-    int64 forkRepoId = 1; // forkRepoId
-}
-
-message GetOriginResp {
-    base.Base base = 1;
-    int64 originalRepoId = 2; // originalRepoId
-}
-
-message SearchForkReq {
-    int64 page = 1; // page
-    int64 limit = 2; // limit
-    int64 originalRepoId = 3; // originalRepoId
-}
-
-message SearchForkResp {
-    base.Base base = 1;
-    repeated int64 forkRepoIds = 2; // forkRepoId
-}
-
-message DelAllForkReq {
-    int64 originalRepoId = 1; //originalRepoId
-}
-  
-message DelAllForkResp {
-    base.Base base = 1;
-}
-
 // ====== Star ======
 message Star {
     int64 dataId = 1; // dataId
@@ -155,16 +111,6 @@ message AddStarReq {
 
 message AddStarResp {
     base.Base base = 1;
-}
-
-message CheckIfStarReq {
-    int64 developerId = 1; // developerId
-    int64 repoId = 2; // repoId
-}
-
-message CheckIfStarResp {
-    base.Base base = 1;
-    bool isStar = 2; // isStar
 }
 
 message SearchStarredRepoReq {
@@ -216,11 +162,6 @@ service relation{
     rpc SearchFollowerByDeveloperId(SearchFollowerByDeveloperIdReq) returns (SearchFollowerByDeveloperIdResp);
     rpc DelAllFollower(DelAllFollowerReq) returns (DelAllFollowerResp);
     rpc DelAllFollowing(DelAllFollowingReq) returns (DelAllFollowingResp);
-    //-----------------------Fork-----------------------
-    rpc AddFork(AddForkReq) returns (AddForkResp);
-    rpc GetOrigin(GetOriginReq) returns (GetOriginResp);
-    rpc SearchFork(SearchForkReq) returns (SearchForkResp);
-    rpc DelAllFork(DelAllForkReq) returns (DelAllForkResp);
     //-----------------------Star-----------------------
     rpc AddStar(AddStarReq) returns (AddStarResp);
     rpc SearchStarredRepo(SearchStarredRepoReq) returns (SearchStarredRepoResp);

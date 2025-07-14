@@ -50,18 +50,3 @@ func BuildCompletedFollow(dataId int64, developerId int64) *relation.Follow {
 		FollowingId: 0,
 	}
 }
-
-// Fork
-func BuildFork(originalRepoId int64, forkRepoId int64) *relation.Fork {
-	return &relation.Fork{
-		OriginalRepoId: originalRepoId,
-		ForkRepoId:     forkRepoId,
-	}
-}
-
-func BuildCompletedFork(dataId int64, originalRepoId int64) *relation.Fork {
-	return &relation.Fork{
-		DataId:         dataId,
-		OriginalRepoId: originalRepoId,
-	}
-}

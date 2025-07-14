@@ -20,17 +20,6 @@ create table `aster`.`follow` (
         primary key (`data_id`)
 ) engine=InnoDB default charset=utf8mb4;
 
-create table `aster`.`fork` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `original_repo_id`           bigint          not null       comment 'Original Repository ID',
-    `fork_repo_id`               bigint          not null       comment 'Fork Repository ID',
-    `data_created_at`            timestamp       not null default  current_timestamp,
-    `data_updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
-    `data_deleted_at`            timestamp       null     default null,
-    constraint `pk_data_id`
-        primary key (`data_id`)
-) engine=InnoDB default charset=utf8mb4;
-
 create table `aster`.`star` (
     `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
     `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
@@ -63,15 +52,6 @@ create table `aster`.`following_updated_at` (
 create table `aster`.`follower_updated_at` (
     `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
     `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
-    `data_created_at`            timestamp       not null default  current_timestamp,
-    `data_updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
-    constraint `pk_data_id`
-        primary key (`data_id`)
-) engine=InnoDB default charset=utf8mb4;
-
-create table `aster`.`fork_updated_at` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `repo_id`               bigint          not null            comment 'Repo ID',
     `data_created_at`            timestamp       not null default  current_timestamp,
     `data_updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     constraint `pk_data_id`

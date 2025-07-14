@@ -15,7 +15,6 @@ const (
 
 	LockFollowing = "lock_following"
 	LockFollower  = "lock_follower"
-	LockFork      = "lock_fork"
 
 	LockIssuePROfUser = "lock_issue_pr_of_user"
 	LockCommentOfUser = "lock_comment_of_user"

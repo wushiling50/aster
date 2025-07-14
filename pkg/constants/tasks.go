@@ -49,8 +49,6 @@ const (
 	FetchFollowing
 	FetchFollower
 
-	FetchFork
-
 	FetchIssuePROfUser
 	FetchCommentOfUser
 	FetchReviewOfUser
@@ -63,8 +61,6 @@ const (
 
 	FetchFollowingCompletedDataId
 	FetchFollowerCompletedDataId
-
-	FetchForkCompletedDataId
 
 	FetchIssuePROfUserCompletedDataId
 	FetchCommentOfUserCompletedDataId

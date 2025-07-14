@@ -13,7 +13,6 @@ func Consumers(c config.Config, ctx context.Context, svc *svc.ServiceContext) []
 	return []service.Service{
 		kq.MustNewQueue(c.KafkaQueue.KqCreateRepoConsumerConf, NewCreateRepoConsumer(ctx, svc)),
 		kq.MustNewQueue(c.KafkaQueue.KqFollowConsumerConf, NewFollowConsumer(ctx, svc)),
-		kq.MustNewQueue(c.KafkaQueue.KqForkConsumerConf, NewForkConsumer(ctx, svc)),
 		kq.MustNewQueue(c.KafkaQueue.KqStarConsumerConf, NewStarConsumer(ctx, svc)),
 	}
 }

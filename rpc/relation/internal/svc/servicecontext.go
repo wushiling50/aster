@@ -15,13 +15,11 @@ type ServiceContext struct {
 
 	CreateRepoModel relation.CreateRepoModel
 	FollowModel     relation.FollowModel
-	ForkModel       relation.ForkModel
 	StarModel       relation.StarModel
 
 	CreatedRepoUpdatedAtModel relation.CreatedRepoUpdatedAtModel
 	FollowingUpdatedAtModel   relation.FollowingUpdatedAtModel
 	FollowerUpdatedAtModel    relation.FollowerUpdatedAtModel
-	ForkUpdatedAtModel        relation.ForkUpdatedAtModel
 	StarredRepoUpdatedAtModel relation.StarredRepoUpdatedAtModel
 
 	Locks       *locks.BLock
@@ -35,8 +33,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 		FollowModel: relation.NewFollowModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
-		ForkModel: relation.NewForkModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
-			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 		StarModel: relation.NewStarModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 
@@ -45,8 +41,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		FollowingUpdatedAtModel: relation.NewFollowingUpdatedAtModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 		FollowerUpdatedAtModel: relation.NewFollowerUpdatedAtModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
-			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
-		ForkUpdatedAtModel: relation.NewForkUpdatedAtModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 		StarredRepoUpdatedAtModel: relation.NewStarredRepoUpdatedAtModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),

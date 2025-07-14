@@ -65,27 +65,6 @@ func (s *RelationServer) DelAllFollowing(ctx context.Context, in *relation.DelAl
 	return l.DelAllFollowing(in)
 }
 
-// -----------------------Fork-----------------------
-func (s *RelationServer) AddFork(ctx context.Context, in *relation.AddForkReq) (*relation.AddForkResp, error) {
-	l := logic.NewAddForkLogic(ctx, s.svcCtx)
-	return l.AddFork(in)
-}
-
-func (s *RelationServer) GetOrigin(ctx context.Context, in *relation.GetOriginReq) (*relation.GetOriginResp, error) {
-	l := logic.NewGetOriginLogic(ctx, s.svcCtx)
-	return l.GetOrigin(in)
-}
-
-func (s *RelationServer) SearchFork(ctx context.Context, in *relation.SearchForkReq) (*relation.SearchForkResp, error) {
-	l := logic.NewSearchForkLogic(ctx, s.svcCtx)
-	return l.SearchFork(in)
-}
-
-func (s *RelationServer) DelAllFork(ctx context.Context, in *relation.DelAllForkReq) (*relation.DelAllForkResp, error) {
-	l := logic.NewDelAllForkLogic(ctx, s.svcCtx)
-	return l.DelAllFork(in)
-}
-
 // -----------------------Star-----------------------
 func (s *RelationServer) AddStar(ctx context.Context, in *relation.AddStarReq) (*relation.AddStarResp, error) {
 	l := logic.NewAddStarLogic(ctx, s.svcCtx)

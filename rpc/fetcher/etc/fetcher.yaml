@@ -49,12 +49,6 @@ KafkaQueue:
       - 127.0.0.1:9092
     Topic: create-repo-update
 
-  KqForkPusherConf:
-    Name: fork-pusher
-    Brokers:
-      - 127.0.0.1:9092
-    Topic: fork-update
-
   KqStarPusherConf:
     Name: star-pusher
     Brokers:

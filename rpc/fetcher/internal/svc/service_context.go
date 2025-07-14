@@ -24,7 +24,6 @@ type ServiceContext struct {
 	KqDeveloperPusher    *kq.Pusher
 	KqContributionPusher *kq.Pusher
 	KqCreateRepoPusher   *kq.Pusher
-	KqForkPusher         *kq.Pusher
 	KqStarPusher         *kq.Pusher
 	KqFollowPusher       *kq.Pusher
 	KqRepoPusher         *kq.Pusher
@@ -57,11 +56,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		KqCreateRepoPusher: kq.NewPusher(
 			c.KafkaQueue.KqCreateRepoPusherConf.Brokers,
 			c.KafkaQueue.KqCreateRepoPusherConf.Topic,
-			kq.WithAllowAutoTopicCreation(),
-			kq.WithSyncPush()),
-		KqForkPusher: kq.NewPusher(
-			c.KafkaQueue.KqForkPusherConf.Brokers,
-			c.KafkaQueue.KqForkPusherConf.Topic,
 			kq.WithAllowAutoTopicCreation(),
 			kq.WithSyncPush()),
 		KqStarPusher: kq.NewPusher(

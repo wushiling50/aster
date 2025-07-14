@@ -70,11 +70,6 @@ func (c *FetcherTaskConsumer) Consume(ctx context.Context, task *asynq.Task) (er
 
 		l := logic.NewFetchFollowingLogic(ctx, c.svcCtx)
 		err = l.FetchFollowing(msg.Id)
-	case constants.FetchFork:
-		logx.Info("Consume Message: FetchFork")
-
-		l := logic.NewFetchFollowingLogic(ctx, c.svcCtx)
-		err = l.FetchFollowing(msg.Id)
 	case constants.FetchIssuePROfUser:
 		logx.Info("Consume Message: FetchIssuePROfUser")
 

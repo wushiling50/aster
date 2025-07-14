@@ -16,7 +16,6 @@ type Config struct {
 		KqDeveloperPusherConf    config.KqPusherConf
 		KqContributionPusherConf config.KqPusherConf
 		KqCreateRepoPusherConf   config.KqPusherConf
-		KqForkPusherConf         config.KqPusherConf
 		KqStarPusherConf         config.KqPusherConf
 		KqFollowPusherConf       config.KqPusherConf
 		KqRepoPusherConf         config.KqPusherConf
