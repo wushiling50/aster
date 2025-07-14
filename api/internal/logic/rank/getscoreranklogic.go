@@ -101,7 +101,8 @@ func (l *GetScoreRankLogic) GetScoreRank(req *types.GetScoreRankReq) (resp *type
 		})
 	}
 
-	resp.Total, err = l.svcCtx.RankModel.GetScoresTotal(l.ctx, constants.ScoreKey)
+	resp.QueryTotal = int64(len(resp.Rank))
+	resp.DataTotal, err = l.svcCtx.RankModel.GetScoresTotal(l.ctx, constants.ScoreKey)
 	if err != nil {
 		logx.Errorf("applet.GetScoreRank: Get Scores Total failed: %v", err.Error())
 		return

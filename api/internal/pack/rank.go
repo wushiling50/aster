@@ -5,13 +5,15 @@ import (
 )
 
 type GetScoreRank struct {
-	Rank  []*types.DeveloperWithScore `json:"rank"`
-	Total int64                       `json:"total"`
+	Rank       []*types.DeveloperWithScore `json:"rank"`
+	QueryTotal int64                       `json:"query_total"`
+	DataTotal  int64                       `json:"data_total"`
 }
 
 func BuildRank(res *types.GetScoreRankResp) *GetScoreRank {
 	return &GetScoreRank{
-		Rank:  res.Rank,
-		Total: res.Total,
+		Rank:       res.Rank,
+		QueryTotal: res.QueryTotal,
+		DataTotal:  res.DataTotal,
 	}
 }

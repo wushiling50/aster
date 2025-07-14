@@ -70,8 +70,9 @@ type GetScoreRankReq struct {
 }
 
 type GetScoreRankResp struct {
-	Rank  []*DeveloperWithScore `json:"rank"`
-	Total int64                 `json:"total"`
+	Rank       []*DeveloperWithScore `json:"rank"`
+	QueryTotal int64                 `json:"query_total"`
+	DataTotal  int64                 `json:"data_total"`
 }
 
 type GetScoreReq struct {

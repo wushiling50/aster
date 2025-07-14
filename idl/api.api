@@ -73,8 +73,9 @@ type GetScoreRankReq {
 }
 
 type GetScoreRankResp {
-	Rank  []*DeveloperWithScore `json:"rank"`
-	Total int64                 `json:"total"`
+	Rank       []*DeveloperWithScore `json:"rank"`
+	QueryTotal int64                 `json:"query_total"`
+	DataTotal  int64                 `json:"data_total"`
 }
 
 @server (

@@ -25,6 +25,7 @@ type ServiceContext struct {
 	Config config.Config
 
 	Locks          *locks.BLock
+	RedisClient    *redis.Redis
 	AsynqClient    *asynq.Client
 	DeepSeekClient *openai.Client
 
@@ -51,7 +52,9 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
-		Locks:  locks.NewBLock(redis.MustNewRedis(c.Redis.RedisConf), c.Timeout),
+
+		Locks:       locks.NewBLock(redis.MustNewRedis(c.Redis.RedisConf), c.Timeout),
+		RedisClient: redis.MustNewRedis(c.Redis.RedisConf),
 		AsynqClient: asynq.NewClient(asynq.RedisClientOpt{
 			Addr:     c.AsynqRedisConf.Addr,
 			Password: c.AsynqRedisConf.Pass,

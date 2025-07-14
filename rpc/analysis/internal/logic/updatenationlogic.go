@@ -389,12 +389,14 @@ func (l *UpdateNationLogic) updateNation(model *model_analysis.Nation) error {
 
 			dataId, err := l.svcCtx.NationModel.CreateDataId()
 			if err != nil {
+				err = errno.InternalDatabaseError.WithError(err)
 				return err
 			}
 
 			model.DataId = dataId
 			_, err = l.svcCtx.NationModel.Insert(l.ctx, model)
 			if err != nil {
+				err = errno.InternalDatabaseError.WithError(err)
 				return err
 			}
 
@@ -407,6 +409,7 @@ func (l *UpdateNationLogic) updateNation(model *model_analysis.Nation) error {
 	model.DataId = nation.DataId
 	err = l.svcCtx.NationModel.Update(l.ctx, model)
 	if err != nil {
+		err = errno.InternalDatabaseError.WithError(err)
 		return err
 	}
 

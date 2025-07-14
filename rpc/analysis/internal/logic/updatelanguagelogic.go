@@ -140,6 +140,7 @@ func (l *UpdateLanguageLogic) checkIfNeedUpdate(developerId int64) (bool, error)
 func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
 	createdRepoUpdatedAt, err := l.svcCtx.CreatedRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		err = errno.InternalDatabaseError.WithError(err)
 		return err
 	}
 
@@ -222,12 +223,14 @@ func (l *UpdateLanguageLogic) updateLanguage(model *model_analysis.Languages) er
 
 			dataId, err := l.svcCtx.LanguagesModel.CreateDataId()
 			if err != nil {
+				err = errno.InternalDatabaseError.WithError(err)
 				return err
 			}
 
 			model.DataId = dataId
 			_, err = l.svcCtx.LanguagesModel.Insert(l.ctx, model)
 			if err != nil {
+				err = errno.InternalDatabaseError.WithError(err)
 				return err
 			}
 
@@ -240,6 +243,7 @@ func (l *UpdateLanguageLogic) updateLanguage(model *model_analysis.Languages) er
 	model.DataId = language.DataId
 	err = l.svcCtx.LanguagesModel.Update(l.ctx, model)
 	if err != nil {
+		err = errno.InternalDatabaseError.WithError(err)
 		return err
 	}
 

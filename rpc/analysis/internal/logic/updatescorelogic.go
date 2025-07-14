@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"math"
+	"strconv"
 
 	"github.com/wushiling50/aster/gen/analysis"
 	"github.com/wushiling50/aster/gen/contribution"
@@ -17,6 +18,7 @@ import (
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/analysis/internal/pack"
 	"github.com/wushiling50/aster/rpc/analysis/internal/svc"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -42,6 +44,8 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 		contributionsCategorizedByRepoId = make(map[int64][]*contribution.Contribution)
 		developerScore                   float64
 		totalScore                       float64
+
+		eg errgroup.Group
 	)
 
 	need, err := l.checkIfNeedUpdate(in.DeveloperId)
@@ -60,14 +64,14 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 	if err != nil {
 		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
-		resp.Base = pack.BuildSuccessResp()
+		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
 
 	contributions, err := l.rpcGetContributinoById(in.DeveloperId, 1000, 1)
 	if err != nil {
 		logx.Error(err)
-		resp.Base = pack.BuildSuccessResp()
+		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
 
@@ -94,14 +98,14 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 		if err != nil {
 			logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
 			err = errno.InternalAsynqError.WithError(err)
-			resp.Base = pack.BuildSuccessResp()
+			resp.Base = pack.BuildBaseResp(err)
 			return resp, nil
 		}
 
 		theRepo, err := l.rpcGetRepoById(repoId)
 		if err != nil {
 			logx.Error(err)
-			resp.Base = pack.BuildSuccessResp()
+			resp.Base = pack.BuildBaseResp(err)
 			return resp, nil
 		}
 
@@ -146,14 +150,14 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 	if err != nil {
 		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
-		resp.Base = pack.BuildSuccessResp()
+		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
 
 	followerCount, err := l.rpcGetFollowerCountById(in.DeveloperId)
 	if err != nil {
 		logx.Error(err)
-		resp.Base = pack.BuildSuccessResp()
+		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
 
@@ -161,14 +165,14 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 	if err != nil {
 		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
 		err = errno.InternalAsynqError.WithError(err)
-		resp.Base = pack.BuildSuccessResp()
+		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
 
 	starredCount, err := l.rpcGetStarredCountById(in.DeveloperId)
 	if err != nil {
 		logx.Error(err)
-		resp.Base = pack.BuildSuccessResp()
+		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
 
@@ -179,12 +183,19 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 
 	totalScore += developerScore
 
-	err = l.updateScore(&model_analysis.Score{
-		DeveloperId: in.DeveloperId,
-		Score:       totalScore,
+	// update score
+	eg.Go(func() error {
+		return l.updateScore(&model_analysis.Score{
+			DeveloperId: in.DeveloperId,
+			Score:       totalScore,
+		})
 	})
 
-	if err != nil {
+	eg.Go(func() error {
+		return l.updateRankScore(in.DeveloperId, totalScore)
+	})
+
+	if err := eg.Wait(); err != nil {
 		logx.Errorf("service.UpdateScore: Update Score Failed: %w", err)
 		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
@@ -482,12 +493,14 @@ func (l *UpdateScoreLogic) updateScore(model *model_analysis.Score) error {
 
 			dataId, err := l.svcCtx.ScoreModel.CreateDataId()
 			if err != nil {
+				err = errno.InternalDatabaseError.WithError(err)
 				return err
 			}
 
 			model.DataId = dataId
 			_, err = l.svcCtx.ScoreModel.Insert(l.ctx, model)
 			if err != nil {
+				err = errno.InternalDatabaseError.WithError(err)
 				return err
 			}
 
@@ -500,6 +513,17 @@ func (l *UpdateScoreLogic) updateScore(model *model_analysis.Score) error {
 	model.DataId = score.DataId
 	err = l.svcCtx.ScoreModel.Update(l.ctx, model)
 	if err != nil {
+		err = errno.InternalDatabaseError.WithError(err)
+		return err
+	}
+
+	return nil
+}
+
+func (l *UpdateScoreLogic) updateRankScore(developerId int64, score float64) error {
+	_, err := l.svcCtx.RedisClient.ZaddFloatCtx(l.ctx, constants.ScoreKey, score, strconv.FormatInt(developerId, 10))
+	if err != nil {
+		err = errno.InternalRedisError.WithError(err)
 		return err
 	}
 
