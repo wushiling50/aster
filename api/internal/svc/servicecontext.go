@@ -5,6 +5,7 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/api/internal/config"
 	"github.com/wushiling50/aster/pkg/locks"
+	model_developer "github.com/wushiling50/aster/pkg/model/developer"
 	"github.com/wushiling50/aster/pkg/model/rank"
 	"github.com/wushiling50/aster/pkg/utils"
 	analysis "github.com/wushiling50/aster/rpc/analysis/analysisclient"
@@ -19,8 +20,11 @@ type ServiceContext struct {
 	Config         config.Config
 	AsynqClient    *asynq.Client
 	AsynqInspector *asynq.Inspector
+
 	RankModel      *rank.RankModel
-	Locks          *locks.BLock
+	DeveloperModel model_developer.DeveloperModel
+
+	Locks *locks.BLock
 
 	DeveloperRpcClient   developer.DeveloperZrpcClient
 	AnalysisRpcClient    analysis.Analysis
@@ -42,6 +46,10 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		}),
 		RankModel: rank.NewRankModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			redis.MustNewRedis(c.Redis), c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
+
+		DeveloperModel: model_developer.NewDeveloperModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
+			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
+
 		Locks: locks.NewBLock(redis.MustNewRedis(c.Redis), c.Timeout),
 
 		DeveloperRpcClient:   developer.NewDeveloperZrpcClient(zrpc.MustNewClient(c.Services.Developer)),

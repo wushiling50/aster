@@ -213,6 +213,15 @@ func (l *UpdateScoreLogic) checkIfNeedUpdate(developerId int64) (bool, error) {
 
 func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 	// Comment
+	commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(commentOfUserUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksCommentOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksCommentOfUserKey)
@@ -231,6 +240,15 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 	}
 
 	// Issue-PR
+	issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(issuePROfUserUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksIssuePROfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksIssuePROfUserKey)
@@ -249,6 +267,15 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 	}
 
 	// Review
+	reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(reviewOfUserUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksReviewOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksReviewOfUserKey)
@@ -292,6 +319,15 @@ func (l *UpdateScoreLogic) rpcGetContributinoById(developerId, limit, page int64
 }
 
 func (l *UpdateScoreLogic) pushRepoTask(repoId int64) (err error) {
+	repo, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, repoId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(repo.DataUpdatedAt) {
+		return nil
+	}
+
 	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockRepo, repoId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
@@ -338,6 +374,15 @@ func (l *UpdateScoreLogic) rpcGetRepoById(repoId int64) (*repo.Repo, error) {
 }
 
 func (l *UpdateScoreLogic) pushFollowerTask(developerId int64) (err error) {
+	followerUpdatedAt, err := l.svcCtx.FollowerUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(followerUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockFollower, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
@@ -379,6 +424,15 @@ func (l *UpdateScoreLogic) rpcGetFollowerCountById(developerId int64) (int, erro
 }
 
 func (l *UpdateScoreLogic) pushStarredTask(developerId int64) (err error) {
+	starredRepoUpdatedAt, err := l.svcCtx.StarredRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(starredRepoUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockStarredRepo, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)

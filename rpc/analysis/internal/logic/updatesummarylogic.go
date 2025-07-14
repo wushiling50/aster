@@ -150,6 +150,15 @@ func (l *UpdateSummaryLogic) getSummaryByLLModel(developerId int64) (summary str
 }
 
 func (l *UpdateSummaryLogic) pushDeveloperTask(developerId int64) (err error) {
+	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(developer.DataUpdatedAt) {
+		return nil
+	}
+
 	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
@@ -197,6 +206,15 @@ func (l *UpdateSummaryLogic) rpcGetDeveloperById(developerId int64) (*developer.
 
 func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error) {
 	// Comment
+	commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(commentOfUserUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksCommentOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksCommentOfUserKey)
@@ -215,6 +233,15 @@ func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error)
 	}
 
 	// Issue-PR
+	issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(issuePROfUserUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksIssuePROfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksIssuePROfUserKey)
@@ -233,6 +260,15 @@ func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error)
 	}
 
 	// Review
+	reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(reviewOfUserUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksReviewOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksReviewOfUserKey)

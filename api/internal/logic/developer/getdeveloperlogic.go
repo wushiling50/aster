@@ -2,6 +2,7 @@ package developer
 
 import (
 	"context"
+	"errors"
 
 	"github.com/wushiling50/aster/api/internal/pack"
 	"github.com/wushiling50/aster/api/internal/svc"
@@ -9,6 +10,7 @@ import (
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/github"
+	model_developer "github.com/wushiling50/aster/pkg/model/developer"
 	"github.com/wushiling50/aster/pkg/tasks"
 	"github.com/wushiling50/aster/pkg/utils"
 	developer "github.com/wushiling50/aster/rpc/developer/developerclient"
@@ -61,6 +63,15 @@ func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *type
 }
 
 func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
+	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_developer.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(developer.DataUpdatedAt) {
+		return nil
+	}
+
 	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCreatedRepo, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)

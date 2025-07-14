@@ -137,7 +137,16 @@ func (l *UpdateLanguageLogic) checkIfNeedUpdate(developerId int64) (bool, error)
 	}
 }
 
-func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) (err error) {
+func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
+	createdRepoUpdatedAt, err := l.svcCtx.CreatedRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+		return err
+	}
+
+	if !github.CheckIfDataExpired(createdRepoUpdatedAt.DataUpdatedAt) {
+		return nil
+	}
+
 	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCreatedRepo, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
