@@ -7,6 +7,7 @@ import (
 	"github.com/wushiling50/aster/gen/relation"
 	"github.com/wushiling50/aster/rpc/relation/internal/pack"
 	"github.com/wushiling50/aster/rpc/relation/internal/svc"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -46,11 +47,16 @@ func (l *DelAllFollowingLogic) delAllFollowing(developerId, page, limit int64) e
 		return err
 	}
 
+	eg := errgroup.Group{}
 	for _, following := range followings {
-		err := l.svcCtx.FollowModel.Delete(l.ctx, following.DataId)
-		if err != nil {
-			return err
-		}
+		dataId := following.DataId
+		eg.Go(func() error {
+			return l.svcCtx.FollowModel.Delete(l.ctx, dataId)
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		return err
 	}
 
 	return nil

@@ -13,6 +13,7 @@ import (
 	"github.com/wushiling50/aster/rpc/fetcher/internal/svc"
 	"github.com/zeromicro/go-zero/core/jsonx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"golang.org/x/sync/errgroup"
 )
 
 type FetchIssuePROfUserLogic struct {
@@ -35,6 +36,7 @@ func (l *FetchIssuePROfUserLogic) FetchIssuePROfUser(userId int64, createAfter s
 
 		allIssuePR []*github.Issue
 		repos      map[int64]*github.Repository = make(map[int64]*github.Repository)
+		eg         errgroup.Group
 	)
 
 	githubUser, _, err = githubFunc.GetUserById(l.ctx, userId)
@@ -108,9 +110,14 @@ func (l *FetchIssuePROfUserLogic) FetchIssuePROfUser(userId int64, createAfter s
 	}
 
 	for _, repo := range repos {
-		if err = doFetchRepo(l.ctx, l.svcCtx, repo); err != nil {
-			continue
-		}
+		theRepo := repo
+		eg.Go(func() error {
+			return doFetchRepo(l.ctx, l.svcCtx, theRepo)
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		logx.Info("Partial Repo Push Failed")
 	}
 
 	completedContribution := pack.BuildCompletedContribution(constants.FetchIssuePROfUserCompletedDataId, userId)

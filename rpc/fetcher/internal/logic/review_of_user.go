@@ -13,6 +13,7 @@ import (
 	"github.com/wushiling50/aster/rpc/fetcher/internal/svc"
 	"github.com/zeromicro/go-zero/core/jsonx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"golang.org/x/sync/errgroup"
 )
 
 type FetchReviewOfUserLogic struct {
@@ -34,6 +35,8 @@ func (l *FetchReviewOfUserLogic) FetchReviewOfUser(userId int64, createAfter str
 		githubUser *github.User
 		allReview  []*githubFunc.ReviewWithRepoId
 		allRepo    map[int64]*github.Repository
+
+		eg errgroup.Group
 	)
 
 	githubUser, _, err = githubFunc.GetUserById(l.ctx, userId)
@@ -71,9 +74,14 @@ func (l *FetchReviewOfUserLogic) FetchReviewOfUser(userId int64, createAfter str
 	}
 
 	for _, repo := range allRepo {
-		if err = doFetchRepo(l.ctx, l.svcCtx, repo); err != nil {
-			continue
-		}
+		theRepo := repo
+		eg.Go(func() error {
+			return doFetchRepo(l.ctx, l.svcCtx, theRepo)
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		logx.Info("Partial Repo Push Failed")
 	}
 
 	completedContribution := pack.BuildCompletedContribution(constants.FetchReviewOfUserCompletedDataId, userId)

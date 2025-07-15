@@ -7,6 +7,7 @@ import (
 	"github.com/wushiling50/aster/gen/relation"
 	"github.com/wushiling50/aster/rpc/relation/internal/pack"
 	"github.com/wushiling50/aster/rpc/relation/internal/svc"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -46,11 +47,17 @@ func (l *DelAllStaringDeveloperLogic) delAllStaringDeveloper(repoId, page, limit
 		return err
 	}
 
+	eg := errgroup.Group{}
 	for _, star := range stars {
-		err := l.svcCtx.StarModel.Delete(l.ctx, star.DataId)
-		if err != nil {
-			return err
-		}
+		dataId := star.DataId
+
+		eg.Go(func() error {
+			return l.svcCtx.StarModel.Delete(l.ctx, dataId)
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		return err
 	}
 
 	return nil

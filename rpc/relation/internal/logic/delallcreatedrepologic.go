@@ -7,6 +7,7 @@ import (
 	"github.com/wushiling50/aster/gen/relation"
 	"github.com/wushiling50/aster/rpc/relation/internal/pack"
 	"github.com/wushiling50/aster/rpc/relation/internal/svc"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -46,11 +47,17 @@ func (l *DelAllCreatedRepoLogic) delAllCreatedRepo(developerId, page, limit int6
 		return err
 	}
 
+	eg := errgroup.Group{}
 	for _, createdRepo := range createRepos {
-		err := l.svcCtx.CreateRepoModel.Delete(l.ctx, createdRepo.DataId)
-		if err != nil {
-			return err
-		}
+		dataId := createdRepo.DataId
+
+		eg.Go(func() error {
+			return l.svcCtx.CreateRepoModel.Delete(l.ctx, dataId)
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		return err
 	}
 
 	return nil
