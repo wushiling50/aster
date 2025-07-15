@@ -2,10 +2,15 @@ FROM golang:alpine AS builder
 
 LABEL stage=gobuilder
 
-ENV CGO_ENABLED 0
-ENV GOPROXY https://goproxy.cn,direct
+# 设置环境变量
+ENV TZ=Asia/Shanghai
+ENV CGO_ENABLED=0
+ENV GOPROXY=https://goproxy.cn,direct
+ENV GOOS=linux
+ENV GOARCH=amd64
+ENV GOCACHE=/root/.cache/go-build
+# 换源，更新软件依赖
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-
 RUN apk update --no-cache && apk add --no-cache tzdata
 
 WORKDIR /build
@@ -14,16 +19,15 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-RUN go build -ldflags="-s -w" -o /app/api_processor rpc/rpc/api_processor/api_processor.go
+COPY ./rpc/api_processor/etc /app/etc
+RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags="-s -w" -o /app/api_processor ./rpc/api_processor
 
-
-FROM scratch
-
+FROM alpine:latest
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/Shanghai
-ENV TZ Asia/Shanghai
 
 WORKDIR /app
 COPY --from=builder /app/api_processor /app/api_processor
+COPY --from=builder /app/etc /app/etc
 
-CMD ["./api_processor"]
+CMD ["./api_processor","-f", "etc/api_processor.yaml"]

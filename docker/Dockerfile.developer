@@ -2,10 +2,15 @@ FROM golang:alpine AS builder
 
 LABEL stage=gobuilder
 
-ENV CGO_ENABLED 0
-ENV GOPROXY https://goproxy.cn,direct
+# 设置环境变量
+ENV TZ=Asia/Shanghai
+ENV CGO_ENABLED=0
+ENV GOPROXY=https://goproxy.cn,direct
+ENV GOOS=linux
+ENV GOARCH=amd64
+ENV GOCACHE=/root/.cache/go-build
+# 换源，更新软件依赖
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-
 RUN apk update --no-cache && apk add --no-cache tzdata
 
 WORKDIR /build
@@ -14,16 +19,15 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-RUN go build -ldflags="-s -w" -o /app/developer rpc/rpc/developer/developer.go
+COPY ./rpc/developer/etc /app/etc
+RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags="-s -w" -o /app/developer ./rpc/developer
 
-
-FROM scratch
-
+FROM alpine:latest
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/Shanghai
-ENV TZ Asia/Shanghai
 
 WORKDIR /app
 COPY --from=builder /app/developer /app/developer
+COPY --from=builder /app/etc /app/etc
 
-CMD ["./developer"]
+CMD ["./developer","-f", "etc/developer.yaml"]
