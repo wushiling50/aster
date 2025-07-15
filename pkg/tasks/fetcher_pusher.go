@@ -5,6 +5,7 @@ import (
 
 	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/pkg/constants"
+	"github.com/wushiling50/aster/pkg/errno"
 )
 
 func FetcherTaskPusher(c *asynq.Client, fetchType int, id int64, updateAfter string, searchLimit int64) (err error) {
@@ -14,6 +15,7 @@ func FetcherTaskPusher(c *asynq.Client, fetchType int, id int64, updateAfter str
 	)
 
 	if task, taskId, err = NewFetcherTask(fetchType, id, updateAfter, searchLimit); err != nil {
+		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
 
@@ -28,6 +30,7 @@ func FetcherTaskPusher(c *asynq.Client, fetchType int, id int64, updateAfter str
 		if errors.Is(err, asynq.ErrTaskIDConflict) {
 			err = nil
 		} else {
+			err = errno.InternalAsynqError.WithError(err)
 			return
 		}
 	}

@@ -58,7 +58,6 @@ func (l *UpdateLanguageLogic) UpdateLanguage(in *analysis.UpdateAnalysisReq) (*a
 	err = l.pushCreatedRepoTask(in.DeveloperId)
 	if err != nil {
 		logx.Errorf("service.UpdateLanguage: Failed To Enqueue Task: %v", err.Error())
-		err = errno.InternalAsynqError.WithError(err)
 		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}

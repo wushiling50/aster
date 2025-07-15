@@ -44,7 +44,6 @@ func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *type
 	err = l.pushDeveloperTask(developerId)
 	if err != nil {
 		logx.Errorf("applet.PostDeveloper: Failed To Enqueue Task: %v", err.Error())
-		err = errno.InternalAsynqError.WithError(err)
 		return
 	}
 

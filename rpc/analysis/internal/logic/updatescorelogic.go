@@ -63,7 +63,6 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 	err = l.pushContributionTask(in.DeveloperId)
 	if err != nil {
 		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
-		err = errno.InternalAsynqError.WithError(err)
 		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
@@ -149,7 +148,6 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 	err = l.pushFollowerTask(in.DeveloperId)
 	if err != nil {
 		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
-		err = errno.InternalAsynqError.WithError(err)
 		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
@@ -164,7 +162,6 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 	err = l.pushStarredTask(in.DeveloperId)
 	if err != nil {
 		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
-		err = errno.InternalAsynqError.WithError(err)
 		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/wushiling50/aster/pkg/constants"
+	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )
@@ -30,6 +31,7 @@ func (b *BLock) GetNewLocksKey(updateType string, id int64) string {
 func (b *BLock) DelOldLocksKey(ctx context.Context, key string) error {
 	_, err := b.client.DelCtx(ctx, key)
 	if err != nil {
+		err = errno.InternalLockError.WithError(err)
 		return err
 	}
 
@@ -39,12 +41,14 @@ func (b *BLock) DelOldLocksKey(ctx context.Context, key string) error {
 func (b *BLock) Block(ctx context.Context, key string) error {
 	node, err := redis.CreateBlockingNode(b.client)
 	if err != nil {
+		err = errno.InternalLockError.WithError(err)
 		return err
 	}
 	defer node.Close()
 
 	_, err = b.client.BlpopWithTimeoutCtx(ctx, node, time.Duration(b.expire)*time.Millisecond, key)
 	if err != nil {
+		err = errno.InternalLockError.WithError(err)
 		return err
 	}
 
@@ -54,6 +58,7 @@ func (b *BLock) Block(ctx context.Context, key string) error {
 
 func (b *BLock) Unblock(ctx context.Context, key string) error {
 	if _, err := b.client.LpushCtx(ctx, key, ""); err != nil {
+		err = errno.InternalLockError.WithError(err)
 		return err
 	}
 

@@ -27,4 +27,5 @@ const (
 	InternalKafkaErrorCode     = 50008 // Kafka 错误
 	InternalScriptErrorCode    = 50009 // Script 错误
 	InternalLLMErrorCode       = 50010 // LLM 错误
+	InternalLockErrorCode      = 50011 // Lock 错误
 )
