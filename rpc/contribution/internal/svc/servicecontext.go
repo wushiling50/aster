@@ -36,7 +36,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		CommentOfUserUpdatedAtModel: contribution.NewCommentOfUserUpdatedAtModel(sqlx.NewMysql(utils.GetMysqlDSN(c.Mysql)),
 			c.Cache, c.Snowflake.DatancenterId, c.Snowflake.WorkerId),
 
-		Locks: locks.NewBLock(redis.MustNewRedis(c.Redis.RedisConf), c.Timeout),
+		Locks: locks.NewBLock(redis.MustNewRedis(c.RedisClient), c.Timeout),
 		AsynqClient: asynq.NewClient(asynq.RedisClientOpt{
 			Addr:     c.AsynqRedisConf.Addr,
 			Password: c.AsynqRedisConf.Pass,

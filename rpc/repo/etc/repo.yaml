@@ -39,10 +39,10 @@ Mysql:
   Charset: utf8mb4
 
 Cache:
-  Host: 127.0.0.1:6379
-  Pass: aster
+  - Host: 127.0.0.1:6379
+    Pass: aster
 
-Redis:
+RedisClient:
   Host: 127.0.0.1:6379
   Type: node
   Pass: aster

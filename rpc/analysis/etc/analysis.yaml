@@ -39,10 +39,10 @@ Mysql:
   Charset: utf8mb4
 
 Cache:
-  Host: 127.0.0.1:6379
-  Pass: aster
+  - Host: 127.0.0.1:6379
+    Pass: aster
 
-Redis:
+RedisClient:
   Host: 127.0.0.1:6379
   Type: node
   Pass: aster
@@ -54,10 +54,10 @@ AsynqRedisConf:
 
 DeepSeek:
   Endpoint: https://api.deepseek.com/chat/completions
-	Model: deepseek-reasoner  
-	MaxTokens: 4096
-	Temperature: 1.0
-	TopP: 0.9
+  Model: deepseek-reasoner  
+  MaxTokens: 4096
+  Temperature: 1.0
+  TopP: 0.9
 
 # RPC 服务配置
 Services:

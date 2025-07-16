@@ -40,8 +40,8 @@ Redis:
   Pass: aster
 
 Cache:
-  Host: 127.0.0.1:6379
-  Pass: aster
+  - Host: 127.0.0.1:6379
+    Pass: aster
 
 AsynqRedisConf:
   Addr: 127.0.0.1:6379

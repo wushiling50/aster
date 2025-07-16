@@ -234,6 +234,19 @@ services:
     networks:
       - aster
 
+  asynqmon:
+    image: hibiken/asynqmon:latest  # 使用最新版
+    container_name: aster-asynqmon-dashboard
+    restart: always
+    ports:
+      - 6380:8080 
+    env_file:
+      - "./env/asynqmon.env"
+    depends_on:
+      - redis
+    networks:
+      - aster
+
 networks:
   aster:
     driver: bridge

@@ -53,8 +53,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
 
-		Locks:       locks.NewBLock(redis.MustNewRedis(c.Redis.RedisConf), c.Timeout),
-		RedisClient: redis.MustNewRedis(c.Redis.RedisConf),
+		Locks:       locks.NewBLock(redis.MustNewRedis(c.RedisClient), c.Timeout),
+		RedisClient: redis.MustNewRedis(c.RedisClient),
 		AsynqClient: asynq.NewClient(asynq.RedisClientOpt{
 			Addr:     c.AsynqRedisConf.Addr,
 			Password: c.AsynqRedisConf.Pass,

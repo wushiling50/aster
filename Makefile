@@ -13,7 +13,7 @@ NO_DB_SERVICES := id_generator
 
 .PHONY: env-up
 env-up:
-	sudo rm -f ./docker/data//mysql/mysql.sock
+	sudo rm -f ./docker/data/mysql/mysql.sock
 	@ docker compose -f ./docker/docker-compose.yml up -d
 
 .PHONY: env-down
@@ -25,9 +25,24 @@ api-go:
 	goctl api format --dir ${IDL_PATH}
 	goctl api go --dir=${API_PATH} --api ${IDL_PATH}/api.api
 
+# TODO: add dockerfile build & run command
+.PHONY: rpc-run
+rpc-run: 
+	echo "TODO"
+
 .PHONY: api-run
 api-run:
+	go run ./rpc/developer/developer.go
+	go run ./rpc/contribution/contribution.go
+	go run ./rpc/relation/relation.go
+	go run ./rpc/repo/repo.go
+	
+	go run ./rpc/analysis/analysis.go
+	
+	go run ./rpc/id_generator/idgenerator.go
+
 	go run ./api/applet.go
+	
 
 $(SERVICES): gen-base
 
