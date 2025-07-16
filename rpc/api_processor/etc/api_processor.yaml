@@ -4,7 +4,7 @@ Mode: dev
 # dev 环境模式配置
 DevServer:
   Enabled: true
-  Port: 6002
+  Port: 5005
 
 # 日志配置
 Log:

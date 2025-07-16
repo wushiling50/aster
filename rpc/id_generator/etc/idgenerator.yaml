@@ -16,7 +16,7 @@ Log:
 
 DevServer:
   Enabled: true
-  Port: 6003
+  Port: 5009
 
 Telemetry:
   Name: idgenerator.rpc

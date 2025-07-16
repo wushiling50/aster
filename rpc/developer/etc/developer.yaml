@@ -11,7 +11,7 @@ Etcd:
 # dev 环境模式配置
 DevServer:
   Enabled: true
-  Port: 5003
+  Port: 5007
 
 # 日志配置
 Log:
