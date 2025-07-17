@@ -5,11 +5,16 @@ IDL_PATH = $(DIR)/idl
 API_PATH = $(DIR)/api
 GEN_PATH = $(DIR)/gen
 RPC_PATH = $(DIR)/rpc
+DOCKER_PATH = $(DIR)/docker
 GO_MODULE := github.com/wushiling50/aster
+IMAGE_TAG := 0.1
 
 # 服务名
-SERVICES := analysis contribution developer id_generator relation repo
+SERVICES := contribution developer id_generator relation repo analysis
 NO_DB_SERVICES := id_generator
+
+DOCKER_BUILD := contribution developer id_generator relation repo analysis api_processor fetcher api
+
 
 .PHONY: env-up
 env-up:
@@ -42,7 +47,16 @@ api-run:
 	go run ./rpc/id_generator/idgenerator.go
 
 	go run ./api/applet.go
-	
+
+.PHONY: aster-build-all
+aster-build-all:
+	for svc in $(DOCKER_BUILD); do \
+		docker build -f $(DOCKER_PATH)/Dockerfile.$$svc -t aster/$$svc:$(IMAGE_TAG) . ;\
+	done
+
+.PHONY: $(addprefix aster-build-,$(DOCKER_BUILD))
+$(addprefix aster-build-,$(DOCKER_BUILD)): aster-build-%:
+	docker build -f $(DOCKER_PATH)/Dockerfile.$* -t aster/$*:$(IMAGE_TAG) .
 
 $(SERVICES): gen-base
 

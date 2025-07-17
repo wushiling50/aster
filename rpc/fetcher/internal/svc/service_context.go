@@ -12,13 +12,12 @@ import (
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/rpc/fetcher/internal/config"
 	"github.com/zeromicro/go-queue/kq"
-	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
-	Config      config.Config
-	Redis       *redis.Redis
+	Config config.Config
+
 	AsynqServer *asynq.Server
 
 	KqDeveloperPusher    *kq.Pusher
@@ -36,8 +35,8 @@ type ServiceContext struct {
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config:                c,
-		Redis:                 redis.MustNewRedis(c.Redis),
+		Config: c,
+
 		DeveloperRpcClient:    developer.NewDeveloperZrpcClient(zrpc.MustNewClient(c.Services.Developer)),
 		RelationRpcClient:     relation.NewRelation(zrpc.MustNewClient(c.Services.Relation)),
 		ContributionRpcClient: contribution.NewContributionZrpcClient(zrpc.MustNewClient(c.Services.Contribution)),
