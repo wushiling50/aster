@@ -12,7 +12,7 @@ import (
 )
 
 func githubClientInit() *github.Client {
-	return github.NewClient(nil).WithAuthToken("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")
+	return github.NewClient(nil).WithAuthToken("*********")
 }
 
 func GetIdByLogin(ctx context.Context, login string) (id int64, err error) {
