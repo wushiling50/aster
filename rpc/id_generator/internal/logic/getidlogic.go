@@ -36,6 +36,7 @@ func (l *GetIdLogic) GetId(in *id_generator.GetIdReq) (*id_generator.GetIdResp, 
 	}
 
 	resp.Id = id
+	resp.Base = pack.BuildSuccessResp()
 
 	return resp, nil
 }
