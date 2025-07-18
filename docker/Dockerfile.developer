@@ -16,7 +16,7 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-COPY ./rpc/developer/etc /app/etc
+COPY ./docker/etc /app/rpc/developer/etc
 RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags="-s -w" -o /app/developer ./rpc/developer
 
 FROM alpine:latest
@@ -29,6 +29,6 @@ RUN apk update --no-cache && apk add --no-cache tzdata
 
 WORKDIR /app
 COPY --from=builder /app/developer /app/developer
-COPY --from=builder /app/etc /app/etc
+COPY --from=builder /app/rpc/developer/etc /app/rpc/developer/etc
 
-CMD ["./developer","-f", "etc/developer.yaml"]
+CMD ["./developer","-f", "rpc/developer/etc/developer.yaml"]

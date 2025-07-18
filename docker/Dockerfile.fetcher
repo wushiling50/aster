@@ -16,7 +16,7 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-COPY ./rpc/fetcher/etc /app/etc
+COPY ./docker/etc /app/rpc/fetcher/etc
 RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags="-s -w" -o /app/fetcher ./rpc/fetcher
 
 FROM alpine:latest
@@ -29,6 +29,6 @@ RUN apk update --no-cache && apk add --no-cache tzdata
 
 WORKDIR /app
 COPY --from=builder /app/fetcher /app/fetcher
-COPY --from=builder /app/etc /app/etc
+COPY --from=builder /app/rpc/fetcher/etc /app/rpc/fetcher/etc
 
-CMD ["./fetcher","-f", "etc/fetcher.yaml"]
+CMD ["./fetcher","-f", "rpc/fetcher/etc/fetcher.yaml"]

@@ -45,7 +45,7 @@ func (m *customLanguagesModel) FindOneByDeveloperId(ctx context.Context, develop
 	cacheLanguagesDeveloperIdKey := fmt.Sprintf("%s%v", "cache:languages:developerId:", developerId)
 	var resp Languages
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheLanguagesDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", languagesRows, m.table)
+		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", languagesRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err
 		}

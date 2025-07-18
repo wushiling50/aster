@@ -49,7 +49,7 @@ func (m *customCreatedRepoUpdatedAtModel) FindOneByDeveloperId(ctx context.Conte
 	cacheCreatedRepoUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", "cache:createdRepoUpdatedAt:developerId:", developerId)
 	var resp CreatedRepoUpdatedAt
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheCreatedRepoUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", createdRepoUpdatedAtRows, m.table)
+		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", createdRepoUpdatedAtRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err
 		}

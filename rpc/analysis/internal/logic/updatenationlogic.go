@@ -16,6 +16,8 @@ import (
 	"github.com/wushiling50/aster/pkg/github"
 	"github.com/wushiling50/aster/pkg/llm"
 	model_analysis "github.com/wushiling50/aster/pkg/model/analysis"
+	model_contribution "github.com/wushiling50/aster/pkg/model/contribution"
+	model_developer "github.com/wushiling50/aster/pkg/model/developer"
 	"github.com/wushiling50/aster/pkg/tasks"
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/analysis/internal/pack"
@@ -219,7 +221,9 @@ func (l *UpdateNationLogic) getNationWithConfidenceByLLModel(developerId int64) 
 }
 
 func (l *UpdateNationLogic) pushDeveloperTask(developerId int64) (err error) {
-	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
+	developer := new(model_developer.Developer)
+
+	developer, err = l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
 		return err
 	}
@@ -275,7 +279,8 @@ func (l *UpdateNationLogic) rpcGetDeveloperById(developerId int64) (*developer.D
 
 func (l *UpdateNationLogic) pushContributionTask(developerId int64) (err error) {
 	// Comment
-	commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	commentOfUserUpdatedAt := new(model_contribution.CommentOfUserUpdatedAt)
+	commentOfUserUpdatedAt, err = l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
 		return err
 	}
@@ -302,7 +307,8 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) (err error) 
 	}
 
 	// Issue-PR
-	issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	issuePROfUserUpdatedAt := new(model_contribution.IssuePrOfUserUpdatedAt)
+	issuePROfUserUpdatedAt, err = l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
 		return err
 	}
@@ -329,7 +335,8 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) (err error) 
 	}
 
 	// Review
-	reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	reviewOfUserUpdatedAt := new(model_contribution.ReviewOfUserUpdatedAt)
+	reviewOfUserUpdatedAt, err = l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
 		return err
 	}

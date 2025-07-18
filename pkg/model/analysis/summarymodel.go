@@ -45,7 +45,7 @@ func (m *defaultSummaryModel) FindOneByDeveloperId(ctx context.Context, develope
 	cacheSummaryDeveloperIdKey := fmt.Sprintf("%s%v", "cache:summary:developerId:", developerId)
 	var resp Summary
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheSummaryDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", summaryRows, m.table)
+		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", summaryRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err
 		}

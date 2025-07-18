@@ -45,7 +45,7 @@ func (m *customReviewOfUserUpdatedAtModel) FindOneByDeveloperId(ctx context.Cont
 	cacheReviewOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", "cache:reviewOfUserUpdatedAt:developerId:", developerId)
 	var resp ReviewOfUserUpdatedAt
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheReviewOfUserUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", reviewOfUserUpdatedAtRows, m.table)
+		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", reviewOfUserUpdatedAtRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err
 		}

@@ -2,7 +2,6 @@ package github
 
 import (
 	"context"
-	"os"
 	"strings"
 	"time"
 
@@ -13,7 +12,7 @@ import (
 )
 
 func githubClientInit() *github.Client {
-	return github.NewClient(nil).WithAuthToken(os.Getenv(constants.GithubAPIToken))
+	return github.NewClient(nil).WithAuthToken("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")
 }
 
 func GetIdByLogin(ctx context.Context, login string) (id int64, err error) {

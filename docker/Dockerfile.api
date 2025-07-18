@@ -16,7 +16,7 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-COPY ./api/etc /app/etc
+COPY ./docker/etc /app/api/etc
 RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags="-s -w" -o /app/applet ./api
 
 FROM alpine:latest
@@ -29,6 +29,6 @@ RUN apk update --no-cache && apk add --no-cache tzdata
 
 WORKDIR /app
 COPY --from=builder /app/applet /app/applet
-COPY --from=builder /app/etc /app/etc
+COPY --from=builder /app/api/etc /app/api/etc
 
-CMD ["./applet","-f", "etc/applet.yaml"]
+CMD ["./applet","-f", "api/etc/applet.yaml"]

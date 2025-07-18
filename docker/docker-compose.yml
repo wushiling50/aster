@@ -1,6 +1,7 @@
 services:
   redis:
     container_name: aster-redis
+    hostname: redis
     image: redis:bookworm # 选择使用 redis 官方的 bookworm tag
     ports:
       - "6379:6379"
@@ -13,6 +14,7 @@ services:
 
   mysql:
     container_name: aster-mysql
+    hostname: mysql
     image: mysql:9.0.1 # 选择使用 mysql 官方的 9.0.1 版本
     ports:
       - "3306:3306"
@@ -26,6 +28,7 @@ services:
 
   etcd:
     container_name: aster-etcd
+    hostname: etcd
     image: quay.io/coreos/etcd:v3.5.5
     restart: always
     ports:
@@ -34,20 +37,15 @@ services:
     env_file:
       - "./env/etcd.env"
     volumes:
-      - ./script:/script
-      - ../config:/config
       - ./data/etcd:/etcd-data
     networks:
       - aster
-    entrypoint: [ "sh", "-c", "chmod +x /script/etcd-monitor.sh && /script/etcd-monitor.sh & exec etcd" ]
 
   etcd-keeper:
-    hostname: aster-etcdkeeper
+    container_name: aster-etcdkeeper
     image: evildecay/etcdkeeper
     env_file:
       - "./env/etcd-keeper.env"
-    links:
-      - etcd
     ports:
       - 8099:8080
     depends_on:
@@ -57,6 +55,7 @@ services:
 
   kafka:
     container_name: aster-kafka
+    hostname: kafka
     image: bitnami/kafka:latest
     restart: always
     user: root
@@ -142,6 +141,7 @@ services:
 
   jaeger:
     container_name: aster-jaeger
+    hostname: jaeger
     image: "jaegertracing/all-in-one:latest"
     restart: always
     ports:

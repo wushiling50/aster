@@ -45,7 +45,7 @@ func (m *customNationModel) FindOneByDeveloperId(ctx context.Context, developerI
 	cacheNationDeveloperIdKey := fmt.Sprintf("%s%v", "cache:nation:developerId:", developerId)
 	var resp Nation
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheNationDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", nationRows, m.table)
+		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", nationRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err
 		}

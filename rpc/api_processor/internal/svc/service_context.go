@@ -7,7 +7,6 @@ import (
 	"github.com/wushiling50/aster/pkg/constants"
 	analysis "github.com/wushiling50/aster/rpc/analysis/analysisclient"
 	"github.com/wushiling50/aster/rpc/api_processor/internal/config"
-	developer "github.com/wushiling50/aster/rpc/developer/developerclient"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
@@ -16,8 +15,7 @@ type ServiceContext struct {
 
 	AsynqServer *asynq.Server
 
-	DeveloperRpcClient developer.DeveloperZrpcClient
-	AnalysisRpcClient  analysis.Analysis
+	AnalysisRpcClient analysis.Analysis
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -37,7 +35,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 				Queues: map[string]int{constants.APITaskQueue: 1},
 			}),
 
-		DeveloperRpcClient: developer.NewDeveloperZrpcClient(zrpc.MustNewClient(c.Services.Developer)),
-		AnalysisRpcClient:  analysis.NewAnalysis(zrpc.MustNewClient(c.Services.Analysis)),
+		AnalysisRpcClient: analysis.NewAnalysis(zrpc.MustNewClient(c.Services.Analysis)),
 	}
 }

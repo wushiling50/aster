@@ -57,7 +57,7 @@ func (m *customCreateRepoModel) FindOneByRepoId(ctx context.Context, repoId int6
 	cacheCreateRepoRepoIdPrefix := fmt.Sprintf("%s%v", "cache:createRepo:repoId:", repoId)
 	var resp CreateRepo
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheCreateRepoRepoIdPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where repo_id = $1 limit 1", createRepoRows, m.table)
+		query := fmt.Sprintf("select %s from %s where repo_id = ? limit 1", createRepoRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, repoId); err != nil {
 			return nil, err
 		}

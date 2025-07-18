@@ -12,7 +12,6 @@ type Config struct {
 	AsynqRedisConf config.AsynqRedisConf
 
 	Services struct {
-		Developer zrpc.RpcClientConf
-		Analysis  zrpc.RpcClientConf
+		Analysis zrpc.RpcClientConf
 	}
 }

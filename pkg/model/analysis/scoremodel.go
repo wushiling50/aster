@@ -45,7 +45,7 @@ func (m *customScoreModel) FindOneByDeveloperId(ctx context.Context, developerId
 	cacheScoreDeveloperIdKey := fmt.Sprintf("%s%v", "cache:score:developerId:", developerId)
 	var resp Score
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheScoreDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", scoreRows, m.table)
+		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", scoreRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err
 		}

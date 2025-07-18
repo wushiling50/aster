@@ -13,8 +13,7 @@ IMAGE_TAG := 0.1
 SERVICES := contribution developer id_generator relation repo analysis
 NO_DB_SERVICES := id_generator
 
-DOCKER_BUILD := contribution developer id_generator relation repo analysis api_processor fetcher api
-
+DOCKER := contribution developer id_generator relation repo analysis api_processor fetcher api
 
 .PHONY: env-up
 env-up:
@@ -25,38 +24,51 @@ env-up:
 env-down:
 	@ cd ./docker && docker compose down
 
+.PHONY: aster-build-all
+aster-build-all:
+	for svc in $(DOCKER); do \
+		docker build -f $(DOCKER_PATH)/Dockerfile.$$svc -t aster/$$svc:$(IMAGE_TAG) . ;\
+	done
+
+.PHONY: $(addprefix aster-build-,$(DOCKER))
+$(addprefix aster-build-,$(DOCKER)): aster-build-%:
+	docker build -f $(DOCKER_PATH)/Dockerfile.$* -t aster/$*:$(IMAGE_TAG) .
+
+.PHONY: aster-run-all
+aster-run-all: 
+	for svc in $(DOCKER); do \
+		if echo 'api' | grep -wq $$svc ; then \
+			docker run -di -p 20001:20001 --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
+		else \
+			docker run -di --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
+		fi \
+	done
+
+.PHONY: $(addprefix aster-run-,$(DOCKER))
+$(addprefix aster-run-,$(DOCKER)): aster-run-%:
+	if echo 'api' | grep -wq $* ; then \
+			docker run -di -p 20001:20001 --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
+	else \
+			docker run -di --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
+	fi
+
+.PHONY: aster-remove-all
+aster-remove-all:
+	for svc in $(DOCKER); do \
+		docker stop aster-$$svc ;\
+		docker rm aster-$$svc ;\
+	done
+
+.PHONY: $(addprefix aster-remove-,$(DOCKER))
+$(addprefix aster-remove-,$(DOCKER)): aster-remove-%:
+	docker stop aster-$* ;\
+	docker rm aster-$*
+
+# -----------------------
 .PHONY: api-go
 api-go:
 	goctl api format --dir ${IDL_PATH}
 	goctl api go --dir=${API_PATH} --api ${IDL_PATH}/api.api
-
-# TODO: add dockerfile build & run command
-.PHONY: rpc-run
-rpc-run: 
-	echo "TODO"
-
-.PHONY: api-run
-api-run:
-	go run ./rpc/developer/developer.go
-	go run ./rpc/contribution/contribution.go
-	go run ./rpc/relation/relation.go
-	go run ./rpc/repo/repo.go
-	
-	go run ./rpc/analysis/analysis.go
-	
-	go run ./rpc/id_generator/idgenerator.go
-
-	go run ./api/applet.go
-
-.PHONY: aster-build-all
-aster-build-all:
-	for svc in $(DOCKER_BUILD); do \
-		docker build -f $(DOCKER_PATH)/Dockerfile.$$svc -t aster/$$svc:$(IMAGE_TAG) . ;\
-	done
-
-.PHONY: $(addprefix aster-build-,$(DOCKER_BUILD))
-$(addprefix aster-build-,$(DOCKER_BUILD)): aster-build-%:
-	docker build -f $(DOCKER_PATH)/Dockerfile.$* -t aster/$*:$(IMAGE_TAG) .
 
 $(SERVICES): gen-base
 

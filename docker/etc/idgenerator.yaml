@@ -1,0 +1,25 @@
+Name: idgenerator.rpc
+ListenOn: 0.0.0.0:20005
+Mode: dev
+Timeout: 3000
+
+Etcd:
+  Hosts:
+  - etcd:2379
+  Key: idgenerator.rpc
+
+Log:
+  ServiceName: idgenerator.rpc
+  Mode: file
+  Encoding: json
+  Path: log/idgenerator_rpc/
+
+DevServer:
+  Enabled: true
+  Port: 5009
+
+Telemetry:
+  Name: idgenerator.rpc
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger

@@ -45,7 +45,7 @@ func (m *customStarredRepoUpdatedAtModel) FindOneByDeveloperId(ctx context.Conte
 	cacheStarredRepoUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", "cache:starredRepoUpdatedAt:developerId:", developerId)
 	var resp StarredRepoUpdatedAt
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheStarredRepoUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", starredRepoUpdatedAtRows, m.table)
+		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", starredRepoUpdatedAtRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err
 		}

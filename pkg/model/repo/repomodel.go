@@ -45,7 +45,7 @@ func (m *customRepoModel) FindOneById(ctx context.Context, id int64) (*Repo, err
 	cacheRepoIdPrefix := fmt.Sprintf("%s%v", "cache:repo:id:", id)
 	var resp Repo
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheRepoIdPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where id = $1 limit 1", repoRows, m.table)
+		query := fmt.Sprintf("select %s from %s where id = ? limit 1", repoRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, id); err != nil {
 			return nil, err
 		}

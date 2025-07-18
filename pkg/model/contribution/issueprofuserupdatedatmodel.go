@@ -45,7 +45,7 @@ func (m *customIssuePrOfUserUpdatedAtModel) FindOneByDeveloperId(ctx context.Con
 	cacheIssuePrOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", "cache:issuePrOfUserUpdatedAt:developerId:", developerId)
 	var resp IssuePrOfUserUpdatedAt
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheIssuePrOfUserUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = $1 limit 1", issuePrOfUserUpdatedAtRows, m.table)
+		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", issuePrOfUserUpdatedAtRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
 			return nil, err
 		}

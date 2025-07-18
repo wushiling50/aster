@@ -16,12 +16,12 @@ Log:
 # 链路追踪​
 Telemetry:
   Name: apiProcessor
-  Endpoint: http://127.0.0.1:14268/api/traces
+  Endpoint: http://jaeger:14268/api/traces
   Sampler: 1.0
   Batcher: jaeger
 
 AsynqRedisConf:
-  Addr: 127.0.0.1:6379
+  Addr: redis:6379
   Pass: aster
   DB: 0
 
@@ -30,5 +30,5 @@ Services:
   Analysis:
     Etcd:
       Hosts:
-      - 127.0.0.1:2379
+      - etcd:2379
       Key: analysis.rpc

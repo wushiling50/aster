@@ -46,7 +46,7 @@ func (m *customDeveloperModel) FindOneById(ctx context.Context, id int64) (*Deve
 	cacheDeveloperIdPrefix := fmt.Sprintf("%s%v", "cache:developer:id:", id)
 	var resp Developer
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheDeveloperIdPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where id = $1 limit 1", developerRows, m.table)
+		query := fmt.Sprintf("select %s from %s where id = ? limit 1", developerRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, id); err != nil {
 			return nil, err
 		}
@@ -66,7 +66,7 @@ func (m *defaultDeveloperModel) FindOneByLogin(ctx context.Context, login string
 	cacheDeveloperLoginPrefix := fmt.Sprintf("%s%v", "cache:developer:login:", login)
 	var resp Developer
 	err := m.QueryRowIndexCtx(ctx, &resp, cacheDeveloperLoginPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where login = $1 limit 1", developerRows, m.table)
+		query := fmt.Sprintf("select %s from %s where login = ? limit 1", developerRows, m.table)
 		if err := conn.QueryRowCtx(ctx, &resp, query, login); err != nil {
 			return nil, err
 		}
