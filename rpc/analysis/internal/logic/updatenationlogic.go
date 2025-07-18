@@ -221,14 +221,12 @@ func (l *UpdateNationLogic) getNationWithConfidenceByLLModel(developerId int64) 
 }
 
 func (l *UpdateNationLogic) pushDeveloperTask(developerId int64) (err error) {
-	developer := new(model_developer.Developer)
-
-	developer, err = l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_developer.ErrNotFound) {
 		return err
 	}
 
-	if !github.CheckIfDataExpired(developer.DataUpdatedAt) {
+	if developer != nil && !github.CheckIfDataExpired(developer.DataUpdatedAt) {
 		return nil
 	}
 
@@ -279,9 +277,8 @@ func (l *UpdateNationLogic) rpcGetDeveloperById(developerId int64) (*developer.D
 
 func (l *UpdateNationLogic) pushContributionTask(developerId int64) (err error) {
 	// Comment
-	commentOfUserUpdatedAt := new(model_contribution.CommentOfUserUpdatedAt)
-	commentOfUserUpdatedAt, err = l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 		return err
 	}
 
@@ -307,9 +304,8 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) (err error) 
 	}
 
 	// Issue-PR
-	issuePROfUserUpdatedAt := new(model_contribution.IssuePrOfUserUpdatedAt)
-	issuePROfUserUpdatedAt, err = l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 		return err
 	}
 
@@ -335,9 +331,8 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) (err error) 
 	}
 
 	// Review
-	reviewOfUserUpdatedAt := new(model_contribution.ReviewOfUserUpdatedAt)
-	reviewOfUserUpdatedAt, err = l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 		return err
 	}
 

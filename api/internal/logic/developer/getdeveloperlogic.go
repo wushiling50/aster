@@ -62,13 +62,12 @@ func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *type
 }
 
 func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
-	developer := new(model_developer.Developer)
-	developer, err = l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
+	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_developer.ErrNotFound) {
 		return err
 	}
 
-	if !github.CheckIfDataExpired(developer.DataUpdatedAt) {
+	if developer != nil && !github.CheckIfDataExpired(developer.DataUpdatedAt) {
 		return nil
 	}
 

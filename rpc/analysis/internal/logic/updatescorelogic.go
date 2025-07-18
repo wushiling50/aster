@@ -224,9 +224,8 @@ func (l *UpdateScoreLogic) checkIfNeedUpdate(developerId int64) (bool, error) {
 
 func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 	// Comment
-	commentOfUserUpdatedAt := new(model_contribution.CommentOfUserUpdatedAt)
-	commentOfUserUpdatedAt, err = l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 		return err
 	}
 
@@ -252,9 +251,8 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 	}
 
 	// Issue-PR
-	issuePROfUserUpdatedAt := new(model_contribution.IssuePrOfUserUpdatedAt)
-	issuePROfUserUpdatedAt, err = l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 		return err
 	}
 
@@ -280,9 +278,8 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 	}
 
 	// Review
-	reviewOfUserUpdatedAt := new(model_contribution.ReviewOfUserUpdatedAt)
-	reviewOfUserUpdatedAt, err = l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 		return err
 	}
 
@@ -333,9 +330,8 @@ func (l *UpdateScoreLogic) rpcGetContributinoById(developerId, limit, page int64
 }
 
 func (l *UpdateScoreLogic) pushRepoTask(repoId int64) (err error) {
-	repo := new(model_repo.Repo)
-	repo, err = l.svcCtx.RepoModel.FindOneById(l.ctx, repoId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	repo, err := l.svcCtx.RepoModel.FindOneById(l.ctx, repoId)
+	if err != nil && !errors.Is(err, model_repo.ErrNotFound) {
 		return err
 	}
 
@@ -389,9 +385,8 @@ func (l *UpdateScoreLogic) rpcGetRepoById(repoId int64) (*repo.Repo, error) {
 }
 
 func (l *UpdateScoreLogic) pushFollowerTask(developerId int64) (err error) {
-	followerUpdatedAt := new(model_relation.FollowerUpdatedAt)
-	followerUpdatedAt, err = l.svcCtx.FollowerUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	followerUpdatedAt, err := l.svcCtx.FollowerUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_relation.ErrNotFound) {
 		return err
 	}
 
@@ -440,9 +435,8 @@ func (l *UpdateScoreLogic) rpcGetFollowerCountById(developerId int64) (int, erro
 }
 
 func (l *UpdateScoreLogic) pushStarredTask(developerId int64) (err error) {
-	starredRepoUpdatedAt := new(model_relation.StarredRepoUpdatedAt)
-	starredRepoUpdatedAt, err = l.svcCtx.StarredRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	starredRepoUpdatedAt, err := l.svcCtx.StarredRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_relation.ErrNotFound) {
 		return err
 	}
 

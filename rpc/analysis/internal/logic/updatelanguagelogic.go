@@ -12,6 +12,7 @@ import (
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/github"
 	model_analysis "github.com/wushiling50/aster/pkg/model/analysis"
+	model_relation "github.com/wushiling50/aster/pkg/model/relation"
 	"github.com/wushiling50/aster/pkg/tasks"
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/analysis/internal/pack"
@@ -138,12 +139,12 @@ func (l *UpdateLanguageLogic) checkIfNeedUpdate(developerId int64) (bool, error)
 
 func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
 	createdRepoUpdatedAt, err := l.svcCtx.CreatedRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_analysis.ErrNotFound) {
+	if err != nil && !errors.Is(err, model_relation.ErrNotFound) {
 		err = errno.InternalDatabaseError.WithError(err)
 		return err
 	}
 
-	if !github.CheckIfDataExpired(createdRepoUpdatedAt.DataUpdatedAt) {
+	if createdRepoUpdatedAt != nil && !github.CheckIfDataExpired(createdRepoUpdatedAt.DataUpdatedAt) {
 		return nil
 	}
 
