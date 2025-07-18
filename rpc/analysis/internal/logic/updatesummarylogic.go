@@ -157,7 +157,7 @@ func (l *UpdateSummaryLogic) pushDeveloperTask(developerId int64) (err error) {
 		return err
 	}
 
-	if !github.CheckIfDataExpired(developer.DataUpdatedAt) {
+	if developer != nil && !github.CheckIfDataExpired(developer.DataUpdatedAt) {
 		return nil
 	}
 
@@ -213,7 +213,7 @@ func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error)
 		return err
 	}
 
-	if !github.CheckIfDataExpired(commentOfUserUpdatedAt.DataUpdatedAt) {
+	if commentOfUserUpdatedAt != nil && !github.CheckIfDataExpired(commentOfUserUpdatedAt.DataUpdatedAt) {
 		return nil
 	}
 
@@ -240,7 +240,7 @@ func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error)
 		return err
 	}
 
-	if !github.CheckIfDataExpired(issuePROfUserUpdatedAt.DataUpdatedAt) {
+	if issuePROfUserUpdatedAt != nil && !github.CheckIfDataExpired(issuePROfUserUpdatedAt.DataUpdatedAt) {
 		return nil
 	}
 
@@ -267,7 +267,7 @@ func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error)
 		return err
 	}
 
-	if !github.CheckIfDataExpired(reviewOfUserUpdatedAt.DataUpdatedAt) {
+	if reviewOfUserUpdatedAt != nil && !github.CheckIfDataExpired(reviewOfUserUpdatedAt.DataUpdatedAt) {
 		return nil
 	}
 
