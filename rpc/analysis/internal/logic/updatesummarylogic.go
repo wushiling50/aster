@@ -224,7 +224,7 @@ func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error)
 		return err
 	}
 
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCommentOfUser, developerId, "", 0)
+	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCommentOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
 	if err != nil {
 		return err
 	}
@@ -251,7 +251,7 @@ func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error)
 		return err
 	}
 
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchIssuePROfUser, developerId, "", 0)
+	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchIssuePROfUser, developerId, github.DefaultUpdateAfterTime(), 0)
 	if err != nil {
 		return err
 	}
@@ -278,7 +278,7 @@ func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error)
 		return err
 	}
 
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchReviewOfUser, developerId, "", 0)
+	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchReviewOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
 	if err != nil {
 		return err
 	}

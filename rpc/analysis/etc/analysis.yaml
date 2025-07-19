@@ -1,7 +1,7 @@
 Name: analysis.rpc
 ListenOn: 0.0.0.0:20002
 Mode: dev
-Timeout: 3000
+Timeout: 15000
 
 Etcd:
   Hosts:

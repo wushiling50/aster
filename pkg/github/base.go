@@ -6,13 +6,14 @@ import (
 	"time"
 
 	"github.com/google/go-github/v66/github"
+	"github.com/wushiling50/aster/config"
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
 func githubClientInit() *github.Client {
-	return github.NewClient(nil).WithAuthToken("*********")
+	return github.NewClient(nil).WithAuthToken(config.GitHubAPIToken)
 }
 
 func GetIdByLogin(ctx context.Context, login string) (id int64, err error) {

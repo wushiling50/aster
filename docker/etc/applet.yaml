@@ -2,7 +2,7 @@ Name: applet
 Host: 0.0.0.0
 Port: 20001
 Mode: dev
-TimeOut: 3000
+TimeOut: 15000
 
 # dev 环境模式配置
 DevServer:

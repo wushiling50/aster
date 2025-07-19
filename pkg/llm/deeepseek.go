@@ -1,11 +1,8 @@
 package llm
 
 import (
-	"os"
-
 	"github.com/sashabaranov/go-openai"
 	"github.com/wushiling50/aster/config"
-	"github.com/wushiling50/aster/pkg/constants"
 )
 
 type NationConfidence struct {
@@ -14,7 +11,7 @@ type NationConfidence struct {
 }
 
 func NewDeepSeekClient(c config.DeepSeekModel) *openai.Client {
-	config := openai.DefaultConfig(os.Getenv(constants.DeepSeekAPIToken))
+	config := openai.DefaultConfig(config.DeepseekAPIToken)
 	config.BaseURL = c.Endpoint
 	client := openai.NewClientWithConfig(config)
 	return client

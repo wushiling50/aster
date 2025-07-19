@@ -16,6 +16,7 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
+COPY ./config/config.yaml /app/config/config.yaml
 COPY ./docker/etc /app/rpc/contribution/etc
 RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags="-s -w" -o /app/contribution ./rpc/contribution
 
@@ -30,5 +31,6 @@ RUN apk update --no-cache && apk add --no-cache tzdata
 WORKDIR /app
 COPY --from=builder /app/contribution /app/contribution
 COPY --from=builder /app/rpc/contribution/etc /app/rpc/contribution/etc
+COPY --from=builder /app/config/config.yaml /app/config/config.yaml
 
 CMD ["./contribution","-f", "rpc/contribution/etc/contribution.yaml"]
