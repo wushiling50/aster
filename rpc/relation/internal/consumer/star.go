@@ -75,8 +75,10 @@ func (c *StarConsumer) updateStarUpdatedAt(developerId int64) error {
 				return err
 			}
 
-			starredRepoUpdatedAt.DataId = dataId
-			starredRepoUpdatedAt.DeveloperId = developerId
+			starredRepoUpdatedAt := &model_relation.StarredRepoUpdatedAt{
+				DataId:      dataId,
+				DeveloperId: developerId,
+			}
 
 			if _, err = c.svcCtx.StarredRepoUpdatedAtModel.Insert(c.ctx, starredRepoUpdatedAt); err != nil {
 				err = errno.InternalServiceError.WithError(err)

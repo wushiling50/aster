@@ -108,8 +108,10 @@ func (c *ContributionConsumer) updateIssuePROfUserUpdatedAt(developerId int64) e
 				return err
 			}
 
-			issuePrOfUserUpdatedAt.DataId = dataId
-			issuePrOfUserUpdatedAt.DeveloperId = developerId
+			issuePrOfUserUpdatedAt := &model_contribution.IssuePrOfUserUpdatedAt{
+				DataId:      dataId,
+				DeveloperId: developerId,
+			}
 
 			if _, err = c.svcCtx.IssuePrOfUserUpdatedAtModel.Insert(c.ctx, issuePrOfUserUpdatedAt); err != nil {
 				err = errno.InternalServiceError.WithError(err)
@@ -145,8 +147,10 @@ func (c *ContributionConsumer) updateCommentOfUserUpdatedAt(developerId int64) e
 				return err
 			}
 
-			commentOfUserUpdatedAt.DataId = dataId
-			commentOfUserUpdatedAt.DeveloperId = developerId
+			commentOfUserUpdatedAt := &model_contribution.CommentOfUserUpdatedAt{
+				DataId:      dataId,
+				DeveloperId: developerId,
+			}
 
 			if _, err = c.svcCtx.CommentOfUserUpdatedAtModel.Insert(c.ctx, commentOfUserUpdatedAt); err != nil {
 				err = errno.InternalServiceError.WithError(err)
@@ -182,8 +186,10 @@ func (c *ContributionConsumer) updateReviewOfUserUpdatedAt(developerId int64) er
 				return err
 			}
 
-			reviewOfUserUpdatedAt.DataId = dataId
-			reviewOfUserUpdatedAt.DeveloperId = developerId
+			reviewOfUserUpdatedAt := &model_contribution.ReviewOfUserUpdatedAt{
+				DataId:      dataId,
+				DeveloperId: developerId,
+			}
 
 			if _, err = c.svcCtx.ReviewOfUserUpdatedAtModel.Insert(c.ctx, reviewOfUserUpdatedAt); err != nil {
 				err = errno.InternalServiceError.WithError(err)
@@ -205,6 +211,7 @@ func (c *ContributionConsumer) updateReviewOfUserUpdatedAt(developerId int64) er
 
 	return nil
 }
+
 func (c *ContributionConsumer) addNewContribution(newContribution *contribution.Contribution) error {
 	l := logic.NewAddContributionLogic(c.ctx, c.svcCtx)
 

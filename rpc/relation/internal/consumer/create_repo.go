@@ -75,8 +75,10 @@ func (c *CreateRepoConsumer) updateCreateRepoUpdatedAt(developerId int64) error 
 				return err
 			}
 
-			createRepoUpdatedAt.DataId = dataId
-			createRepoUpdatedAt.DeveloperId = developerId
+			createRepoUpdatedAt := &model_relation.CreatedRepoUpdatedAt{
+				DataId:      dataId,
+				DeveloperId: developerId,
+			}
 
 			if _, err = c.svcCtx.CreatedRepoUpdatedAtModel.Insert(c.ctx, createRepoUpdatedAt); err != nil {
 				err = errno.InternalServiceError.WithError(err)

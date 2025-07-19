@@ -87,8 +87,10 @@ func (c *FollowConsumer) updateFollowerUpdatedAt(developerId int64) error {
 				return err
 			}
 
-			followerUpdatedAt.DataId = dataId
-			followerUpdatedAt.DeveloperId = developerId
+			followerUpdatedAt := &model_relation.FollowerUpdatedAt{
+				DataId:      dataId,
+				DeveloperId: developerId,
+			}
 
 			if _, err = c.svcCtx.FollowerUpdatedAtModel.Insert(c.ctx, followerUpdatedAt); err != nil {
 				err = errno.InternalServiceError.WithError(err)
@@ -123,8 +125,10 @@ func (c *FollowConsumer) updateFollowingUpdatedAt(developerId int64) error {
 				return err
 			}
 
-			followingUpdatedAt.DataId = dataId
-			followingUpdatedAt.DeveloperId = developerId
+			followingUpdatedAt := &model_relation.FollowingUpdatedAt{
+				DataId:      dataId,
+				DeveloperId: developerId,
+			}
 
 			if _, err = c.svcCtx.FollowingUpdatedAtModel.Insert(c.ctx, followingUpdatedAt); err != nil {
 				err = errno.InternalServiceError.WithError(err)
