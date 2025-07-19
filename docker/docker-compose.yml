@@ -53,22 +53,36 @@ services:
     networks:
       - aster
 
-  kafka:
-    container_name: aster-kafka
-    hostname: kafka
-    image: bitnami/kafka:latest
+  zookeeper:
+    container_name: aster-zookeeper
+    hostname: zookeeper
+    image: zookeeper:latest
     restart: always
-    user: root
     ports:
-      - "9092:9092"
-      - "9094:9093"
-    env_file:
-      - ./env/kafka.env
+      - 2181:2181
     volumes:
-      - ./data/kafka:/bitnami/kafka
+      - ./data/zookeeper/data:/data
+      - ./data/zookeeper/datalog:/datalog
+      - ./data/zookeeper/logs:/logs
     networks:
       - aster
 
+  kafka:
+    container_name: aster-kafka
+    hostname: kafka
+    image: wurstmeister/kafka:latest
+    restart: always
+    ports:
+      - 9092:9092
+    env_file:
+      - "./env/kafka.env"
+    volumes:
+      - ./data/kafka:/kafka
+    depends_on:
+      - zookeeper
+    networks:
+      - aster
+      
   kafka-ui:
     container_name: aster-kafka-ui
     image: provectuslabs/kafka-ui:latest
@@ -182,7 +196,7 @@ services:
     container_name: aster-alertmanager
     restart: always
     ports:
-      - 9093:9093
+      - 9193:9093
     networks:
       - aster
 

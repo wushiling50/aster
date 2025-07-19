@@ -59,7 +59,7 @@ KafkaQueue:
       - 127.0.0.1:9092
     Group: create-repo
     Topic: create-repo-update
-    
+  
   KqStarConsumerConf:
     Name: star-consumer
     Brokers:

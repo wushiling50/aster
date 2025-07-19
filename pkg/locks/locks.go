@@ -46,13 +46,14 @@ func (b *BLock) Block(ctx context.Context, key string) error {
 	}
 	defer node.Close()
 
+	logx.Infof("Block: %s", key)
+
 	_, err = b.client.BlpopWithTimeoutCtx(ctx, node, time.Duration(b.expire)*time.Millisecond, key)
 	if err != nil {
 		err = errno.InternalLockError.WithError(err)
 		return err
 	}
 
-	logx.Infof("Block: %s", key)
 	return nil
 }
 

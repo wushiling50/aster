@@ -71,7 +71,7 @@ func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
 		return nil
 	}
 
-	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCreatedRepo, developerId)
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
 	if err != nil {
