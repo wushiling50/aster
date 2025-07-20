@@ -93,7 +93,7 @@ func GetRepoByUrl(ctx context.Context, repoUrl string) (repo *github.Repository,
 }
 
 func DefaultUpdateAfterTime() string {
-	return time.Unix(time.Now().Unix()-int64(constants.ONE_WEEK.Seconds()), 0).Format("2006-01-02")
+	return time.Unix(time.Now().AddDate(-10, 0, 0).Unix(), 0).Format("2006-01-02")
 }
 
 func CheckIfDataExpired(lastUpdate time.Time) bool {

@@ -1,8 +1,6 @@
 package pack
 
 import (
-	"time"
-
 	"github.com/wushiling50/aster/gen/developer"
 	model_developer "github.com/wushiling50/aster/pkg/model/developer"
 )
@@ -24,29 +22,25 @@ func BuildModelDeveloper(developer *developer.Developer) *model_developer.Develo
 		Followers:       developer.Followers,
 		Stars:           developer.Stars,
 		Gists:           developer.Gists,
-		CreatedAt:       time.Unix(developer.CreatedAt, 0),
-		UpdatedAt:       time.Unix(developer.UpdatedAt, 0),
 	}
 }
 
-func BuildGenDeveloper(mdoelDveloper *model_developer.Developer) *developer.Developer {
+func BuildGenDeveloper(modelDeveloper *model_developer.Developer) *developer.Developer {
 	return &developer.Developer{
-		Id:              mdoelDveloper.Id,
-		Name:            mdoelDveloper.Name,
-		Login:           mdoelDveloper.Login,
-		AvatarUrl:       mdoelDveloper.AvatarUrl,
-		Company:         mdoelDveloper.Company,
-		Location:        mdoelDveloper.Location,
-		Bio:             mdoelDveloper.Bio,
-		Blog:            mdoelDveloper.Blog,
-		Email:           mdoelDveloper.Email,
-		TwitterUsername: mdoelDveloper.TwitterUsername,
-		Repos:           mdoelDveloper.Repos,
-		Following:       mdoelDveloper.Following,
-		Followers:       mdoelDveloper.Followers,
-		Stars:           mdoelDveloper.Stars,
-		Gists:           mdoelDveloper.Gists,
-		CreatedAt:       mdoelDveloper.CreatedAt.Unix(),
-		UpdatedAt:       mdoelDveloper.UpdatedAt.Unix(),
+		Id:              modelDeveloper.Id,
+		Name:            modelDeveloper.Name,
+		Login:           modelDeveloper.Login,
+		AvatarUrl:       modelDeveloper.AvatarUrl,
+		Company:         modelDeveloper.Company,
+		Location:        modelDeveloper.Location,
+		Bio:             modelDeveloper.Bio,
+		Blog:            modelDeveloper.Blog,
+		Email:           modelDeveloper.Email,
+		TwitterUsername: modelDeveloper.TwitterUsername,
+		Repos:           modelDeveloper.Repos,
+		Following:       modelDeveloper.Following,
+		Followers:       modelDeveloper.Followers,
+		Stars:           modelDeveloper.Stars,
+		Gists:           modelDeveloper.Gists,
 	}
 }

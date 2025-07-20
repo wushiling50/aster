@@ -56,8 +56,6 @@ func BuildTypeDeveloper(res *developer.Developer) *types.Developer {
 		Bio:       res.Bio,
 		Blog:      res.Blog,
 		Email:     res.Email,
-		CreatedAt: time.Unix(res.CreatedAt, 0).Format(time.RFC3339),
-		UpdatedAt: time.Unix(res.UpdatedAt, 0).Format(time.RFC3339),
 		Following: res.Following,
 		Followers: res.Followers,
 		Gists:     res.Gists,

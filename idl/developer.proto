@@ -23,8 +23,6 @@ message Developer {
     int64 followers = 13; // followers_count
     int64 stars = 14; // star_count
     int64 gists = 15; // gists_count
-    int64 createdAt = 16; // createdAt
-    int64 updatedAt = 17; // updatedAt
 }
 
 message AddDeveloperReq {

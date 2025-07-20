@@ -16,8 +16,6 @@ func BuildDeveloperProfile(githubUser *github.User, starredRepoCount int64) *dev
 		Bio:             githubUser.GetBio(),
 		Blog:            githubUser.GetBlog(),
 		Email:           githubUser.GetEmail(),
-		CreatedAt:       githubUser.GetCreatedAt().Unix(),
-		UpdatedAt:       githubUser.GetUpdatedAt().Unix(),
 		TwitterUsername: githubUser.GetTwitterUsername(),
 		Repos:           int64(githubUser.GetPublicRepos()),
 		Following:       int64(githubUser.GetFollowing()),

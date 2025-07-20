@@ -15,8 +15,6 @@ create table `aster`.`developer` (
     `followers`             bigint          not null       comment 'Followers Count',
     `stars`                 bigint          not null       comment 'Total Stars Received',
     `gists`                 bigint          not null       comment 'Gists count',
-    `created_at`            timestamp       not null       comment 'GitHub account creation time',
-    `updated_at`            timestamp       not null       comment 'GitHub account update time',
     `data_created_at`       timestamp       not null default  current_timestamp,
     `data_updated_at`       timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     `data_deleted_at`       timestamp       null     default null,

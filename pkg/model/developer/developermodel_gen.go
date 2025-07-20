@@ -57,8 +57,6 @@ type (
 		Followers       int64        `db:"followers"`        // Followers Count
 		Stars           int64        `db:"stars"`            // Total Stars Received
 		Gists           int64        `db:"gists"`            // Gists count
-		CreatedAt       time.Time    `db:"created_at"`       // GitHub account creation time
-		UpdatedAt       time.Time    `db:"updated_at"`       // GitHub account update time
 		DataCreatedAt   time.Time    `db:"data_created_at"`
 		DataUpdatedAt   time.Time    `db:"data_updated_at"` // update data time
 		DataDeletedAt   sql.NullTime `db:"data_deleted_at"`
