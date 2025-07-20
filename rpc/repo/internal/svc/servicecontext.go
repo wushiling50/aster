@@ -1,6 +1,7 @@
 package svc
 
 import (
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/hibiken/asynq"
 	"github.com/wushiling50/aster/pkg/locks"
 	"github.com/wushiling50/aster/pkg/model/repo"

@@ -1,7 +1,7 @@
 create table `aster`.`create_repo` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
-    `repo_id`                    bigint          not null       comment 'Unique GitHub Repository ID',
+    `data_id`                    bigint          not null unique      comment 'Generated Primary Key, Must Not Be Changed',
+    `developer_id`               bigint          not null            comment 'Unique GitHub User ID',
+    `repo_id`                    bigint          not null unique     comment 'Unique GitHub Repository ID',
     `created_at`                 timestamp       not null default  current_timestamp,
     `updated_at`                 timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     `deleted_at`                 timestamp       null     default null,
@@ -10,7 +10,7 @@ create table `aster`.`create_repo` (
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`follow` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
+    `data_id`                    bigint          not null unique      comment 'Generated Primary Key, Must Not Be Changed',
     `follower_id`                bigint          not null       comment 'Follower ID',
     `following_id`               bigint          not null       comment 'Following ID',
     `created_at`                 timestamp       not null default  current_timestamp,
@@ -21,7 +21,7 @@ create table `aster`.`follow` (
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`star` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
+    `data_id`                    bigint          not null unique      comment 'Generated Primary Key, Must Not Be Changed',
     `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
     `repo_id`                    bigint          not null       comment 'Unique GitHub Repository ID',
     `created_at`                 timestamp       not null default  current_timestamp,
@@ -32,8 +32,8 @@ create table `aster`.`star` (
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`created_repo_updated_at` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
+    `data_id`                    bigint          not null  unique     comment 'Generated Primary Key, Must Not Be Changed',
+    `developer_id`               bigint          not null  unique     comment 'Unique GitHub User ID',
     `created_at`                 timestamp       not null default  current_timestamp,
     `updated_at`                 timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     constraint `pk_data_id`
@@ -41,8 +41,8 @@ create table `aster`.`created_repo_updated_at` (
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`following_updated_at` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
+    `data_id`                    bigint          not null  unique     comment 'Generated Primary Key, Must Not Be Changed',
+    `developer_id`               bigint          not null  unique     comment 'Unique GitHub User ID',
     `created_at`                 timestamp       not null default  current_timestamp,
     `updated_at`                 timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     constraint `pk_data_id`
@@ -50,8 +50,8 @@ create table `aster`.`following_updated_at` (
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`follower_updated_at` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
+    `data_id`                    bigint          not null  unique     comment 'Generated Primary Key, Must Not Be Changed',
+    `developer_id`               bigint          not null  unique     comment 'Unique GitHub User ID',
     `created_at`                 timestamp       not null default  current_timestamp,
     `updated_at`                 timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     constraint `pk_data_id`
@@ -59,8 +59,8 @@ create table `aster`.`follower_updated_at` (
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`starred_repo_updated_at` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `developer_id`               bigint          not null       comment 'Unique GitHub User ID',
+    `data_id`                    bigint          not null  unique     comment 'Generated Primary Key, Must Not Be Changed',
+    `developer_id`               bigint          not null  unique     comment 'Unique GitHub User ID',
     `created_at`                 timestamp       not null default  current_timestamp,
     `updated_at`                 timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     constraint `pk_data_id`

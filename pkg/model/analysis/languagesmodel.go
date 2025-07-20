@@ -1,13 +1,9 @@
 package analysis
 
 import (
-	"context"
-	"fmt"
-
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/cache"
-	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -18,7 +14,6 @@ type (
 	// and implement the added methods in customLanguagesModel.
 	LanguagesModel interface {
 		languagesModel
-		FindOneByDeveloperId(ctx context.Context, developerId int64) (*Languages, error)
 		CreateDataId() (int64, error)
 	}
 
@@ -38,26 +33,6 @@ func NewLanguagesModel(conn sqlx.SqlConn, c cache.CacheConf, DatancenterId, Work
 	return &customLanguagesModel{
 		defaultLanguagesModel: newLanguagesModel(conn, c, opts...),
 		sf:                    sf,
-	}
-}
-
-func (m *customLanguagesModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*Languages, error) {
-	cacheLanguagesDeveloperIdKey := fmt.Sprintf("%s%v", "cache:languages:developerId:", developerId)
-	var resp Languages
-	err := m.QueryRowIndexCtx(ctx, &resp, cacheLanguagesDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where developer_id = ? limit 1", languagesRows, m.table)
-		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
-			return nil, err
-		}
-		return resp.DataId, nil
-	}, m.queryPrimary)
-	switch err {
-	case nil:
-		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
 	}
 }
 

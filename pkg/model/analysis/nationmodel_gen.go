@@ -24,13 +24,15 @@ var (
 	nationRowsExpectAutoSet   = strings.Join(stringx.Remove(nationFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	nationRowsWithPlaceHolder = strings.Join(stringx.Remove(nationFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheNationDataIdPrefix = "cache:nation:dataId:"
+	cacheNationDataIdPrefix      = "cache:nation:dataId:"
+	cacheNationDeveloperIdPrefix = "cache:nation:developerId:"
 )
 
 type (
 	nationModel interface {
 		Insert(ctx context.Context, data *Nation) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*Nation, error)
+		FindOneByDeveloperId(ctx context.Context, developerId int64) (*Nation, error)
 		Update(ctx context.Context, data *Nation) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -59,11 +61,17 @@ func newNationModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) 
 }
 
 func (m *defaultNationModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	nationDataIdKey := fmt.Sprintf("%s%v", cacheNationDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	nationDeveloperIdKey := fmt.Sprintf("%s%v", cacheNationDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, nationDataIdKey)
+	}, nationDataIdKey, nationDeveloperIdKey)
 	return err
 }
 
@@ -84,21 +92,48 @@ func (m *defaultNationModel) FindOne(ctx context.Context, dataId int64) (*Nation
 	}
 }
 
+func (m *defaultNationModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*Nation, error) {
+	nationDeveloperIdKey := fmt.Sprintf("%s%v", cacheNationDeveloperIdPrefix, developerId)
+	var resp Nation
+	err := m.QueryRowIndexCtx(ctx, &resp, nationDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `developer_id` = ? limit 1", nationRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultNationModel) Insert(ctx context.Context, data *Nation) (sql.Result, error) {
 	nationDataIdKey := fmt.Sprintf("%s%v", cacheNationDataIdPrefix, data.DataId)
+	nationDeveloperIdKey := fmt.Sprintf("%s%v", cacheNationDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, nationRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Nation, data.Confidence, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
-	}, nationDataIdKey)
+	}, nationDataIdKey, nationDeveloperIdKey)
 	return ret, err
 }
 
-func (m *defaultNationModel) Update(ctx context.Context, data *Nation) error {
+func (m *defaultNationModel) Update(ctx context.Context, newData *Nation) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	nationDataIdKey := fmt.Sprintf("%s%v", cacheNationDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	nationDeveloperIdKey := fmt.Sprintf("%s%v", cacheNationDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, nationRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.Nation, data.Confidence, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
-	}, nationDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.Nation, newData.Confidence, newData.DataCreatedAt, newData.DataUpdatedAt, newData.DataDeletedAt, newData.DataId)
+	}, nationDataIdKey, nationDeveloperIdKey)
 	return err
 }
 

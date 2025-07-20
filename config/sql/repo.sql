@@ -1,6 +1,6 @@
 create table `aster`.`repo` (
-    `data_id`                    bigint          not null       comment 'Generated Primary Key, Must Not Be Changed',
-    `id`                         bigint          not null       comment 'Unique GitHub Repository ID',
+    `data_id`                    bigint          not null unique      comment 'Generated Primary Key, Must Not Be Changed',
+    `id`                         bigint          not null unique      comment 'Unique GitHub Repository ID',
     `name`                       varchar(255)    not null       comment 'Repository Name',
     `star_count`                 bigint          not null       comment 'Number Of Stars',
     `fork_count`                 bigint          not null       comment 'Number Of Forks',

@@ -47,9 +47,7 @@ func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *type
 		return
 	}
 
-	var rpcResp *types.Developer
-
-	rpcResp, err = l.rpcGetDeveloperById(developerId)
+	rpcResp, err := l.rpcGetDeveloperById(developerId)
 	if err != nil {
 		logx.Error(err)
 		return
@@ -92,7 +90,7 @@ func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
 }
 
 func (l *GetDeveloperLogic) rpcGetDeveloperById(id int64) (typeDeveloper *types.Developer, err error) {
-	var resp *developer.GetDeveloperByIdResp
+	resp := new(developer.GetDeveloperByIdResp)
 
 	resp, err = l.svcCtx.DeveloperRpcClient.GetDeveloperById(l.ctx, &developer.GetDeveloperByIdReq{
 		Id: id,

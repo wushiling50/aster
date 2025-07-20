@@ -24,13 +24,15 @@ var (
 	issuePrOfUserUpdatedAtRowsExpectAutoSet   = strings.Join(stringx.Remove(issuePrOfUserUpdatedAtFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	issuePrOfUserUpdatedAtRowsWithPlaceHolder = strings.Join(stringx.Remove(issuePrOfUserUpdatedAtFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheIssuePrOfUserUpdatedAtDataIdPrefix = "cache:issuePrOfUserUpdatedAt:dataId:"
+	cacheIssuePrOfUserUpdatedAtDataIdPrefix      = "cache:issuePrOfUserUpdatedAt:dataId:"
+	cacheIssuePrOfUserUpdatedAtDeveloperIdPrefix = "cache:issuePrOfUserUpdatedAt:developerId:"
 )
 
 type (
 	issuePrOfUserUpdatedAtModel interface {
 		Insert(ctx context.Context, data *IssuePrOfUserUpdatedAt) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*IssuePrOfUserUpdatedAt, error)
+		FindOneByDeveloperId(ctx context.Context, developerId int64) (*IssuePrOfUserUpdatedAt, error)
 		Update(ctx context.Context, data *IssuePrOfUserUpdatedAt) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -56,11 +58,17 @@ func newIssuePrOfUserUpdatedAtModel(conn sqlx.SqlConn, c cache.CacheConf, opts .
 }
 
 func (m *defaultIssuePrOfUserUpdatedAtModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	issuePrOfUserUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	issuePrOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, issuePrOfUserUpdatedAtDataIdKey)
+	}, issuePrOfUserUpdatedAtDataIdKey, issuePrOfUserUpdatedAtDeveloperIdKey)
 	return err
 }
 
@@ -81,21 +89,48 @@ func (m *defaultIssuePrOfUserUpdatedAtModel) FindOne(ctx context.Context, dataId
 	}
 }
 
+func (m *defaultIssuePrOfUserUpdatedAtModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*IssuePrOfUserUpdatedAt, error) {
+	issuePrOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDeveloperIdPrefix, developerId)
+	var resp IssuePrOfUserUpdatedAt
+	err := m.QueryRowIndexCtx(ctx, &resp, issuePrOfUserUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `developer_id` = ? limit 1", issuePrOfUserUpdatedAtRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultIssuePrOfUserUpdatedAtModel) Insert(ctx context.Context, data *IssuePrOfUserUpdatedAt) (sql.Result, error) {
 	issuePrOfUserUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDataIdPrefix, data.DataId)
+	issuePrOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, issuePrOfUserUpdatedAtRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId)
-	}, issuePrOfUserUpdatedAtDataIdKey)
+	}, issuePrOfUserUpdatedAtDataIdKey, issuePrOfUserUpdatedAtDeveloperIdKey)
 	return ret, err
 }
 
-func (m *defaultIssuePrOfUserUpdatedAtModel) Update(ctx context.Context, data *IssuePrOfUserUpdatedAt) error {
+func (m *defaultIssuePrOfUserUpdatedAtModel) Update(ctx context.Context, newData *IssuePrOfUserUpdatedAt) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	issuePrOfUserUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	issuePrOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, issuePrOfUserUpdatedAtRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.DataId)
-	}, issuePrOfUserUpdatedAtDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.DataId)
+	}, issuePrOfUserUpdatedAtDataIdKey, issuePrOfUserUpdatedAtDeveloperIdKey)
 	return err
 }
 

@@ -24,13 +24,15 @@ var (
 	starredRepoUpdatedAtRowsExpectAutoSet   = strings.Join(stringx.Remove(starredRepoUpdatedAtFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	starredRepoUpdatedAtRowsWithPlaceHolder = strings.Join(stringx.Remove(starredRepoUpdatedAtFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheStarredRepoUpdatedAtDataIdPrefix = "cache:starredRepoUpdatedAt:dataId:"
+	cacheStarredRepoUpdatedAtDataIdPrefix      = "cache:starredRepoUpdatedAt:dataId:"
+	cacheStarredRepoUpdatedAtDeveloperIdPrefix = "cache:starredRepoUpdatedAt:developerId:"
 )
 
 type (
 	starredRepoUpdatedAtModel interface {
 		Insert(ctx context.Context, data *StarredRepoUpdatedAt) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*StarredRepoUpdatedAt, error)
+		FindOneByDeveloperId(ctx context.Context, developerId int64) (*StarredRepoUpdatedAt, error)
 		Update(ctx context.Context, data *StarredRepoUpdatedAt) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -56,11 +58,17 @@ func newStarredRepoUpdatedAtModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...
 }
 
 func (m *defaultStarredRepoUpdatedAtModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	starredRepoUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheStarredRepoUpdatedAtDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	starredRepoUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheStarredRepoUpdatedAtDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, starredRepoUpdatedAtDataIdKey)
+	}, starredRepoUpdatedAtDataIdKey, starredRepoUpdatedAtDeveloperIdKey)
 	return err
 }
 
@@ -81,21 +89,48 @@ func (m *defaultStarredRepoUpdatedAtModel) FindOne(ctx context.Context, dataId i
 	}
 }
 
+func (m *defaultStarredRepoUpdatedAtModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*StarredRepoUpdatedAt, error) {
+	starredRepoUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheStarredRepoUpdatedAtDeveloperIdPrefix, developerId)
+	var resp StarredRepoUpdatedAt
+	err := m.QueryRowIndexCtx(ctx, &resp, starredRepoUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `developer_id` = ? limit 1", starredRepoUpdatedAtRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultStarredRepoUpdatedAtModel) Insert(ctx context.Context, data *StarredRepoUpdatedAt) (sql.Result, error) {
 	starredRepoUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheStarredRepoUpdatedAtDataIdPrefix, data.DataId)
+	starredRepoUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheStarredRepoUpdatedAtDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, starredRepoUpdatedAtRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId)
-	}, starredRepoUpdatedAtDataIdKey)
+	}, starredRepoUpdatedAtDataIdKey, starredRepoUpdatedAtDeveloperIdKey)
 	return ret, err
 }
 
-func (m *defaultStarredRepoUpdatedAtModel) Update(ctx context.Context, data *StarredRepoUpdatedAt) error {
+func (m *defaultStarredRepoUpdatedAtModel) Update(ctx context.Context, newData *StarredRepoUpdatedAt) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	starredRepoUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheStarredRepoUpdatedAtDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	starredRepoUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheStarredRepoUpdatedAtDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, starredRepoUpdatedAtRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.DataId)
-	}, starredRepoUpdatedAtDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.DataId)
+	}, starredRepoUpdatedAtDataIdKey, starredRepoUpdatedAtDeveloperIdKey)
 	return err
 }
 

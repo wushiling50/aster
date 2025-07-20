@@ -24,13 +24,15 @@ var (
 	languagesRowsExpectAutoSet   = strings.Join(stringx.Remove(languagesFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	languagesRowsWithPlaceHolder = strings.Join(stringx.Remove(languagesFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheLanguagesDataIdPrefix = "cache:languages:dataId:"
+	cacheLanguagesDataIdPrefix      = "cache:languages:dataId:"
+	cacheLanguagesDeveloperIdPrefix = "cache:languages:developerId:"
 )
 
 type (
 	languagesModel interface {
 		Insert(ctx context.Context, data *Languages) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*Languages, error)
+		FindOneByDeveloperId(ctx context.Context, developerId int64) (*Languages, error)
 		Update(ctx context.Context, data *Languages) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -58,11 +60,17 @@ func newLanguagesModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Optio
 }
 
 func (m *defaultLanguagesModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	languagesDataIdKey := fmt.Sprintf("%s%v", cacheLanguagesDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	languagesDeveloperIdKey := fmt.Sprintf("%s%v", cacheLanguagesDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, languagesDataIdKey)
+	}, languagesDataIdKey, languagesDeveloperIdKey)
 	return err
 }
 
@@ -83,21 +91,48 @@ func (m *defaultLanguagesModel) FindOne(ctx context.Context, dataId int64) (*Lan
 	}
 }
 
+func (m *defaultLanguagesModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*Languages, error) {
+	languagesDeveloperIdKey := fmt.Sprintf("%s%v", cacheLanguagesDeveloperIdPrefix, developerId)
+	var resp Languages
+	err := m.QueryRowIndexCtx(ctx, &resp, languagesDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `developer_id` = ? limit 1", languagesRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultLanguagesModel) Insert(ctx context.Context, data *Languages) (sql.Result, error) {
 	languagesDataIdKey := fmt.Sprintf("%s%v", cacheLanguagesDataIdPrefix, data.DataId)
+	languagesDeveloperIdKey := fmt.Sprintf("%s%v", cacheLanguagesDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, languagesRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Language, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
-	}, languagesDataIdKey)
+	}, languagesDataIdKey, languagesDeveloperIdKey)
 	return ret, err
 }
 
-func (m *defaultLanguagesModel) Update(ctx context.Context, data *Languages) error {
+func (m *defaultLanguagesModel) Update(ctx context.Context, newData *Languages) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	languagesDataIdKey := fmt.Sprintf("%s%v", cacheLanguagesDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	languagesDeveloperIdKey := fmt.Sprintf("%s%v", cacheLanguagesDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, languagesRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.Language, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
-	}, languagesDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.Language, newData.DataCreatedAt, newData.DataUpdatedAt, newData.DataDeletedAt, newData.DataId)
+	}, languagesDataIdKey, languagesDeveloperIdKey)
 	return err
 }
 

@@ -24,13 +24,15 @@ var (
 	commentOfUserUpdatedAtRowsExpectAutoSet   = strings.Join(stringx.Remove(commentOfUserUpdatedAtFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	commentOfUserUpdatedAtRowsWithPlaceHolder = strings.Join(stringx.Remove(commentOfUserUpdatedAtFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheCommentOfUserUpdatedAtDataIdPrefix = "cache:commentOfUserUpdatedAt:dataId:"
+	cacheCommentOfUserUpdatedAtDataIdPrefix      = "cache:commentOfUserUpdatedAt:dataId:"
+	cacheCommentOfUserUpdatedAtDeveloperIdPrefix = "cache:commentOfUserUpdatedAt:developerId:"
 )
 
 type (
 	commentOfUserUpdatedAtModel interface {
 		Insert(ctx context.Context, data *CommentOfUserUpdatedAt) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*CommentOfUserUpdatedAt, error)
+		FindOneByDeveloperId(ctx context.Context, developerId int64) (*CommentOfUserUpdatedAt, error)
 		Update(ctx context.Context, data *CommentOfUserUpdatedAt) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -56,11 +58,17 @@ func newCommentOfUserUpdatedAtModel(conn sqlx.SqlConn, c cache.CacheConf, opts .
 }
 
 func (m *defaultCommentOfUserUpdatedAtModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	commentOfUserUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheCommentOfUserUpdatedAtDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	commentOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheCommentOfUserUpdatedAtDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, commentOfUserUpdatedAtDataIdKey)
+	}, commentOfUserUpdatedAtDataIdKey, commentOfUserUpdatedAtDeveloperIdKey)
 	return err
 }
 
@@ -81,21 +89,48 @@ func (m *defaultCommentOfUserUpdatedAtModel) FindOne(ctx context.Context, dataId
 	}
 }
 
+func (m *defaultCommentOfUserUpdatedAtModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*CommentOfUserUpdatedAt, error) {
+	commentOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheCommentOfUserUpdatedAtDeveloperIdPrefix, developerId)
+	var resp CommentOfUserUpdatedAt
+	err := m.QueryRowIndexCtx(ctx, &resp, commentOfUserUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `developer_id` = ? limit 1", commentOfUserUpdatedAtRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultCommentOfUserUpdatedAtModel) Insert(ctx context.Context, data *CommentOfUserUpdatedAt) (sql.Result, error) {
 	commentOfUserUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheCommentOfUserUpdatedAtDataIdPrefix, data.DataId)
+	commentOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheCommentOfUserUpdatedAtDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, commentOfUserUpdatedAtRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId)
-	}, commentOfUserUpdatedAtDataIdKey)
+	}, commentOfUserUpdatedAtDataIdKey, commentOfUserUpdatedAtDeveloperIdKey)
 	return ret, err
 }
 
-func (m *defaultCommentOfUserUpdatedAtModel) Update(ctx context.Context, data *CommentOfUserUpdatedAt) error {
+func (m *defaultCommentOfUserUpdatedAtModel) Update(ctx context.Context, newData *CommentOfUserUpdatedAt) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	commentOfUserUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheCommentOfUserUpdatedAtDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	commentOfUserUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheCommentOfUserUpdatedAtDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, commentOfUserUpdatedAtRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.DataId)
-	}, commentOfUserUpdatedAtDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.DataId)
+	}, commentOfUserUpdatedAtDataIdKey, commentOfUserUpdatedAtDeveloperIdKey)
 	return err
 }
 

@@ -25,12 +25,14 @@ var (
 	createRepoRowsWithPlaceHolder = strings.Join(stringx.Remove(createRepoFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheCreateRepoDataIdPrefix = "cache:createRepo:dataId:"
+	cacheCreateRepoRepoIdPrefix = "cache:createRepo:repoId:"
 )
 
 type (
 	createRepoModel interface {
 		Insert(ctx context.Context, data *CreateRepo) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*CreateRepo, error)
+		FindOneByRepoId(ctx context.Context, repoId int64) (*CreateRepo, error)
 		Update(ctx context.Context, data *CreateRepo) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -58,11 +60,17 @@ func newCreateRepoModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Opti
 }
 
 func (m *defaultCreateRepoModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	createRepoDataIdKey := fmt.Sprintf("%s%v", cacheCreateRepoDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	createRepoRepoIdKey := fmt.Sprintf("%s%v", cacheCreateRepoRepoIdPrefix, data.RepoId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, createRepoDataIdKey)
+	}, createRepoDataIdKey, createRepoRepoIdKey)
 	return err
 }
 
@@ -83,21 +91,48 @@ func (m *defaultCreateRepoModel) FindOne(ctx context.Context, dataId int64) (*Cr
 	}
 }
 
+func (m *defaultCreateRepoModel) FindOneByRepoId(ctx context.Context, repoId int64) (*CreateRepo, error) {
+	createRepoRepoIdKey := fmt.Sprintf("%s%v", cacheCreateRepoRepoIdPrefix, repoId)
+	var resp CreateRepo
+	err := m.QueryRowIndexCtx(ctx, &resp, createRepoRepoIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `repo_id` = ? limit 1", createRepoRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, repoId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultCreateRepoModel) Insert(ctx context.Context, data *CreateRepo) (sql.Result, error) {
 	createRepoDataIdKey := fmt.Sprintf("%s%v", cacheCreateRepoDataIdPrefix, data.DataId)
+	createRepoRepoIdKey := fmt.Sprintf("%s%v", cacheCreateRepoRepoIdPrefix, data.RepoId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, createRepoRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.RepoId, data.DeletedAt)
-	}, createRepoDataIdKey)
+	}, createRepoDataIdKey, createRepoRepoIdKey)
 	return ret, err
 }
 
-func (m *defaultCreateRepoModel) Update(ctx context.Context, data *CreateRepo) error {
+func (m *defaultCreateRepoModel) Update(ctx context.Context, newData *CreateRepo) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	createRepoDataIdKey := fmt.Sprintf("%s%v", cacheCreateRepoDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	createRepoRepoIdKey := fmt.Sprintf("%s%v", cacheCreateRepoRepoIdPrefix, data.RepoId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, createRepoRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.RepoId, data.DeletedAt, data.DataId)
-	}, createRepoDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.RepoId, newData.DeletedAt, newData.DataId)
+	}, createRepoDataIdKey, createRepoRepoIdKey)
 	return err
 }
 

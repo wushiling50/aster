@@ -24,13 +24,15 @@ var (
 	scoreRowsExpectAutoSet   = strings.Join(stringx.Remove(scoreFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	scoreRowsWithPlaceHolder = strings.Join(stringx.Remove(scoreFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheScoreDataIdPrefix = "cache:score:dataId:"
+	cacheScoreDataIdPrefix      = "cache:score:dataId:"
+	cacheScoreDeveloperIdPrefix = "cache:score:developerId:"
 )
 
 type (
 	scoreModel interface {
 		Insert(ctx context.Context, data *Score) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*Score, error)
+		FindOneByDeveloperId(ctx context.Context, developerId int64) (*Score, error)
 		Update(ctx context.Context, data *Score) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -59,11 +61,17 @@ func newScoreModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *
 }
 
 func (m *defaultScoreModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	scoreDataIdKey := fmt.Sprintf("%s%v", cacheScoreDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	scoreDeveloperIdKey := fmt.Sprintf("%s%v", cacheScoreDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, scoreDataIdKey)
+	}, scoreDataIdKey, scoreDeveloperIdKey)
 	return err
 }
 
@@ -84,21 +92,48 @@ func (m *defaultScoreModel) FindOne(ctx context.Context, dataId int64) (*Score, 
 	}
 }
 
+func (m *defaultScoreModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*Score, error) {
+	scoreDeveloperIdKey := fmt.Sprintf("%s%v", cacheScoreDeveloperIdPrefix, developerId)
+	var resp Score
+	err := m.QueryRowIndexCtx(ctx, &resp, scoreDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `developer_id` = ? limit 1", scoreRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultScoreModel) Insert(ctx context.Context, data *Score) (sql.Result, error) {
 	scoreDataIdKey := fmt.Sprintf("%s%v", cacheScoreDataIdPrefix, data.DataId)
+	scoreDeveloperIdKey := fmt.Sprintf("%s%v", cacheScoreDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, scoreRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.ContributionId, data.DeveloperId, data.Score, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
-	}, scoreDataIdKey)
+	}, scoreDataIdKey, scoreDeveloperIdKey)
 	return ret, err
 }
 
-func (m *defaultScoreModel) Update(ctx context.Context, data *Score) error {
+func (m *defaultScoreModel) Update(ctx context.Context, newData *Score) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	scoreDataIdKey := fmt.Sprintf("%s%v", cacheScoreDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	scoreDeveloperIdKey := fmt.Sprintf("%s%v", cacheScoreDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, scoreRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.ContributionId, data.DeveloperId, data.Score, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
-	}, scoreDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.ContributionId, newData.DeveloperId, newData.Score, newData.DataCreatedAt, newData.DataUpdatedAt, newData.DataDeletedAt, newData.DataId)
+	}, scoreDataIdKey, scoreDeveloperIdKey)
 	return err
 }
 

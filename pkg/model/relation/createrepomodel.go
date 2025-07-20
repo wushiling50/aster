@@ -7,7 +7,6 @@ import (
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/cache"
-	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -19,7 +18,6 @@ type (
 	CreateRepoModel interface {
 		createRepoModel
 		SearchCreatedRepo(ctx context.Context, developerId int64, page int64, limit int64) ([]*CreateRepo, error)
-		FindOneByRepoId(ctx context.Context, repoId int64) (*CreateRepo, error)
 		CreateDataId() (int64, error)
 	}
 
@@ -51,26 +49,6 @@ func (m *customCreateRepoModel) SearchCreatedRepo(ctx context.Context, developer
 	}
 
 	return resp, nil
-}
-
-func (m *customCreateRepoModel) FindOneByRepoId(ctx context.Context, repoId int64) (*CreateRepo, error) {
-	cacheCreateRepoRepoIdPrefix := fmt.Sprintf("%s%v", "cache:createRepo:repoId:", repoId)
-	var resp CreateRepo
-	err := m.QueryRowIndexCtx(ctx, &resp, cacheCreateRepoRepoIdPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where repo_id = ? limit 1", createRepoRows, m.table)
-		if err := conn.QueryRowCtx(ctx, &resp, query, repoId); err != nil {
-			return nil, err
-		}
-		return resp.DataId, nil
-	}, m.queryPrimary)
-	switch err {
-	case nil:
-		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
 }
 
 func (m *customCreateRepoModel) CreateDataId() (int64, error) {

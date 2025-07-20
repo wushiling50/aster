@@ -24,13 +24,15 @@ var (
 	followingUpdatedAtRowsExpectAutoSet   = strings.Join(stringx.Remove(followingUpdatedAtFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	followingUpdatedAtRowsWithPlaceHolder = strings.Join(stringx.Remove(followingUpdatedAtFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheFollowingUpdatedAtDataIdPrefix = "cache:followingUpdatedAt:dataId:"
+	cacheFollowingUpdatedAtDataIdPrefix      = "cache:followingUpdatedAt:dataId:"
+	cacheFollowingUpdatedAtDeveloperIdPrefix = "cache:followingUpdatedAt:developerId:"
 )
 
 type (
 	followingUpdatedAtModel interface {
 		Insert(ctx context.Context, data *FollowingUpdatedAt) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*FollowingUpdatedAt, error)
+		FindOneByDeveloperId(ctx context.Context, developerId int64) (*FollowingUpdatedAt, error)
 		Update(ctx context.Context, data *FollowingUpdatedAt) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -56,11 +58,17 @@ func newFollowingUpdatedAtModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...ca
 }
 
 func (m *defaultFollowingUpdatedAtModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	followingUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheFollowingUpdatedAtDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	followingUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheFollowingUpdatedAtDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, followingUpdatedAtDataIdKey)
+	}, followingUpdatedAtDataIdKey, followingUpdatedAtDeveloperIdKey)
 	return err
 }
 
@@ -81,21 +89,48 @@ func (m *defaultFollowingUpdatedAtModel) FindOne(ctx context.Context, dataId int
 	}
 }
 
+func (m *defaultFollowingUpdatedAtModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*FollowingUpdatedAt, error) {
+	followingUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheFollowingUpdatedAtDeveloperIdPrefix, developerId)
+	var resp FollowingUpdatedAt
+	err := m.QueryRowIndexCtx(ctx, &resp, followingUpdatedAtDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `developer_id` = ? limit 1", followingUpdatedAtRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultFollowingUpdatedAtModel) Insert(ctx context.Context, data *FollowingUpdatedAt) (sql.Result, error) {
 	followingUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheFollowingUpdatedAtDataIdPrefix, data.DataId)
+	followingUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheFollowingUpdatedAtDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, followingUpdatedAtRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId)
-	}, followingUpdatedAtDataIdKey)
+	}, followingUpdatedAtDataIdKey, followingUpdatedAtDeveloperIdKey)
 	return ret, err
 }
 
-func (m *defaultFollowingUpdatedAtModel) Update(ctx context.Context, data *FollowingUpdatedAt) error {
+func (m *defaultFollowingUpdatedAtModel) Update(ctx context.Context, newData *FollowingUpdatedAt) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	followingUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheFollowingUpdatedAtDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	followingUpdatedAtDeveloperIdKey := fmt.Sprintf("%s%v", cacheFollowingUpdatedAtDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, followingUpdatedAtRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.DataId)
-	}, followingUpdatedAtDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.DataId)
+	}, followingUpdatedAtDataIdKey, followingUpdatedAtDeveloperIdKey)
 	return err
 }
 

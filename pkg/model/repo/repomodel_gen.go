@@ -25,12 +25,14 @@ var (
 	repoRowsWithPlaceHolder = strings.Join(stringx.Remove(repoFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheRepoDataIdPrefix = "cache:repo:dataId:"
+	cacheRepoIdPrefix     = "cache:repo:id:"
 )
 
 type (
 	repoModel interface {
 		Insert(ctx context.Context, data *Repo) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*Repo, error)
+		FindOneById(ctx context.Context, id int64) (*Repo, error)
 		Update(ctx context.Context, data *Repo) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -71,11 +73,17 @@ func newRepoModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *d
 }
 
 func (m *defaultRepoModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	repoDataIdKey := fmt.Sprintf("%s%v", cacheRepoDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	repoIdKey := fmt.Sprintf("%s%v", cacheRepoIdPrefix, data.Id)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, repoDataIdKey)
+	}, repoDataIdKey, repoIdKey)
 	return err
 }
 
@@ -96,21 +104,48 @@ func (m *defaultRepoModel) FindOne(ctx context.Context, dataId int64) (*Repo, er
 	}
 }
 
+func (m *defaultRepoModel) FindOneById(ctx context.Context, id int64) (*Repo, error) {
+	repoIdKey := fmt.Sprintf("%s%v", cacheRepoIdPrefix, id)
+	var resp Repo
+	err := m.QueryRowIndexCtx(ctx, &resp, repoIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", repoRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, id); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultRepoModel) Insert(ctx context.Context, data *Repo) (sql.Result, error) {
 	repoDataIdKey := fmt.Sprintf("%s%v", cacheRepoDataIdPrefix, data.DataId)
+	repoIdKey := fmt.Sprintf("%s%v", cacheRepoIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, repoRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.Id, data.Name, data.StarCount, data.ForkCount, data.IssueCount, data.CommitCount, data.PrCount, data.Language, data.Description, data.LastFetchForkAt, data.LastFetchContributionAt, data.MergedPrCount, data.OpenPrCount, data.CommentCount, data.ReviewCount, data.DeletedAt)
-	}, repoDataIdKey)
+	}, repoDataIdKey, repoIdKey)
 	return ret, err
 }
 
-func (m *defaultRepoModel) Update(ctx context.Context, data *Repo) error {
+func (m *defaultRepoModel) Update(ctx context.Context, newData *Repo) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	repoDataIdKey := fmt.Sprintf("%s%v", cacheRepoDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	repoIdKey := fmt.Sprintf("%s%v", cacheRepoIdPrefix, data.Id)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, repoRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Id, data.Name, data.StarCount, data.ForkCount, data.IssueCount, data.CommitCount, data.PrCount, data.Language, data.Description, data.LastFetchForkAt, data.LastFetchContributionAt, data.MergedPrCount, data.OpenPrCount, data.CommentCount, data.ReviewCount, data.DeletedAt, data.DataId)
-	}, repoDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.Id, newData.Name, newData.StarCount, newData.ForkCount, newData.IssueCount, newData.CommitCount, newData.PrCount, newData.Language, newData.Description, newData.LastFetchForkAt, newData.LastFetchContributionAt, newData.MergedPrCount, newData.OpenPrCount, newData.CommentCount, newData.ReviewCount, newData.DeletedAt, newData.DataId)
+	}, repoDataIdKey, repoIdKey)
 	return err
 }
 

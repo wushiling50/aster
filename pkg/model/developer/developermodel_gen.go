@@ -25,12 +25,14 @@ var (
 	developerRowsWithPlaceHolder = strings.Join(stringx.Remove(developerFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheDeveloperDataIdPrefix = "cache:developer:dataId:"
+	cacheDeveloperIdPrefix     = "cache:developer:id:"
 )
 
 type (
 	developerModel interface {
 		Insert(ctx context.Context, data *Developer) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*Developer, error)
+		FindOneById(ctx context.Context, id int64) (*Developer, error)
 		Update(ctx context.Context, data *Developer) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -71,11 +73,17 @@ func newDeveloperModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Optio
 }
 
 func (m *defaultDeveloperModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	developerDataIdKey := fmt.Sprintf("%s%v", cacheDeveloperDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	developerIdKey := fmt.Sprintf("%s%v", cacheDeveloperIdPrefix, data.Id)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, developerDataIdKey)
+	}, developerDataIdKey, developerIdKey)
 	return err
 }
 
@@ -96,21 +104,48 @@ func (m *defaultDeveloperModel) FindOne(ctx context.Context, dataId int64) (*Dev
 	}
 }
 
+func (m *defaultDeveloperModel) FindOneById(ctx context.Context, id int64) (*Developer, error) {
+	developerIdKey := fmt.Sprintf("%s%v", cacheDeveloperIdPrefix, id)
+	var resp Developer
+	err := m.QueryRowIndexCtx(ctx, &resp, developerIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", developerRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, id); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultDeveloperModel) Insert(ctx context.Context, data *Developer) (sql.Result, error) {
 	developerDataIdKey := fmt.Sprintf("%s%v", cacheDeveloperDataIdPrefix, data.DataId)
+	developerIdKey := fmt.Sprintf("%s%v", cacheDeveloperIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, developerRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.Id, data.Name, data.Login, data.AvatarUrl, data.Company, data.Location, data.Bio, data.Blog, data.Email, data.TwitterUsername, data.Repos, data.Following, data.Followers, data.Stars, data.Gists, data.DeletedAt)
-	}, developerDataIdKey)
+	}, developerDataIdKey, developerIdKey)
 	return ret, err
 }
 
-func (m *defaultDeveloperModel) Update(ctx context.Context, data *Developer) error {
+func (m *defaultDeveloperModel) Update(ctx context.Context, newData *Developer) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	developerDataIdKey := fmt.Sprintf("%s%v", cacheDeveloperDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	developerIdKey := fmt.Sprintf("%s%v", cacheDeveloperIdPrefix, data.Id)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, developerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Id, data.Name, data.Login, data.AvatarUrl, data.Company, data.Location, data.Bio, data.Blog, data.Email, data.TwitterUsername, data.Repos, data.Following, data.Followers, data.Stars, data.Gists, data.DeletedAt, data.DataId)
-	}, developerDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.Id, newData.Name, newData.Login, newData.AvatarUrl, newData.Company, newData.Location, newData.Bio, newData.Blog, newData.Email, newData.TwitterUsername, newData.Repos, newData.Following, newData.Followers, newData.Stars, newData.Gists, newData.DeletedAt, newData.DataId)
+	}, developerDataIdKey, developerIdKey)
 	return err
 }
 

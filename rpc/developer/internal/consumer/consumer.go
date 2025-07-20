@@ -48,7 +48,7 @@ func (c *DeveloperConsumer) Consume(ctx context.Context, key string, value strin
 		return
 	}
 
-	if _, exist, err = c.getDeveloper(newDeveloper.Id); err != nil {
+	if exist, err = c.getDeveloper(newDeveloper.Id); err != nil {
 		logx.Error(err)
 		return
 	}
@@ -77,7 +77,7 @@ func (c *DeveloperConsumer) Consume(ctx context.Context, key string, value strin
 	return
 }
 
-func (c *DeveloperConsumer) getDeveloper(developerId int64) (*developer.Developer, bool, error) {
+func (c *DeveloperConsumer) getDeveloper(developerId int64) (bool, error) {
 	l := logic.NewGetDeveloperByIdLogic(c.ctx, c.svcCtx)
 
 	resp, err := l.GetDeveloperById(&developer.GetDeveloperByIdReq{
@@ -86,20 +86,20 @@ func (c *DeveloperConsumer) getDeveloper(developerId int64) (*developer.Develope
 
 	if err != nil {
 		err = errno.InternalServiceError.WithError(err)
-		return nil, false, err
+		return false, err
 	}
 
 	if !utils.IsSuccess(resp.Base) {
 		err = errno.BizError.WithMessage(resp.Base.Message)
-		return nil, false, err
+		return false, err
 	}
 
 	if resp.Developer == nil {
 		logx.Info("No Found This Developer!")
-		return nil, false, nil
+		return false, nil
 	}
 
-	return resp.Developer, true, nil
+	return true, nil
 }
 
 func (c *DeveloperConsumer) updateOldDeveloper(newDeveloper *developer.Developer) error {

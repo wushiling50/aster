@@ -24,13 +24,15 @@ var (
 	summaryRowsExpectAutoSet   = strings.Join(stringx.Remove(summaryFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	summaryRowsWithPlaceHolder = strings.Join(stringx.Remove(summaryFieldNames, "`data_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheSummaryDataIdPrefix = "cache:summary:dataId:"
+	cacheSummaryDataIdPrefix      = "cache:summary:dataId:"
+	cacheSummaryDeveloperIdPrefix = "cache:summary:developerId:"
 )
 
 type (
 	summaryModel interface {
 		Insert(ctx context.Context, data *Summary) (sql.Result, error)
 		FindOne(ctx context.Context, dataId int64) (*Summary, error)
+		FindOneByDeveloperId(ctx context.Context, developerId int64) (*Summary, error)
 		Update(ctx context.Context, data *Summary) error
 		Delete(ctx context.Context, dataId int64) error
 	}
@@ -58,11 +60,17 @@ func newSummaryModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option)
 }
 
 func (m *defaultSummaryModel) Delete(ctx context.Context, dataId int64) error {
+	data, err := m.FindOne(ctx, dataId)
+	if err != nil {
+		return err
+	}
+
 	summaryDataIdKey := fmt.Sprintf("%s%v", cacheSummaryDataIdPrefix, dataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	summaryDeveloperIdKey := fmt.Sprintf("%s%v", cacheSummaryDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `data_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, dataId)
-	}, summaryDataIdKey)
+	}, summaryDataIdKey, summaryDeveloperIdKey)
 	return err
 }
 
@@ -83,21 +91,48 @@ func (m *defaultSummaryModel) FindOne(ctx context.Context, dataId int64) (*Summa
 	}
 }
 
+func (m *defaultSummaryModel) FindOneByDeveloperId(ctx context.Context, developerId int64) (*Summary, error) {
+	summaryDeveloperIdKey := fmt.Sprintf("%s%v", cacheSummaryDeveloperIdPrefix, developerId)
+	var resp Summary
+	err := m.QueryRowIndexCtx(ctx, &resp, summaryDeveloperIdKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `developer_id` = ? limit 1", summaryRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, developerId); err != nil {
+			return nil, err
+		}
+		return resp.DataId, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultSummaryModel) Insert(ctx context.Context, data *Summary) (sql.Result, error) {
 	summaryDataIdKey := fmt.Sprintf("%s%v", cacheSummaryDataIdPrefix, data.DataId)
+	summaryDeveloperIdKey := fmt.Sprintf("%s%v", cacheSummaryDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, summaryRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Summary, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
-	}, summaryDataIdKey)
+	}, summaryDataIdKey, summaryDeveloperIdKey)
 	return ret, err
 }
 
-func (m *defaultSummaryModel) Update(ctx context.Context, data *Summary) error {
+func (m *defaultSummaryModel) Update(ctx context.Context, newData *Summary) error {
+	data, err := m.FindOne(ctx, newData.DataId)
+	if err != nil {
+		return err
+	}
+
 	summaryDataIdKey := fmt.Sprintf("%s%v", cacheSummaryDataIdPrefix, data.DataId)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	summaryDeveloperIdKey := fmt.Sprintf("%s%v", cacheSummaryDeveloperIdPrefix, data.DeveloperId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, summaryRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.Summary, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
-	}, summaryDataIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.Summary, newData.DataCreatedAt, newData.DataUpdatedAt, newData.DataDeletedAt, newData.DataId)
+	}, summaryDataIdKey, summaryDeveloperIdKey)
 	return err
 }
 

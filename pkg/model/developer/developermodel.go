@@ -18,7 +18,6 @@ type (
 	// and implement the added methods in customDeveloperModel.
 	DeveloperModel interface {
 		developerModel
-		FindOneById(ctx context.Context, id int64) (*Developer, error)
 		FindOneByLogin(ctx context.Context, login string) (*Developer, error)
 		CreateDataId() (int64, error)
 	}
@@ -39,26 +38,6 @@ func NewDeveloperModel(conn sqlx.SqlConn, c cache.CacheConf, DatancenterId, Work
 	return &customDeveloperModel{
 		defaultDeveloperModel: newDeveloperModel(conn, c, opts...),
 		sf:                    sf,
-	}
-}
-
-func (m *customDeveloperModel) FindOneById(ctx context.Context, id int64) (*Developer, error) {
-	cacheDeveloperIdPrefix := fmt.Sprintf("%s%v", "cache:developer:id:", id)
-	var resp Developer
-	err := m.QueryRowIndexCtx(ctx, &resp, cacheDeveloperIdPrefix, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where id = ? limit 1", developerRows, m.table)
-		if err := conn.QueryRowCtx(ctx, &resp, query, id); err != nil {
-			return nil, err
-		}
-		return resp.DataId, nil
-	}, m.queryPrimary)
-	switch err {
-	case nil:
-		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
 	}
 }
 
