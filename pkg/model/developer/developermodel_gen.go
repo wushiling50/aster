@@ -57,9 +57,9 @@ type (
 		Followers       int64        `db:"followers"`        // Followers Count
 		Stars           int64        `db:"stars"`            // Total Stars Received
 		Gists           int64        `db:"gists"`            // Gists count
-		DataCreatedAt   time.Time    `db:"data_created_at"`
-		DataUpdatedAt   time.Time    `db:"data_updated_at"` // update data time
-		DataDeletedAt   sql.NullTime `db:"data_deleted_at"`
+		CreatedAt       time.Time    `db:"created_at"`
+		UpdatedAt       time.Time    `db:"updated_at"` // update data time
+		DeletedAt       sql.NullTime `db:"deleted_at"`
 	}
 )
 
@@ -99,8 +99,8 @@ func (m *defaultDeveloperModel) FindOne(ctx context.Context, dataId int64) (*Dev
 func (m *defaultDeveloperModel) Insert(ctx context.Context, data *Developer) (sql.Result, error) {
 	developerDataIdKey := fmt.Sprintf("%s%v", cacheDeveloperDataIdPrefix, data.DataId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, developerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.Id, data.Name, data.Login, data.AvatarUrl, data.Company, data.Location, data.Bio, data.Blog, data.Email, data.TwitterUsername, data.Repos, data.Following, data.Followers, data.Stars, data.Gists, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, developerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DataId, data.Id, data.Name, data.Login, data.AvatarUrl, data.Company, data.Location, data.Bio, data.Blog, data.Email, data.TwitterUsername, data.Repos, data.Following, data.Followers, data.Stars, data.Gists, data.DeletedAt)
 	}, developerDataIdKey)
 	return ret, err
 }
@@ -109,7 +109,7 @@ func (m *defaultDeveloperModel) Update(ctx context.Context, data *Developer) err
 	developerDataIdKey := fmt.Sprintf("%s%v", cacheDeveloperDataIdPrefix, data.DataId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, developerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Id, data.Name, data.Login, data.AvatarUrl, data.Company, data.Location, data.Bio, data.Blog, data.Email, data.TwitterUsername, data.Repos, data.Following, data.Followers, data.Stars, data.Gists, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
+		return conn.ExecCtx(ctx, query, data.Id, data.Name, data.Login, data.AvatarUrl, data.Company, data.Location, data.Bio, data.Blog, data.Email, data.TwitterUsername, data.Repos, data.Following, data.Followers, data.Stars, data.Gists, data.DeletedAt, data.DataId)
 	}, developerDataIdKey)
 	return err
 }

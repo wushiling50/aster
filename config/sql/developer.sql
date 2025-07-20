@@ -15,9 +15,9 @@ create table `aster`.`developer` (
     `followers`             bigint          not null       comment 'Followers Count',
     `stars`                 bigint          not null       comment 'Total Stars Received',
     `gists`                 bigint          not null       comment 'Gists count',
-    `data_created_at`       timestamp       not null default  current_timestamp,
-    `data_updated_at`       timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
-    `data_deleted_at`       timestamp       null     default null,
+    `created_at`            timestamp       not null default current_timestamp,
+    `updated_at`            timestamp       not null default current_timestamp on update current_timestamp comment 'update data time',
+    `deleted_at`            timestamp       null     default null,
     constraint `pk_data_id`
         primary key (`data_id`),
     index `idx_developer_id` (`id`),

@@ -48,10 +48,10 @@ func (l *GetDeveloperByIdLogic) GetDeveloperById(in *developer.GetDeveloperByIdR
 }
 
 func (l *GetDeveloperByIdLogic) getDeveloperById(developerId int64) (*model_developer.Developer, error) {
-	repo, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
+	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
 	if err != nil {
 		return nil, err
 	}
 
-	return repo, nil
+	return developer, nil
 }

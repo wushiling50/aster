@@ -48,10 +48,10 @@ func (l *GetDeveloperByLoginLogic) GetDeveloperByLogin(in *developer.GetDevelope
 }
 
 func (l *GetDeveloperByLoginLogic) getDeveloperByLogin(login string) (*model_developer.Developer, error) {
-	repo, err := l.svcCtx.DeveloperModel.FindOneByLogin(l.ctx, login)
+	developer, err := l.svcCtx.DeveloperModel.FindOneByLogin(l.ctx, login)
 	if err != nil {
 		return nil, err
 	}
 
-	return repo, nil
+	return developer, nil
 }

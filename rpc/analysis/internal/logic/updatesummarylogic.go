@@ -157,7 +157,7 @@ func (l *UpdateSummaryLogic) pushDeveloperTask(developerId int64) (err error) {
 		return err
 	}
 
-	if developer != nil && !github.CheckIfDataExpired(developer.DataUpdatedAt) {
+	if developer != nil && !github.CheckIfDataExpired(developer.UpdatedAt) {
 		return nil
 	}
 
