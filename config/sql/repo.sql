@@ -15,9 +15,9 @@ create table `aster`.`repo` (
     `open_pr_count`              bigint          not null       comment 'Count Of Open Pull Requests',
     `comment_count`              bigint          not null       comment 'Total Comments Count',
     `review_count`               bigint          not null       comment 'Code Reviews Count',
-    `data_created_at`            timestamp       not null default  current_timestamp,
-    `data_updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
-    `data_deleted_at`            timestamp       null     default null,
+    `created_at`                 timestamp       not null default  current_timestamp,
+    `updated_at`                 timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
+    `deleted_at`                 timestamp       null     default null,
     constraint `pk_data_id`
         primary key (`data_id`),
     index `idx_repo_id` (`id`)

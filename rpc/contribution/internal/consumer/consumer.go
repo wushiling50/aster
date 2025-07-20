@@ -216,13 +216,13 @@ func (c *ContributionConsumer) addNewContribution(newContribution *contribution.
 	l := logic.NewAddContributionLogic(c.ctx, c.svcCtx)
 
 	resp, err := l.AddContribution(&contribution.AddContributionReq{
-		DeveloperId:    newContribution.DeveloperId,
-		RepoId:         newContribution.RepoId,
-		Category:       newContribution.Category,
-		Content:        newContribution.Content,
-		CreatedAt:      newContribution.CreatedAt,
-		UpdatedAt:      newContribution.UpdatedAt,
-		ContributionId: newContribution.ContributionId,
+		DeveloperId:           newContribution.DeveloperId,
+		RepoId:                newContribution.RepoId,
+		Category:              newContribution.Category,
+		Content:               newContribution.Content,
+		ContributionCreatedAt: newContribution.ContributionCreatedAt,
+		ContributionUpdatedAt: newContribution.ContributionUpdatedAt,
+		ContributionId:        newContribution.ContributionId,
 	})
 
 	if err != nil {

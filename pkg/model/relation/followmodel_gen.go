@@ -41,12 +41,12 @@ type (
 	}
 
 	Follow struct {
-		DataId        int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
-		FollowerId    int64        `db:"follower_id"`  // Follower ID
-		FollowingId   int64        `db:"following_id"` // Following ID
-		DataCreatedAt time.Time    `db:"data_created_at"`
-		DataUpdatedAt time.Time    `db:"data_updated_at"` // update data time
-		DataDeletedAt sql.NullTime `db:"data_deleted_at"`
+		DataId      int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
+		FollowerId  int64        `db:"follower_id"`  // Follower ID
+		FollowingId int64        `db:"following_id"` // Following ID
+		CreatedAt   time.Time    `db:"created_at"`
+		UpdatedAt   time.Time    `db:"updated_at"` // update data time
+		DeletedAt   sql.NullTime `db:"deleted_at"`
 	}
 )
 
@@ -86,8 +86,8 @@ func (m *defaultFollowModel) FindOne(ctx context.Context, dataId int64) (*Follow
 func (m *defaultFollowModel) Insert(ctx context.Context, data *Follow) (sql.Result, error) {
 	followDataIdKey := fmt.Sprintf("%s%v", cacheFollowDataIdPrefix, data.DataId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, followRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.FollowerId, data.FollowingId, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, followRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DataId, data.FollowerId, data.FollowingId, data.DeletedAt)
 	}, followDataIdKey)
 	return ret, err
 }
@@ -96,7 +96,7 @@ func (m *defaultFollowModel) Update(ctx context.Context, data *Follow) error {
 	followDataIdKey := fmt.Sprintf("%s%v", cacheFollowDataIdPrefix, data.DataId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, followRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.FollowerId, data.FollowingId, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
+		return conn.ExecCtx(ctx, query, data.FollowerId, data.FollowingId, data.DeletedAt, data.DataId)
 	}, followDataIdKey)
 	return err
 }

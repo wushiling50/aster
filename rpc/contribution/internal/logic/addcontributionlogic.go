@@ -35,8 +35,8 @@ func (l *AddContributionLogic) AddContribution(in *contribution.AddContributionR
 		RepoId:         in.RepoId,
 		Category:       in.Category,
 		Content:        in.Content,
-		CreatedAt:      time.Unix(in.CreatedAt, 0),
-		UpdatedAt:      time.Unix(in.UpdatedAt, 0),
+		CreatedAt:      time.Unix(in.ContributionCreatedAt, 0),
+		UpdatedAt:      time.Unix(in.ContributionUpdatedAt, 0),
 	})
 
 	if err != nil {

@@ -18,8 +18,6 @@ type Developer {
 	Stars     int64  `json:"stars"`
 	Repos     int64  `json:"repos"`
 	Gists     int64  `json:"gists"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
 }
 
 type Score {

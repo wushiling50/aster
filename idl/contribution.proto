@@ -9,15 +9,13 @@ import "idl/base.proto";
 // ====== Contribution ======
 message Contribution {
     int64 dataId = 1; // dataId
-    int64 dataCreatedAt = 2; // dataCreatedAt
-    int64 dataUpdatedAt = 3; // dataUpdatedAt
-    int64 developerId = 4; // developerId
-    int64 repoId = 5; // repoId
-    string category = 6; // category
-    string content = 7; // content
-    int64 createdAt = 8; // createdAt
-    int64 updatedAt = 9; // updatedAt
-    int64 contributionId = 10; // contributionId
+    int64 developerId = 2; // developerId
+    int64 repoId = 3; // repoId
+    string category = 4; // category
+    string content = 5; // content
+    int64 contributionCreatedAt = 6; // contribution_created_at
+    int64 contributionUpdatedAt = 7; // contribution_updated_at
+    int64 contributionId = 8; // contributionId
 }
   
 message AddContributionReq {
@@ -25,8 +23,8 @@ message AddContributionReq {
     int64 repoId = 2; // repoId
     string category = 3; // category
     string content = 4; // content
-    int64 createdAt = 5; // createdAt
-    int64 updatedAt = 6; // updatedAt
+    int64 contributionCreatedAt = 5; // contribution_created_at
+    int64 contributionUpdatedAt = 6; // contribution_updated_at
     int64 contributionId = 7; // contributionId
 }
   

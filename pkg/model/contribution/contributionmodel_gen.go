@@ -41,17 +41,17 @@ type (
 	}
 
 	Contribution struct {
-		DataId         int64        `db:"data_id"`         // Generated Primary Key, Must Not Be Changed
-		ContributionId int64        `db:"contribution_id"` // Unique Contribution ID
-		DeveloperId    int64        `db:"developer_id"`    // Unique GitHub User ID
-		RepoId         int64        `db:"repo_id"`         // Unique GitHub Repository ID
-		Category       string       `db:"category"`        // Category
-		Content        string       `db:"content"`         // Contribution Content
-		CreatedAt      time.Time    `db:"created_at"`      // Original creation timestamp
-		UpdatedAt      time.Time    `db:"updated_at"`      // Last update timestamp
-		DataCreatedAt  time.Time    `db:"data_created_at"`
-		DataUpdatedAt  time.Time    `db:"data_updated_at"` // update data time
-		DataDeletedAt  sql.NullTime `db:"data_deleted_at"`
+		DataId                int64        `db:"data_id"`                 // Generated Primary Key, Must Not Be Changed
+		ContributionId        int64        `db:"contribution_id"`         // Unique Contribution ID
+		DeveloperId           int64        `db:"developer_id"`            // Unique GitHub User ID
+		RepoId                int64        `db:"repo_id"`                 // Unique GitHub Repository ID
+		Category              string       `db:"category"`                // Category
+		Content               string       `db:"content"`                 // Contribution Content
+		ContributionCreatedAt time.Time    `db:"contribution_created_at"` // Original creation timestamp
+		ContributionUpdatedAt time.Time    `db:"contribution_updated_at"` // Last update timestamp
+		CreatedAt             time.Time    `db:"created_at"`
+		UpdatedAt             time.Time    `db:"updated_at"` // update data time
+		DeletedAt             sql.NullTime `db:"deleted_at"`
 	}
 )
 
@@ -92,7 +92,7 @@ func (m *defaultContributionModel) Insert(ctx context.Context, data *Contributio
 	contributionDataIdKey := fmt.Sprintf("%s%v", cacheContributionDataIdPrefix, data.DataId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, contributionRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.ContributionId, data.DeveloperId, data.RepoId, data.Category, data.Content, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
+		return conn.ExecCtx(ctx, query, data.DataId, data.ContributionId, data.DeveloperId, data.RepoId, data.Category, data.Content, data.ContributionCreatedAt, data.ContributionUpdatedAt, data.DeletedAt)
 	}, contributionDataIdKey)
 	return ret, err
 }
@@ -101,7 +101,7 @@ func (m *defaultContributionModel) Update(ctx context.Context, data *Contributio
 	contributionDataIdKey := fmt.Sprintf("%s%v", cacheContributionDataIdPrefix, data.DataId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, contributionRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.ContributionId, data.DeveloperId, data.RepoId, data.Category, data.Content, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
+		return conn.ExecCtx(ctx, query, data.ContributionId, data.DeveloperId, data.RepoId, data.Category, data.Content, data.ContributionCreatedAt, data.ContributionUpdatedAt, data.DeletedAt, data.DataId)
 	}, contributionDataIdKey)
 	return err
 }

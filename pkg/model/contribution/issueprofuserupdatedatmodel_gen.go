@@ -41,10 +41,10 @@ type (
 	}
 
 	IssuePrOfUserUpdatedAt struct {
-		DataId        int64     `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
-		DeveloperId   int64     `db:"developer_id"` // Unique GitHub User ID
-		DataCreatedAt time.Time `db:"data_created_at"`
-		DataUpdatedAt time.Time `db:"data_updated_at"` // update data time
+		DataId      int64     `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
+		DeveloperId int64     `db:"developer_id"` // Unique GitHub User ID
+		CreatedAt   time.Time `db:"created_at"`
+		UpdatedAt   time.Time `db:"updated_at"` // update data time
 	}
 )
 
@@ -84,8 +84,8 @@ func (m *defaultIssuePrOfUserUpdatedAtModel) FindOne(ctx context.Context, dataId
 func (m *defaultIssuePrOfUserUpdatedAtModel) Insert(ctx context.Context, data *IssuePrOfUserUpdatedAt) (sql.Result, error) {
 	issuePrOfUserUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDataIdPrefix, data.DataId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, issuePrOfUserUpdatedAtRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.DataCreatedAt, data.DataUpdatedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, issuePrOfUserUpdatedAtRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId)
 	}, issuePrOfUserUpdatedAtDataIdKey)
 	return ret, err
 }
@@ -94,7 +94,7 @@ func (m *defaultIssuePrOfUserUpdatedAtModel) Update(ctx context.Context, data *I
 	issuePrOfUserUpdatedAtDataIdKey := fmt.Sprintf("%s%v", cacheIssuePrOfUserUpdatedAtDataIdPrefix, data.DataId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, issuePrOfUserUpdatedAtRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.DataCreatedAt, data.DataUpdatedAt, data.DataId)
+		return conn.ExecCtx(ctx, query, data.DeveloperId, data.DataId)
 	}, issuePrOfUserUpdatedAtDataIdKey)
 	return err
 }

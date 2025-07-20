@@ -144,7 +144,7 @@ func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
 		return err
 	}
 
-	if createdRepoUpdatedAt != nil && !github.CheckIfDataExpired(createdRepoUpdatedAt.DataUpdatedAt) {
+	if createdRepoUpdatedAt != nil && !github.CheckIfDataExpired(createdRepoUpdatedAt.UpdatedAt) {
 		return nil
 	}
 

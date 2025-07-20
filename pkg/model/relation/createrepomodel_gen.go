@@ -41,12 +41,12 @@ type (
 	}
 
 	CreateRepo struct {
-		DataId        int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
-		DeveloperId   int64        `db:"developer_id"` // Unique GitHub User ID
-		RepoId        int64        `db:"repo_id"`      // Unique GitHub Repository ID
-		DataCreatedAt time.Time    `db:"data_created_at"`
-		DataUpdatedAt time.Time    `db:"data_updated_at"` // update data time
-		DataDeletedAt sql.NullTime `db:"data_deleted_at"`
+		DataId      int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
+		DeveloperId int64        `db:"developer_id"` // Unique GitHub User ID
+		RepoId      int64        `db:"repo_id"`      // Unique GitHub Repository ID
+		CreatedAt   time.Time    `db:"created_at"`
+		UpdatedAt   time.Time    `db:"updated_at"` // update data time
+		DeletedAt   sql.NullTime `db:"deleted_at"`
 	}
 )
 
@@ -86,8 +86,8 @@ func (m *defaultCreateRepoModel) FindOne(ctx context.Context, dataId int64) (*Cr
 func (m *defaultCreateRepoModel) Insert(ctx context.Context, data *CreateRepo) (sql.Result, error) {
 	createRepoDataIdKey := fmt.Sprintf("%s%v", cacheCreateRepoDataIdPrefix, data.DataId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, createRepoRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.RepoId, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, createRepoRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.RepoId, data.DeletedAt)
 	}, createRepoDataIdKey)
 	return ret, err
 }
@@ -96,7 +96,7 @@ func (m *defaultCreateRepoModel) Update(ctx context.Context, data *CreateRepo) e
 	createRepoDataIdKey := fmt.Sprintf("%s%v", cacheCreateRepoDataIdPrefix, data.DataId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, createRepoRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeveloperId, data.RepoId, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt, data.DataId)
+		return conn.ExecCtx(ctx, query, data.DeveloperId, data.RepoId, data.DeletedAt, data.DataId)
 	}, createRepoDataIdKey)
 	return err
 }

@@ -229,7 +229,7 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 		return err
 	}
 
-	if commentOfUserUpdatedAt != nil && !github.CheckIfDataExpired(commentOfUserUpdatedAt.DataUpdatedAt) {
+	if commentOfUserUpdatedAt != nil && !github.CheckIfDataExpired(commentOfUserUpdatedAt.UpdatedAt) {
 		return nil
 	}
 
@@ -256,7 +256,7 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 		return err
 	}
 
-	if issuePROfUserUpdatedAt != nil && !github.CheckIfDataExpired(issuePROfUserUpdatedAt.DataUpdatedAt) {
+	if issuePROfUserUpdatedAt != nil && !github.CheckIfDataExpired(issuePROfUserUpdatedAt.UpdatedAt) {
 		return nil
 	}
 
@@ -283,7 +283,7 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
 		return err
 	}
 
-	if reviewOfUserUpdatedAt != nil && !github.CheckIfDataExpired(reviewOfUserUpdatedAt.DataUpdatedAt) {
+	if reviewOfUserUpdatedAt != nil && !github.CheckIfDataExpired(reviewOfUserUpdatedAt.UpdatedAt) {
 		return nil
 	}
 
@@ -335,7 +335,7 @@ func (l *UpdateScoreLogic) pushRepoTask(repoId int64) (err error) {
 		return err
 	}
 
-	if repo != nil && !github.CheckIfDataExpired(repo.DataUpdatedAt) {
+	if repo != nil && !github.CheckIfDataExpired(repo.UpdatedAt) {
 		return nil
 	}
 
@@ -390,7 +390,7 @@ func (l *UpdateScoreLogic) pushFollowerTask(developerId int64) (err error) {
 		return err
 	}
 
-	if followerUpdatedAt != nil && !github.CheckIfDataExpired(followerUpdatedAt.DataUpdatedAt) {
+	if followerUpdatedAt != nil && !github.CheckIfDataExpired(followerUpdatedAt.UpdatedAt) {
 		return nil
 	}
 
@@ -440,7 +440,7 @@ func (l *UpdateScoreLogic) pushStarredTask(developerId int64) (err error) {
 		return err
 	}
 
-	if starredRepoUpdatedAt != nil && !github.CheckIfDataExpired(starredRepoUpdatedAt.DataUpdatedAt) {
+	if starredRepoUpdatedAt != nil && !github.CheckIfDataExpired(starredRepoUpdatedAt.UpdatedAt) {
 		return nil
 	}
 

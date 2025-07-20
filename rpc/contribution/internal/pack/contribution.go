@@ -7,15 +7,13 @@ import (
 
 func BuildGenContribution(model *model_contribution.Contribution) *contribution.Contribution {
 	return &contribution.Contribution{
-		DataId:         model.DataId,
-		DataCreatedAt:  model.DataCreatedAt.Unix(),
-		DataUpdatedAt:  model.DataUpdatedAt.Unix(),
-		DeveloperId:    model.DeveloperId,
-		RepoId:         model.RepoId,
-		Category:       model.Category,
-		Content:        model.Content,
-		CreatedAt:      model.CreatedAt.Unix(),
-		UpdatedAt:      model.UpdatedAt.Unix(),
-		ContributionId: model.ContributionId,
+		DataId:                model.DataId,
+		DeveloperId:           model.DeveloperId,
+		RepoId:                model.RepoId,
+		Category:              model.Category,
+		Content:               model.Content,
+		ContributionCreatedAt: model.ContributionCreatedAt.Unix(),
+		ContributionUpdatedAt: model.ContributionUpdatedAt.Unix(),
+		ContributionId:        model.ContributionId,
 	}
 }
