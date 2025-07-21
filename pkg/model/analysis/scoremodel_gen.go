@@ -47,9 +47,9 @@ type (
 		ContributionId int64        `db:"contribution_id"` // Unique Contribution ID
 		DeveloperId    int64        `db:"developer_id"`    // Unique GitHub User ID
 		Score          float64      `db:"score"`           // score
-		DataCreatedAt  time.Time    `db:"data_created_at"`
-		DataUpdatedAt  time.Time    `db:"data_updated_at"` // update data time
-		DataDeletedAt  sql.NullTime `db:"data_deleted_at"`
+		CreatedAt      time.Time    `db:"created_at"`
+		UpdatedAt      time.Time    `db:"updated_at"` // update data time
+		DeletedAt      sql.NullTime `db:"deleted_at"`
 	}
 )
 
@@ -116,8 +116,8 @@ func (m *defaultScoreModel) Insert(ctx context.Context, data *Score) (sql.Result
 	scoreDataIdKey := fmt.Sprintf("%s%v", cacheScoreDataIdPrefix, data.DataId)
 	scoreDeveloperIdKey := fmt.Sprintf("%s%v", cacheScoreDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, scoreRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.ContributionId, data.DeveloperId, data.Score, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, scoreRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DataId, data.ContributionId, data.DeveloperId, data.Score, data.DeletedAt)
 	}, scoreDataIdKey, scoreDeveloperIdKey)
 	return ret, err
 }
@@ -132,7 +132,7 @@ func (m *defaultScoreModel) Update(ctx context.Context, newData *Score) error {
 	scoreDeveloperIdKey := fmt.Sprintf("%s%v", cacheScoreDeveloperIdPrefix, data.DeveloperId)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, scoreRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.ContributionId, newData.DeveloperId, newData.Score, newData.DataCreatedAt, newData.DataUpdatedAt, newData.DataDeletedAt, newData.DataId)
+		return conn.ExecCtx(ctx, query, newData.ContributionId, newData.DeveloperId, newData.Score, newData.DeletedAt, newData.DataId)
 	}, scoreDataIdKey, scoreDeveloperIdKey)
 	return err
 }

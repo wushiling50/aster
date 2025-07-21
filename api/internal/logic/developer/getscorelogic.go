@@ -79,7 +79,7 @@ func (l *GetScoreLogic) GetScore(req *types.GetScoreReq) (resp *types.GetScoreRe
 		resp.Score = &types.Score{
 			Id:        developerId,
 			Score:     score.Score,
-			UpdatedAt: time.Unix(score.DataUpdatedAt, 0).Format(time.RFC3339),
+			UpdatedAt: time.Unix(score.UpdatedAt, 0).Format(time.RFC3339),
 		}
 	default:
 		err = errno.InternalServiceError.WithMessage(fmt.Sprintf("Unexpected Task State: %v", taskInfo.State.String()))

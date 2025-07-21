@@ -39,6 +39,7 @@ func (c *FetcherTaskConsumer) Consume(ctx context.Context, task *asynq.Task) (er
 	if err = jsonx.Unmarshal(task.Payload(), &msg); err != nil {
 		return
 	}
+
 	switch msg.Type {
 	case constants.FetchDeveloper:
 		logx.Info("Consume Message: FetchDeveloper")

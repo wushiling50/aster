@@ -43,12 +43,12 @@ type (
 	}
 
 	Summary struct {
-		DataId        int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
-		DeveloperId   int64        `db:"developer_id"` // Unique GitHub User ID
-		Summary       string       `db:"summary"`      // User Summary
-		DataCreatedAt time.Time    `db:"data_created_at"`
-		DataUpdatedAt time.Time    `db:"data_updated_at"` // update data time
-		DataDeletedAt sql.NullTime `db:"data_deleted_at"`
+		DataId      int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
+		DeveloperId int64        `db:"developer_id"` // Unique GitHub User ID
+		Summary     string       `db:"summary"`      // User Summary
+		CreatedAt   time.Time    `db:"created_at"`
+		UpdatedAt   time.Time    `db:"updated_at"` // update data time
+		DeletedAt   sql.NullTime `db:"deleted_at"`
 	}
 )
 
@@ -115,8 +115,8 @@ func (m *defaultSummaryModel) Insert(ctx context.Context, data *Summary) (sql.Re
 	summaryDataIdKey := fmt.Sprintf("%s%v", cacheSummaryDataIdPrefix, data.DataId)
 	summaryDeveloperIdKey := fmt.Sprintf("%s%v", cacheSummaryDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, summaryRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Summary, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, summaryRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Summary, data.DeletedAt)
 	}, summaryDataIdKey, summaryDeveloperIdKey)
 	return ret, err
 }
@@ -131,7 +131,7 @@ func (m *defaultSummaryModel) Update(ctx context.Context, newData *Summary) erro
 	summaryDeveloperIdKey := fmt.Sprintf("%s%v", cacheSummaryDeveloperIdPrefix, data.DeveloperId)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, summaryRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.Summary, newData.DataCreatedAt, newData.DataUpdatedAt, newData.DataDeletedAt, newData.DataId)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.Summary, newData.DeletedAt, newData.DataId)
 	}, summaryDataIdKey, summaryDeveloperIdKey)
 	return err
 }

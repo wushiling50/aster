@@ -32,3 +32,4 @@ Services:
       Hosts:
       - 127.0.0.1:2379
       Key: analysis.rpc
+    Timeout: 60000

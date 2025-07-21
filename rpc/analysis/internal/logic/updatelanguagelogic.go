@@ -116,6 +116,8 @@ func (l *UpdateLanguageLogic) UpdateLanguage(in *analysis.UpdateAnalysisReq) (*a
 		return resp, nil
 	}
 
+	resp.Base = pack.BuildSuccessResp()
+
 	return resp, nil
 }
 
@@ -130,7 +132,7 @@ func (l *UpdateLanguageLogic) checkIfNeedUpdate(developerId int64) (bool, error)
 		}
 	}
 
-	if github.CheckIfDataExpired(langauge.DataUpdatedAt) {
+	if github.CheckIfDataExpired(langauge.UpdatedAt) {
 		return true, nil
 	} else {
 		return false, nil

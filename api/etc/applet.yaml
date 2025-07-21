@@ -55,15 +55,18 @@ Services:
       Hosts:
       - 127.0.0.1:2379
       Key: developer.rpc
+      Timeout: 30000
 
   Analysis:
     Etcd:
       Hosts:
       - 127.0.0.1:2379
       Key: analysis.rpc
+      Timeout: 30000
 
   IdGenerator:
     Etcd:
       Hosts:
       - 127.0.0.1:2379
       Key: idgenerator.rpc
+      Timeout: 30000

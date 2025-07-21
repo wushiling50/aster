@@ -43,13 +43,13 @@ type (
 	}
 
 	Nation struct {
-		DataId        int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
-		DeveloperId   int64        `db:"developer_id"` // Unique GitHub User ID
-		Nation        string       `db:"nation"`       // Nation
-		Confidence    float64      `db:"confidence"`   // Confidence
-		DataCreatedAt time.Time    `db:"data_created_at"`
-		DataUpdatedAt time.Time    `db:"data_updated_at"` // update data time
-		DataDeletedAt sql.NullTime `db:"data_deleted_at"`
+		DataId      int64        `db:"data_id"`      // Generated Primary Key, Must Not Be Changed
+		DeveloperId int64        `db:"developer_id"` // Unique GitHub User ID
+		Nation      string       `db:"nation"`       // Nation
+		Confidence  float64      `db:"confidence"`   // Confidence
+		CreatedAt   time.Time    `db:"created_at"`
+		UpdatedAt   time.Time    `db:"updated_at"` // update data time
+		DeletedAt   sql.NullTime `db:"deleted_at"`
 	}
 )
 
@@ -116,8 +116,8 @@ func (m *defaultNationModel) Insert(ctx context.Context, data *Nation) (sql.Resu
 	nationDataIdKey := fmt.Sprintf("%s%v", cacheNationDataIdPrefix, data.DataId)
 	nationDeveloperIdKey := fmt.Sprintf("%s%v", cacheNationDeveloperIdPrefix, data.DeveloperId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, nationRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Nation, data.Confidence, data.DataCreatedAt, data.DataUpdatedAt, data.DataDeletedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, nationRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DataId, data.DeveloperId, data.Nation, data.Confidence, data.DeletedAt)
 	}, nationDataIdKey, nationDeveloperIdKey)
 	return ret, err
 }
@@ -132,7 +132,7 @@ func (m *defaultNationModel) Update(ctx context.Context, newData *Nation) error 
 	nationDeveloperIdKey := fmt.Sprintf("%s%v", cacheNationDeveloperIdPrefix, data.DeveloperId)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `data_id` = ?", m.table, nationRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.Nation, newData.Confidence, newData.DataCreatedAt, newData.DataUpdatedAt, newData.DataDeletedAt, newData.DataId)
+		return conn.ExecCtx(ctx, query, newData.DeveloperId, newData.Nation, newData.Confidence, newData.DeletedAt, newData.DataId)
 	}, nationDataIdKey, nationDeveloperIdKey)
 	return err
 }

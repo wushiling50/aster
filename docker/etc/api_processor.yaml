@@ -32,3 +32,4 @@ Services:
       Hosts:
       - etcd:2379
       Key: analysis.rpc
+    Timeout: 60000

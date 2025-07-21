@@ -18,6 +18,7 @@ import (
 	"github.com/wushiling50/aster/pkg/utils"
 	"github.com/wushiling50/aster/rpc/analysis/internal/pack"
 	"github.com/wushiling50/aster/rpc/analysis/internal/svc"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -69,6 +70,8 @@ func (l *UpdateSummaryLogic) UpdateSummary(in *analysis.UpdateAnalysisReq) (*ana
 		return resp, nil
 	}
 
+	resp.Base = pack.BuildSuccessResp()
+
 	return resp, nil
 }
 
@@ -83,7 +86,7 @@ func (l *UpdateSummaryLogic) checkIfNeedUpdate(developerId int64) (bool, error) 
 		}
 	}
 
-	if github.CheckIfDataExpired(summary.DataUpdatedAt) {
+	if github.CheckIfDataExpired(summary.UpdatedAt) {
 		return true, nil
 	} else {
 		return false, nil
@@ -206,85 +209,110 @@ func (l *UpdateSummaryLogic) rpcGetDeveloperById(developerId int64) (*developer.
 	return resp.Developer, nil
 }
 
-func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) (err error) {
+func (l *UpdateSummaryLogic) pushContributionTask(developerId int64) error {
+	var eg errgroup.Group
+
 	// Comment
-	commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
-		return err
-	}
+	eg.Go(func() error {
+		var err error
 
-	if commentOfUserUpdatedAt != nil && !github.CheckIfDataExpired(commentOfUserUpdatedAt.UpdatedAt) {
+		commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
+			return err
+		}
+
+		if commentOfUserUpdatedAt != nil && !github.CheckIfDataExpired(commentOfUserUpdatedAt.UpdatedAt) {
+			return nil
+		}
+
+		locksCommentOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
+
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksCommentOfUserKey)
+		if err != nil {
+			return err
+		}
+
+		err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCommentOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
+		if err != nil {
+			return err
+		}
+
+		err = l.svcCtx.Locks.Block(l.ctx, locksCommentOfUserKey)
+		if err != nil {
+			return err
+		}
+
 		return nil
-	}
-
-	locksCommentOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
-
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksCommentOfUserKey)
-	if err != nil {
-		return err
-	}
-
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCommentOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
-	if err != nil {
-		return err
-	}
-
-	err = l.svcCtx.Locks.Block(l.ctx, locksCommentOfUserKey)
-	if err != nil {
-		return err
-	}
+	})
 
 	// Issue-PR
-	issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
-		return err
-	}
+	eg.Go(func() error {
+		var err error
 
-	if issuePROfUserUpdatedAt != nil && !github.CheckIfDataExpired(issuePROfUserUpdatedAt.UpdatedAt) {
+		issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
+			return err
+		}
+
+		if issuePROfUserUpdatedAt != nil && !github.CheckIfDataExpired(issuePROfUserUpdatedAt.UpdatedAt) {
+			return nil
+		}
+
+		locksIssuePROfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, developerId)
+
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksIssuePROfUserKey)
+		if err != nil {
+			return err
+		}
+
+		err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchIssuePROfUser, developerId, github.DefaultUpdateAfterTime(), 0)
+		if err != nil {
+			return err
+		}
+
+		err = l.svcCtx.Locks.Block(l.ctx, locksIssuePROfUserKey)
+		if err != nil {
+			return err
+		}
+
 		return nil
-	}
-
-	locksIssuePROfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, developerId)
-
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksIssuePROfUserKey)
-	if err != nil {
-		return err
-	}
-
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchIssuePROfUser, developerId, github.DefaultUpdateAfterTime(), 0)
-	if err != nil {
-		return err
-	}
-
-	err = l.svcCtx.Locks.Block(l.ctx, locksIssuePROfUserKey)
-	if err != nil {
-		return err
-	}
+	})
 
 	// Review
-	reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
-		return err
-	}
+	eg.Go(func() error {
+		var err error
 
-	if reviewOfUserUpdatedAt != nil && !github.CheckIfDataExpired(reviewOfUserUpdatedAt.UpdatedAt) {
+		reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
+			return err
+		}
+
+		if reviewOfUserUpdatedAt != nil && !github.CheckIfDataExpired(reviewOfUserUpdatedAt.UpdatedAt) {
+			return nil
+		}
+
+		locksReviewOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
+
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksReviewOfUserKey)
+		if err != nil {
+			return err
+		}
+
+		err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchReviewOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
+		if err != nil {
+			return err
+		}
+
+		err = l.svcCtx.Locks.Block(l.ctx, locksReviewOfUserKey)
+		if err != nil {
+			return err
+		}
+
 		return nil
-	}
+	})
 
-	locksReviewOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
-
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksReviewOfUserKey)
-	if err != nil {
-		return err
-	}
-
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchReviewOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
-	if err != nil {
-		return err
-	}
-
-	err = l.svcCtx.Locks.Block(l.ctx, locksReviewOfUserKey)
-	if err != nil {
+	if err := eg.Wait(); err != nil {
+		logx.Error(err)
 		return err
 	}
 

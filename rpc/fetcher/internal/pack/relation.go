@@ -47,6 +47,6 @@ func BuildCompletedFollow(dataId int64, developerId int64) *relation.Follow {
 	return &relation.Follow{
 		DataId:      dataId,
 		FollowerId:  developerId,
-		FollowingId: 0,
+		FollowingId: developerId,
 	}
 }

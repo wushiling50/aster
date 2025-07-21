@@ -13,6 +13,7 @@ import (
 	"github.com/wushiling50/aster/rpc/fetcher/internal/svc"
 	"github.com/zeromicro/go-zero/core/jsonx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"golang.org/x/sync/errgroup"
 )
 
 type FetchStarredRepoLogic struct {
@@ -33,6 +34,8 @@ func (l *FetchStarredRepoLogic) FetchStarredRepo(userId int64) (err error) {
 	var (
 		githubUser *github.User
 		allRepos   []*github.StarredRepository
+
+		eg errgroup.Group
 	)
 
 	githubUser, _, err = githubFunc.GetUserById(l.ctx, userId)
@@ -68,25 +71,29 @@ func (l *FetchStarredRepoLogic) FetchStarredRepo(userId int64) (err error) {
 			continue
 		}
 
-		if err = doFetchRepo(l.ctx, l.svcCtx, githubRepo.Repository); err != nil {
-			err = errno.BizError.WithError(err)
-			logx.Error(err)
-			continue
-		}
+		eg.Go(func() error {
+			return doFetchRepo(l.ctx, l.svcCtx, githubRepo.Repository)
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		err = errno.BizError.WithError(err)
+		logx.Error(err)
+		return err
 	}
 
 	completedStarredRepo := pack.BuildCompletedStarredRepo(constants.FetchStarredRepoCompletedDataId, userId)
 
 	var completedStr string
 	if completedStr, err = jsonx.MarshalToString(completedStarredRepo); err != nil {
-		logx.Error(err)
 		err = errno.InternalJSONError.WithError(err)
+		logx.Error(err)
 		return
 	}
 
 	if err = l.svcCtx.KqStarPusher.Push(l.ctx, completedStr); err != nil {
-		logx.Error(err)
 		err = errno.InternalKafkaError.WithError(err)
+		logx.Error(err)
 		return
 	}
 

@@ -68,6 +68,6 @@ func BuildTypeScore(res *analysis.Score, id int64, score float64) *types.Score {
 	return &types.Score{
 		Id:        id,
 		Score:     score,
-		UpdatedAt: time.Unix(res.DataUpdatedAt, 0).Format(time.RFC3339),
+		UpdatedAt: time.Unix(res.UpdatedAt, 0).Format(time.RFC3339),
 	}
 }

@@ -9,31 +9,27 @@ import "idl/base.proto";
 // ====== Analysis ======
 message Languages {
     int64 dataId = 1; // dataId
-    int64 dataCreatedAt = 2; // dataCreatedAt
-    int64 dataUpdatedAt = 3; // dataUpdatedAt
-    string languages = 4; // languages
+    int64 updatedAt = 2; // updatedAt
+    string languages = 3; // languages
 }
 
 message Nation {
     int64 dataId = 1; // dataId
-    int64 dataCreatedAt = 2; // dataCreatedAt
-    int64 dataUpdatedAt = 3; // dataUpdatedAt
-    string nation = 4; // nation
-    double confidence = 5; // confidence
+    int64 updatedAt = 2; // updatedAt
+    string nation = 3; // nation
+    double confidence = 4; // confidence
 }
 
 message Score {
     int64 dataId = 1; // dataId
-    int64 dataCreatedAt = 2; // dataCreatedAt
-    int64 dataUpdatedAt = 3; // dataUpdatedAt
-    double score = 4; // score
+    int64 updatedAt = 2; // updatedAt
+    double score = 3; // score
 }
 
 message Summary {
     int64 dataId = 1; //dataId
-    int64 dataCreatedAt = 2; //dataCreatedAt
-    int64 dataUpdatedAt = 3; //dataUpdatedAt
-    string summary = 4; //summary
+    int64 updatedAt = 2; // updatedAt
+    string summary = 3; //summary
 }
 
 message GetAnalysisReq {

@@ -70,21 +70,25 @@ Services:
       Hosts:
       - etcd:2379
       Key: developer.rpc
+    Timeout: 60000
 
   Relation:
     Etcd:
       Hosts:
       - etcd:2379
       Key: relation.rpc
+    Timeout: 60000
 
   Repo:
     Etcd:
       Hosts:
       - etcd:2379
       Key: repo.rpc
+    Timeout: 60000
 
   Contribution:
     Etcd:
       Hosts:
       - etcd:2379
       Key: contribution.rpc
+    Timeout: 60000

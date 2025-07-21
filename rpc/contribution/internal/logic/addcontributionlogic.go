@@ -30,13 +30,13 @@ func (l *AddContributionLogic) AddContribution(in *contribution.AddContributionR
 	resp := new(contribution.AddContributionResp)
 
 	err := l.addContribution(&model_contribution.Contribution{
-		ContributionId: in.ContributionId,
-		DeveloperId:    in.DeveloperId,
-		RepoId:         in.RepoId,
-		Category:       in.Category,
-		Content:        in.Content,
-		CreatedAt:      time.Unix(in.ContributionCreatedAt, 0),
-		UpdatedAt:      time.Unix(in.ContributionUpdatedAt, 0),
+		ContributionId:        in.ContributionId,
+		DeveloperId:           in.DeveloperId,
+		RepoId:                in.RepoId,
+		Category:              in.Category,
+		Content:               in.Content,
+		ContributionCreatedAt: time.Unix(in.ContributionCreatedAt, 0),
+		ContributionUpdatedAt: time.Unix(in.ContributionUpdatedAt, 0),
 	})
 
 	if err != nil {

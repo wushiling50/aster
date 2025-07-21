@@ -5,17 +5,18 @@ import (
 	"errors"
 	"math"
 	"strconv"
+	"sync"
 
 	"github.com/wushiling50/aster/gen/analysis"
 	"github.com/wushiling50/aster/gen/contribution"
-	"github.com/wushiling50/aster/gen/relation"
+	"github.com/wushiling50/aster/gen/developer"
 	"github.com/wushiling50/aster/gen/repo"
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/wushiling50/aster/pkg/github"
 	model_analysis "github.com/wushiling50/aster/pkg/model/analysis"
 	model_contribution "github.com/wushiling50/aster/pkg/model/contribution"
-	model_relation "github.com/wushiling50/aster/pkg/model/relation"
+	model_developer "github.com/wushiling50/aster/pkg/model/developer"
 	model_repo "github.com/wushiling50/aster/pkg/model/repo"
 	"github.com/wushiling50/aster/pkg/tasks"
 	"github.com/wushiling50/aster/pkg/utils"
@@ -49,6 +50,7 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 		totalScore                       float64
 
 		eg errgroup.Group
+		mu sync.Mutex
 	)
 
 	need, err := l.checkIfNeedUpdate(in.DeveloperId)
@@ -82,124 +84,152 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 	}
 
 	for repoId, contributions := range contributionsCategorizedByRepoId {
-		var (
-			repoScore         float64
-			contributionScore float64
+		theRepoId := repoId
+		theContributions := contributions
+		eg.Go(func() error {
+			var (
+				err error
 
-			theRepo *repo.Repo
+				repoScore         float64
+				contributionScore float64
 
-			contributionComment float64
-			contributionIssue   float64
-			contributionOpenPr  float64
-			contributionReview  float64
-			contributionMergePr float64
-		)
+				theRepo *repo.Repo
 
-		// repo Score
-		err = l.pushRepoTask(repoId)
-		if err != nil {
+				contributionComment float64
+				contributionIssue   float64
+				contributionOpenPr  float64
+				contributionReview  float64
+				contributionMergePr float64
+			)
+
+			// repo Score
+			err = l.pushRepoTask(theRepoId)
+			if err != nil {
+				err = errno.InternalAsynqError.WithError(err)
+				return err
+			}
+
+			theRepo, err = l.rpcGetRepoById(theRepoId)
+			if err != nil {
+				return err
+			}
+
+			repoScore = constants.ScoreRepoStar*float64(theRepo.StarCount) +
+				constants.ScoreRepoFork*float64(theRepo.ForkCount) +
+				constants.ScoreRepoCommit*float64(theRepo.CommitCount) +
+				constants.ScoreRepoComment*float64(theRepo.CommentCount) +
+				constants.ScoreRepoIssue*float64(theRepo.IssueCount) +
+				constants.ScoreRepoOpenPR*float64(theRepo.OpenPrCount) +
+				constants.ScoreRepoReview*float64(theRepo.ReviewCount) +
+				constants.ScoreRepoMergePR*float64(theRepo.MergedPrCount)
+
+			repoScore = math.Sqrt(repoScore)
+
+			// contribution Score
+			for _, theContribution := range theContributions {
+				switch theContribution.Category {
+				case constants.CategoryComment:
+					contributionComment++
+				case constants.CategoryIssue:
+					contributionIssue++
+				case constants.CategoryOpenPullRequest:
+					contributionOpenPr++
+				case constants.CategoryReview:
+					contributionReview++
+				case constants.CategoryMergePullRequest:
+					contributionMergePr++
+				}
+			}
+
+			if theRepo.CommentCount != 0 {
+				radio := contributionComment / float64(theRepo.CommentCount)
+				contributionScore += constants.ScoreContributionComment * radio
+			}
+
+			if theRepo.IssueCount != 0 {
+				radio := contributionIssue / float64(theRepo.IssueCount)
+				contributionScore += constants.ScoreContributionIssue * radio
+			}
+
+			if theRepo.OpenPrCount != 0 {
+				radio := contributionOpenPr / float64(theRepo.OpenPrCount)
+				contributionScore += constants.ScoreContributionOpenPR * radio
+			}
+
+			if theRepo.ReviewCount != 0 {
+				radio := contributionReview / float64(theRepo.ReviewCount)
+				contributionScore += constants.ScoreContributionReview * radio
+			}
+
+			if theRepo.MergedPrCount != 0 {
+				radio := contributionMergePr / float64(theRepo.MergedPrCount)
+				contributionScore += constants.ScoreContributionMergePR * radio
+			}
+
+			mu.Lock()
+			defer mu.Unlock()
+
+			totalScore += repoScore * contributionScore
+
+			return nil
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		switch {
+		case errors.Is(err, errno.InternalAsynqError):
 			logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
-			err = errno.InternalAsynqError.WithError(err)
+
 			resp.Base = pack.BuildBaseResp(err)
 			return resp, nil
-		}
-
-		theRepo, err := l.rpcGetRepoById(repoId)
-		if err != nil {
+		default:
 			logx.Error(err)
 			resp.Base = pack.BuildBaseResp(err)
 			return resp, nil
 		}
-
-		repoScore = constants.ScoreRepoStar*float64(theRepo.StarCount) +
-			constants.ScoreRepoFork*float64(theRepo.ForkCount) +
-			constants.ScoreRepoCommit*float64(theRepo.CommitCount) +
-			constants.ScoreRepoComment*float64(theRepo.CommentCount) +
-			constants.ScoreRepoIssue*float64(theRepo.IssueCount) +
-			constants.ScoreRepoOpenPR*float64(theRepo.OpenPrCount) +
-			constants.ScoreRepoReview*float64(theRepo.ReviewCount) +
-			constants.ScoreRepoMergePR*float64(theRepo.MergedPrCount)
-
-		repoScore = math.Sqrt(repoScore)
-
-		// contribution Score
-		for _, theContribution := range contributions {
-			switch theContribution.Category {
-			case constants.CategoryComment:
-				contributionComment++
-			case constants.CategoryIssue:
-				contributionIssue++
-			case constants.CategoryOpenPullRequest:
-				contributionOpenPr++
-			case constants.CategoryReview:
-				contributionReview++
-			case constants.CategoryMergePullRequest:
-				contributionMergePr++
-			}
-		}
-
-		contributionScore = constants.ScoreContributionComment*contributionComment/float64(theRepo.CommentCount) +
-			constants.ScoreContributionIssue*contributionIssue/float64(theRepo.IssueCount) +
-			constants.ScoreContributionOpenPR*contributionOpenPr/float64(theRepo.OpenPrCount) +
-			constants.ScoreContributionReview*contributionReview/float64(theRepo.ReviewCount) +
-			constants.ScoreContributionMergePR*contributionMergePr/float64(theRepo.MergedPrCount)
-
-		totalScore += repoScore * contributionScore
 	}
 
 	// developer score
-	err = l.pushFollowerTask(in.DeveloperId)
+	err = l.pushDeveloperTask(in.DeveloperId)
 	if err != nil {
 		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
 		resp.Base = pack.BuildBaseResp(err)
-		return resp, nil
+		return resp, err
 	}
 
-	followerCount, err := l.rpcGetFollowerCountById(in.DeveloperId)
+	theDeveloper, err := l.rpcGetDeveloperById(in.DeveloperId)
 	if err != nil {
 		logx.Error(err)
 		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
 
-	err = l.pushStarredTask(in.DeveloperId)
-	if err != nil {
-		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
-		resp.Base = pack.BuildBaseResp(err)
-		return resp, nil
-	}
-
-	starredCount, err := l.rpcGetStarredCountById(in.DeveloperId)
-	if err != nil {
-		logx.Error(err)
-		resp.Base = pack.BuildBaseResp(err)
-		return resp, nil
-	}
-
-	developerScore += constants.ScoreFollower*float64(followerCount) +
-		constants.ScoreStarred*float64(starredCount)
+	developerScore += constants.ScoreFollower*float64(theDeveloper.Followers) +
+		constants.ScoreStarred*float64(theDeveloper.Stars)
 
 	developerScore = math.Sqrt(developerScore * 0.1)
 
 	totalScore += developerScore
 
 	// update score
-	eg.Go(func() error {
-		return l.updateScore(&model_analysis.Score{
-			DeveloperId: in.DeveloperId,
-			Score:       totalScore,
-		})
+	err = l.updateScore(&model_analysis.Score{
+		DeveloperId: in.DeveloperId,
+		Score:       totalScore,
 	})
-
-	eg.Go(func() error {
-		return l.updateRankScore(in.DeveloperId, totalScore)
-	})
-
-	if err := eg.Wait(); err != nil {
+	if err != nil {
 		logx.Errorf("service.UpdateScore: Update Score Failed: %w", err)
 		resp.Base = pack.BuildBaseResp(err)
 		return resp, nil
 	}
+
+	err = l.updateRankScore(in.DeveloperId, totalScore)
+	if err != nil {
+		logx.Errorf("service.UpdateScore: Update Rank Score Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	resp.Base = pack.BuildSuccessResp()
 
 	return resp, nil
 }
@@ -215,92 +245,117 @@ func (l *UpdateScoreLogic) checkIfNeedUpdate(developerId int64) (bool, error) {
 		}
 	}
 
-	if github.CheckIfDataExpired(score.DataUpdatedAt) {
+	if github.CheckIfDataExpired(score.UpdatedAt) {
 		return true, nil
 	} else {
 		return false, nil
 	}
 }
 
-func (l *UpdateScoreLogic) pushContributionTask(developerId int64) (err error) {
+func (l *UpdateScoreLogic) pushContributionTask(developerId int64) error {
+	var eg errgroup.Group
+
 	// Comment
-	commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
-		return err
-	}
+	eg.Go(func() error {
+		var err error
 
-	if commentOfUserUpdatedAt != nil && !github.CheckIfDataExpired(commentOfUserUpdatedAt.UpdatedAt) {
+		commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
+			return err
+		}
+
+		if commentOfUserUpdatedAt != nil && !github.CheckIfDataExpired(commentOfUserUpdatedAt.UpdatedAt) {
+			return nil
+		}
+
+		locksCommentOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
+
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksCommentOfUserKey)
+		if err != nil {
+			return err
+		}
+
+		err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCommentOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
+		if err != nil {
+			return err
+		}
+
+		err = l.svcCtx.Locks.Block(l.ctx, locksCommentOfUserKey)
+		if err != nil {
+			return err
+		}
+
 		return nil
-	}
-
-	locksCommentOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
-
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksCommentOfUserKey)
-	if err != nil {
-		return err
-	}
-
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchCommentOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
-	if err != nil {
-		return err
-	}
-
-	err = l.svcCtx.Locks.Block(l.ctx, locksCommentOfUserKey)
-	if err != nil {
-		return err
-	}
+	})
 
 	// Issue-PR
-	issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
-		return err
-	}
+	eg.Go(func() error {
+		var err error
 
-	if issuePROfUserUpdatedAt != nil && !github.CheckIfDataExpired(issuePROfUserUpdatedAt.UpdatedAt) {
+		issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
+			return err
+		}
+
+		if issuePROfUserUpdatedAt != nil && !github.CheckIfDataExpired(issuePROfUserUpdatedAt.UpdatedAt) {
+			return nil
+		}
+
+		locksIssuePROfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, developerId)
+
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksIssuePROfUserKey)
+		if err != nil {
+			return err
+		}
+
+		err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchIssuePROfUser, developerId, github.DefaultUpdateAfterTime(), 0)
+		if err != nil {
+			return err
+		}
+
+		err = l.svcCtx.Locks.Block(l.ctx, locksIssuePROfUserKey)
+		if err != nil {
+			return err
+		}
+
 		return nil
-	}
-
-	locksIssuePROfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, developerId)
-
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksIssuePROfUserKey)
-	if err != nil {
-		return err
-	}
-
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchIssuePROfUser, developerId, github.DefaultUpdateAfterTime(), 0)
-	if err != nil {
-		return err
-	}
-
-	err = l.svcCtx.Locks.Block(l.ctx, locksIssuePROfUserKey)
-	if err != nil {
-		return err
-	}
+	})
 
 	// Review
-	reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
-		return err
-	}
+	eg.Go(func() error {
+		var err error
 
-	if reviewOfUserUpdatedAt != nil && !github.CheckIfDataExpired(reviewOfUserUpdatedAt.UpdatedAt) {
+		reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
+		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
+			return err
+		}
+
+		if reviewOfUserUpdatedAt != nil && !github.CheckIfDataExpired(reviewOfUserUpdatedAt.UpdatedAt) {
+			return nil
+		}
+
+		locksReviewOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
+
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksReviewOfUserKey)
+		if err != nil {
+			return err
+		}
+
+		err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchReviewOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
+		if err != nil {
+			return err
+		}
+
+		err = l.svcCtx.Locks.Block(l.ctx, locksReviewOfUserKey)
+		if err != nil {
+			return err
+		}
+
 		return nil
-	}
+	})
 
-	locksReviewOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
-
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksReviewOfUserKey)
-	if err != nil {
-		return err
-	}
-
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchReviewOfUser, developerId, github.DefaultUpdateAfterTime(), 0)
-	if err != nil {
-		return err
-	}
-
-	err = l.svcCtx.Locks.Block(l.ctx, locksReviewOfUserKey)
-	if err != nil {
+	if err := eg.Wait(); err != nil {
+		logx.Error(err)
 		return err
 	}
 
@@ -384,24 +439,24 @@ func (l *UpdateScoreLogic) rpcGetRepoById(repoId int64) (*repo.Repo, error) {
 	return resp.Repo, nil
 }
 
-func (l *UpdateScoreLogic) pushFollowerTask(developerId int64) (err error) {
-	followerUpdatedAt, err := l.svcCtx.FollowerUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_relation.ErrNotFound) {
+func (l *UpdateScoreLogic) pushDeveloperTask(developerId int64) (err error) {
+	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
+	if err != nil && !errors.Is(err, model_developer.ErrNotFound) {
 		return err
 	}
 
-	if followerUpdatedAt != nil && !github.CheckIfDataExpired(followerUpdatedAt.UpdatedAt) {
+	if developer != nil && !github.CheckIfDataExpired(developer.UpdatedAt) {
 		return nil
 	}
 
-	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockFollower, developerId)
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, developerId)
 
 	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
 	if err != nil {
 		return err
 	}
 
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchFollower, developerId, "", 0)
+	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchDeveloper, developerId, "", 0)
 	if err != nil {
 		return err
 	}
@@ -414,74 +469,29 @@ func (l *UpdateScoreLogic) pushFollowerTask(developerId int64) (err error) {
 	return nil
 }
 
-func (l *UpdateScoreLogic) rpcGetFollowerCountById(developerId int64) (int, error) {
-	var resp *relation.SearchFollowerByDeveloperIdResp
+func (l *UpdateScoreLogic) rpcGetDeveloperById(developerId int64) (*developer.Developer, error) {
+	var resp *developer.GetDeveloperByIdResp
 
-	resp, err := l.svcCtx.RelationRpcClient.SearchFollowerByDeveloperId(l.ctx, &relation.SearchFollowerByDeveloperIdReq{
-		DeveloperId: developerId,
+	resp, err := l.svcCtx.DeveloperRpcClient.GetDeveloperById(l.ctx, &developer.GetDeveloperByIdReq{
+		Id: developerId,
 	})
 	if err != nil {
-		logx.Errorf("SearchFollowerByDeveloperIdRPC: RPC Called Failed: %v", err.Error())
+		logx.Errorf("GetDeveloperByIdRPC: RPC Called Failed: %v", err.Error())
 		err = errno.InternalServiceError.WithError(err)
-		return 0, err
+		return nil, err
 	}
 
 	if !utils.IsSuccess(resp.Base) {
 		err = errno.BizError.WithMessage(resp.Base.Message)
-		return 0, err
+		return nil, err
 	}
 
-	return len(resp.FollowerIds), nil
-}
-
-func (l *UpdateScoreLogic) pushStarredTask(developerId int64) (err error) {
-	starredRepoUpdatedAt, err := l.svcCtx.StarredRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
-	if err != nil && !errors.Is(err, model_relation.ErrNotFound) {
-		return err
+	if resp.Developer == nil {
+		err = errno.BizNotFoundError.WithMessage("Developer Not Found")
+		return nil, err
 	}
 
-	if starredRepoUpdatedAt != nil && !github.CheckIfDataExpired(starredRepoUpdatedAt.UpdatedAt) {
-		return nil
-	}
-
-	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockStarredRepo, developerId)
-
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
-	if err != nil {
-		return err
-	}
-
-	err = tasks.FetcherTaskPusher(l.svcCtx.AsynqClient, constants.FetchStarredRepo, developerId, "", 0)
-	if err != nil {
-		return err
-	}
-
-	err = l.svcCtx.Locks.Block(l.ctx, locksKey)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (l *UpdateScoreLogic) rpcGetStarredCountById(developerId int64) (int, error) {
-	var resp *relation.SearchStarredRepoResp
-
-	resp, err := l.svcCtx.RelationRpcClient.SearchStarredRepo(l.ctx, &relation.SearchStarredRepoReq{
-		DeveloperId: developerId,
-	})
-	if err != nil {
-		logx.Errorf("SearchStarredRepo: RPC Called Failed: %v", err.Error())
-		err = errno.InternalServiceError.WithError(err)
-		return 0, err
-	}
-
-	if !utils.IsSuccess(resp.Base) {
-		err = errno.BizError.WithMessage(resp.Base.Message)
-		return 0, err
-	}
-
-	return len(resp.RepoIds), nil
+	return resp.Developer, nil
 }
 
 func (l *UpdateScoreLogic) updateScore(model *model_analysis.Score) error {

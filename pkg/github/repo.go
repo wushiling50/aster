@@ -13,33 +13,25 @@ import (
 
 func GetIssuePrCountByRepo(ctx context.Context, owner string, name string) (issueCount int64, prCount int64, err error) {
 	var (
-		githubClient    *github.Client = githubClientInit()
-		githubPrResp    *github.Response
-		githubIssueResp *github.Response
+		githubClient *github.Client = githubClientInit()
 	)
 
-	prOpts := &github.PullRequestListOptions{
-		ListOptions: github.ListOptions{PerPage: 1},
-	}
-
-	issueOpts := &github.IssueListByRepoOptions{
-		ListOptions: github.ListOptions{PerPage: 1},
-	}
-
-	if _, githubPrResp, err = githubClient.PullRequests.List(ctx, owner, name, prOpts); err != nil {
+	prResult, _, err := githubClient.Search.Issues(ctx, fmt.Sprintf("repo:%s/%s type:pr", owner, name), nil)
+	if err != nil {
 		logx.Errorf("github.GetIssuePrCountByRepo: Fail To Fetching PRs: %v", err.Error())
 		err = errno.InternalGithubError.WithError(err)
 		return
 	}
+	prCount = int64(prResult.GetTotal())
 
-	if _, githubIssueResp, err = githubClient.Issues.ListByRepo(ctx, owner, name, issueOpts); err != nil {
+	issueResult, _, err := githubClient.Search.Issues(ctx, fmt.Sprintf("repo:%s/%s type:issue", owner, name), nil)
+	if err != nil {
 		logx.Errorf("github.GetIssuePrCountByRepo: Fail To Fetching Issues: %v", err.Error())
 		err = errno.InternalGithubError.WithError(err)
 		return
 	}
 
-	prCount = int64(githubPrResp.LastPage)
-	issueCount = int64(githubIssueResp.LastPage) - prCount
+	issueCount = int64(issueResult.GetTotal())
 
 	return
 }

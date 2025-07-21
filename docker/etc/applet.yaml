@@ -2,7 +2,7 @@ Name: applet
 Host: 0.0.0.0
 Port: 20001
 Mode: dev
-TimeOut: 30000
+TimeOut: 60000
 
 # dev 环境模式配置
 DevServer:
@@ -55,15 +55,18 @@ Services:
       Hosts:
       - etcd:2379
       Key: developer.rpc
+    Timeout: 60000
 
   Analysis:
     Etcd:
       Hosts:
       - etcd:2379
       Key: analysis.rpc
+    Timeout: 60000
 
   IdGenerator:
     Etcd:
       Hosts:
       - etcd:2379
       Key: idgenerator.rpc
+    Timeout: 60000
