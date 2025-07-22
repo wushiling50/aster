@@ -13,6 +13,7 @@ import (
 	"github.com/wushiling50/aster/rpc/fetcher/internal/svc"
 	"github.com/zeromicro/go-zero/core/jsonx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"golang.org/x/sync/errgroup"
 )
 
 type FetchCreatedRepoLogic struct {
@@ -33,6 +34,8 @@ func (l *FetchCreatedRepoLogic) FetchCreatedRepo(userId int64) (err error) {
 	var (
 		githubUser *github.User
 		allRepos   []*github.Repository
+
+		eg errgroup.Group
 	)
 
 	githubUser, _, err = githubFunc.GetUserById(l.ctx, userId)
@@ -72,6 +75,15 @@ func (l *FetchCreatedRepoLogic) FetchCreatedRepo(userId int64) (err error) {
 			logx.Error(err)
 			continue
 		}
+
+		theRepo := githubRepo
+		eg.Go(func() error {
+			return doFetchRepo(l.ctx, l.svcCtx, theRepo)
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		logx.Info("Partial Repo Push Failed")
 	}
 
 	completedCreatedRepo := pack.BuildCompletedCreatedRepo(constants.FetchCreatedRepoCompletedDataId, userId)

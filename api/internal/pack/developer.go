@@ -10,22 +10,18 @@ type GetDeveloper struct {
 
 type GetLanguageUsage struct {
 	LanguageUsage types.LanguageUsage `json:"language_usage"`
-	TaskState     types.TaskState     `json:"task_state"`
 }
 
 type GetNation struct {
-	Nation    types.Nation    `json:"nation"`
-	TaskState types.TaskState `json:"task_state"`
+	Nation types.Nation `json:"nation"`
 }
 
 type GetScore struct {
-	Score     types.Score     `json:"score"`
-	TaskState types.TaskState `json:"task_state"`
+	Score types.Score `json:"score"`
 }
 
 type GetSummary struct {
-	Summary   types.Summary   `json:"summary"`
-	TaskState types.TaskState `json:"task_state"`
+	Summary types.Summary `json:"summary"`
 }
 
 type PostTask struct {
@@ -41,28 +37,24 @@ func BuildDeveloper(res *types.GetDeveloperResp) *GetDeveloper {
 func BuildLanguageUsage(res *types.GetLanguageUsageResp) *GetLanguageUsage {
 	return &GetLanguageUsage{
 		LanguageUsage: *res.LanguageUsage,
-		TaskState:     res.TaskState,
 	}
 }
 
 func BuildNation(res *types.GetNationResp) *GetNation {
 	return &GetNation{
-		Nation:    *res.Nation,
-		TaskState: res.TaskState,
+		Nation: *res.Nation,
 	}
 }
 
 func BuildScore(res *types.GetScoreResp) *GetScore {
 	return &GetScore{
-		Score:     *res.Score,
-		TaskState: res.TaskState,
+		Score: *res.Score,
 	}
 }
 
 func BuildSummary(res *types.GetSummaryResp) *GetSummary {
 	return &GetSummary{
-		Summary:   *res.Summary,
-		TaskState: res.TaskState,
+		Summary: *res.Summary,
 	}
 }
 
