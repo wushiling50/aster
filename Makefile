@@ -39,6 +39,8 @@ aster-run-all:
 	for svc in $(DOCKER); do \
 		if echo 'api' | grep -wq $$svc ; then \
 			docker run -di -p 20001:20001 --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
+		elif echo 'analysis' | grep -wq $$svc ; then \
+			docker run -di --dns 8.8.8.8 --dns 8.8.4.4 --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
 		else \
 			docker run -di --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
 		fi \
@@ -48,6 +50,8 @@ aster-run-all:
 $(addprefix aster-run-,$(DOCKER)): aster-run-%:
 	if echo 'api' | grep -wq $* ; then \
 			docker run -di -p 20001:20001 --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
+	elif echo 'analysis' | grep -wq $* ; then \
+			docker run -di --dns 8.8.8.8 --dns 8.8.4.4 --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
 	else \
 			docker run -di --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
 	fi

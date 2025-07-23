@@ -53,7 +53,7 @@ func BuildAnalysisSummaryReq(c config.DeepSeekModel, allText string) openai.Chat
 		建议包括：擅长的编程领域、文化/地区信息、能力水平、个人风格、个人性格等，不要求包含全部方面，可以自由发挥，总结更多方面。
 		请严格按照以下标准回复：
 			以中文回复,请直接回复总结内容，不要换行，不要分段,
-			纯文本即可，不需要包含其他信息。字数控制在 600 字以内。`
+			纯文本即可，不需要包含其他信息。字数控制在 200 字以内。`
 
 	return openai.ChatCompletionRequest{
 		Model: c.Model,

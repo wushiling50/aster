@@ -1,7 +1,7 @@
 Name: analysis.rpc
 ListenOn: 0.0.0.0:20002
 Mode: dev
-Timeout: 60000
+Timeout: 0
 
 Etcd:
   Hosts:
@@ -53,7 +53,7 @@ AsynqRedisConf:
   DB: 0
 
 DeepSeek:
-  Endpoint: https://api.deepseek.com/chat/completions
+  Endpoint: https://api.deepseek.com/v1
   Model: deepseek-reasoner  
   MaxTokens: 4096
   Temperature: 1.0
