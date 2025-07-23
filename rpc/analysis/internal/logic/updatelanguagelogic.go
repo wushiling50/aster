@@ -79,6 +79,10 @@ func (l *UpdateLanguageLogic) UpdateLanguage(in *analysis.UpdateAnalysisReq) (*a
 			continue
 		}
 
+		if repoLanguages == "" {
+			continue
+		}
+
 		err = json.Unmarshal([]byte(repoLanguages), &languageBytes)
 		if err != nil {
 			logx.Error(err)
@@ -209,6 +213,11 @@ func (l *UpdateLanguageLogic) rpcGetRepoById(repodId int64) (languages string, e
 	if !utils.IsSuccess(resp.Base) {
 		err = errno.BizError.WithMessage(resp.Base.Message)
 		return
+	}
+
+	if resp.Repo == nil {
+		logx.Info("Repo Is Empty")
+		return "", err
 	}
 
 	languages = resp.GetRepo().GetLanguage()

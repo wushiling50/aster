@@ -66,25 +66,25 @@ Services:
       Hosts:
       - 127.0.0.1:2379
       Key: developer.rpc
-    Timeout: 60000
+    Timeout: 600000
 
   Relation:
     Etcd:
       Hosts:
       - 127.0.0.1:2379
       Key: relation.rpc
-    Timeout: 60000
+    Timeout: 600000
 
   Contribution:
     Etcd:
       Hosts:
       - 127.0.0.1:2379
       Key: contribution.rpc
-    Timeout: 60000
+    Timeout: 600000
   
   Repo:
     Etcd:
       Hosts:
       - 127.0.0.1:2379
       Key: repo.rpc
-    Timeout: 60000
+    Timeout: 600000
