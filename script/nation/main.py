@@ -1,15 +1,16 @@
-import os
 import json
 import sys
 
 from github import Github, Auth
 from loguru import logger
+from ruamel import yaml
 
-from by_profile import (
-    guess_by_profile_email, 
+from aster_profile import (
     guess_by_profile_timezone, 
     guess_by_profile_country_name
 )
+
+from aster_email import guess_by_profile_email
 
 # 不同推测方法的权重分配
 EMAIL_GUESS_WEIGHT = float(0.15)
@@ -19,9 +20,14 @@ COUNTRY_NAME_GUESS_WEIGHT = float(0.25)
 # 验证权重总和为0.6
 assert EMAIL_GUESS_WEIGHT + PROFILE_TIMEZONE_GUESS_WEIGHT + COUNTRY_NAME_GUESS_WEIGHT == 0.6
 
-auth = Auth.Token(os.environ['GITHUB_API_TOKEN'])
-
 def main():
+    config_path = "config/config.yaml"
+
+    with open(config_path,"r") as f:
+        config = yaml.load(f,Loader=yaml.RoundTripLoader)
+
+    auth = Auth.Token(config["GithubAPIToken"])
+
     argv = sys.argv
 
     if len(argv) != 2:

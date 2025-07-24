@@ -6,8 +6,6 @@ from bs4 import BeautifulSoup
 import timezone_util  # 自定义时区工具库
 import pycountry  # 国家信息库
 
-from email import guess_by_profile_email  # 导入邮箱推测模块
-
 def guess_by_profile_timezone(handle: str):
     url = f"https://github.com/{handle}"
     html_content = httpx.get(url).text

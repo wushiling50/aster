@@ -3,7 +3,6 @@ FROM golang:1.23 AS builder
 LABEL stage=gobuilder
 
 # 设置环境变量
-ENV TZ=Asia/Shanghai
 ENV CGO_ENABLED=0
 ENV GOPROXY=https://goproxy.cn,direct
 ENV GOOS=linux
@@ -22,15 +21,17 @@ COPY ./script/nation /app/script/nation
 RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags="-s -w" -o /app/analysis ./rpc/analysis
 
 FROM alpine:latest
+ENV TZ=Asia/Shanghai
+
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/Shanghai
 
 # 换源，更新软件依赖
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN apk update --no-cache && apk add --no-cache tzdata
+RUN apk add --no-cache python3 py3-pip
 
 WORKDIR /app
-RUN apk add --no-cache python3 py3-pip
 RUN python -m venv venv
 COPY --from=builder /app/script/nation /app/script/nation
 RUN . venv/bin/activate && pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple -r /app/script/nation/requirements.txt

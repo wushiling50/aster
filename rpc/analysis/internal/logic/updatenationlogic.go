@@ -74,7 +74,7 @@ func (l *UpdateNationLogic) UpdateNation(in *analysis.UpdateAnalysisReq) (*analy
 	// get nation with confidence by script and llm
 	nationConfidence, err = l.getNationWithConfidenceByScript(login)
 	if err != nil {
-		logx.Info("service.UpdateNation: Get Nation And Confidence By Script Failed")
+		logx.Infof("service.UpdateNation: Get Nation And Confidence By Script Failed: %v", err)
 		err = nil
 	}
 
@@ -142,6 +142,8 @@ func (l *UpdateNationLogic) getNationWithConfidenceByScript(login string) (natio
 	cmd = exec.Command("venv/bin/python", "script/nation/main.py", login)
 
 	out, err = cmd.CombinedOutput()
+
+	logx.Infof("Python script stdout for %s: %s", login, out)
 	if err != nil {
 		err = errno.InternalScriptError.WithError(err)
 		return

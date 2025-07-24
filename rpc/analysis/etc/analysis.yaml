@@ -54,7 +54,7 @@ AsynqRedisConf:
 
 DeepSeek:
   Endpoint: https://api.deepseek.com/v1
-  Model: deepseek-reasoner  
+  Model: deepseek-chat  
   MaxTokens: 4096
   Temperature: 1.0
   TopP: 0.9
