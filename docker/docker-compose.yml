@@ -153,10 +153,9 @@ services:
   #     - aster
   openobserve:
     image: public.ecr.aws/zinclabs/openobserve:latest
-    restart: unless-stopped
-    environment:
-      ZO_ROOT_USER_EMAIL: "aster@example.com"
-      ZO_ROOT_USER_PASSWORD: "aster"
+    restart: always
+    env_file:
+      - ./env/openobserve.env
     ports:
       - "5080:5080"
     volumes:
