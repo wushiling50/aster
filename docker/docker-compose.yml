@@ -137,22 +137,23 @@ services:
   #   networks:
   #     - aster
 
-  # filebeat: # 权限问题执行 sudo chmod go-w (挂载目录)/filebeat.yml
-  #   image: elastic/filebeat:8.17.1
-  #   container_name: aster-filebeat
-  #   user: root
-  #   volumes:
-  #     - ../config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml # 挂载配置文件
-  #     - ./data/filebeat:/usr/share/filebeat/data  # 持久化注册表文件
-  #     - ../log:/usr/share/filebeat/logs  # 挂载日志目录
-  #   depends_on:
-  #     elasticsearch:
-  #       condition: service_healthy
-  #   restart: on-failure
-  #   networks:
-  #     - aster
+  filebeat: # 权限问题执行 sudo chmod go-w (挂载目录)/filebeat.yml
+    image: elastic/filebeat:8.17.1
+    container_name: aster-filebeat
+    user: root
+    volumes:
+      - ../config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml # 挂载配置文件
+      - ./data/filebeat:/usr/share/filebeat/data  # 持久化注册表文件
+      - ../log:/usr/share/filebeat/logs  # 挂载日志目录
+    depends_on:
+      - openobserve
+    restart: on-failure
+    networks:
+      - aster
+
   openobserve:
-    image: public.ecr.aws/zinclabs/openobserve:latest
+    image: public.ecr.aws/zinclabs/openobserve:v0.15.0-rc1
+    container_name: aster-openobserve
     restart: always
     env_file:
       - ./env/openobserve.env
