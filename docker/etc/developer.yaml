@@ -18,7 +18,7 @@ Log:
   ServiceName: developer.rpc
   Mode: file
   Encoding: json
-  Path: log/developer_rpc/
+  Path: log/developer/
 
 # 链路追踪​
 Telemetry:

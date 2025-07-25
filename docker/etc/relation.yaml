@@ -18,7 +18,7 @@ Log:
   ServiceName: relation.rpc
   Mode: file
   Encoding: json
-  Path: log/relation_rpc/
+  Path: log/relation/
 
 # 链路追踪​
 Telemetry:

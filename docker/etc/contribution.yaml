@@ -18,7 +18,7 @@ Log:
   ServiceName: contribution.rpc
   Mode: file
   Encoding: json
-  Path: log/contribution_rpc/
+  Path: log/contribution/
 
 # 链路追踪​
 Telemetry:

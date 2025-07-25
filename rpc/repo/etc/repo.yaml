@@ -18,7 +18,7 @@ Log:
   ServiceName: repo.rpc
   Mode: file
   Encoding: json
-  Path: log/repo_rpc/
+  Path: log/repo/
 
 # 链路追踪​
 Telemetry:

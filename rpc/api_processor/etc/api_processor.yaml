@@ -11,7 +11,7 @@ Log:
   ServiceName: apiProcessor
   Mode: file
   Encoding: json
-  Path: log/apiProcessor/
+  Path: log/api_processor/
 
 # 链路追踪​
 Telemetry:

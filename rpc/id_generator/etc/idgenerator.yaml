@@ -12,7 +12,7 @@ Log:
   ServiceName: idgenerator.rpc
   Mode: file
   Encoding: json
-  Path: log/idgenerator_rpc/
+  Path: log/id_generator/
 
 DevServer:
   Enabled: true

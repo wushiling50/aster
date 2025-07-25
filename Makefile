@@ -38,22 +38,24 @@ $(addprefix aster-build-,$(DOCKER)): aster-build-%:
 aster-run-all: 
 	for svc in $(DOCKER); do \
 		if echo 'api' | grep -wq $$svc ; then \
-			docker run -di -p 20001:20001 --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
+			docker run -di -p 20001:20001 -v ./log/$$svc:/app/log/$$svc --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
 		elif echo 'analysis' | grep -wq $$svc ; then \
-			docker run -di --dns 8.8.8.8 --dns 8.8.4.4 --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
+			docker run -di --dns 8.8.8.8 --dns 8.8.4.4 --name aster-$$svc -v ./log/$$svc:/app/log/$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
 		else \
-			docker run -di --name aster-$$svc --network aster aster/$$svc:$(IMAGE_TAG) ;\
+			docker run -di --name aster-$$svc \
+			-v ./log/$$svc:/app/log/$$svc \
+			--network aster aster/$$svc:$(IMAGE_TAG) ;\
 		fi \
 	done
 
 .PHONY: $(addprefix aster-run-,$(DOCKER))
 $(addprefix aster-run-,$(DOCKER)): aster-run-%:
 	if echo 'api' | grep -wq $* ; then \
-			docker run -di -p 20001:20001 --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
+			docker run -di -p 20001:20001 -v ./log/$*:/app/log/$* --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
 	elif echo 'analysis' | grep -wq $* ; then \
-			docker run -di --dns 8.8.8.8 --dns 8.8.4.4 --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
+			docker run -di --dns 8.8.8.8 --dns 8.8.4.4 --name aster-$* -v ./log/$*:/app/log/$* --network aster aster/$*:$(IMAGE_TAG) ;\
 	else \
-			docker run -di --name aster-$* --network aster aster/$*:$(IMAGE_TAG) ;\
+			docker run -di --name aster-$* -v ./log/$*:/app/log/$* --network aster aster/$*:$(IMAGE_TAG) ;\
 	fi
 
 .PHONY: aster-remove-all
@@ -61,12 +63,14 @@ aster-remove-all:
 	for svc in $(DOCKER); do \
 		docker stop aster-$$svc ;\
 		docker rm aster-$$svc ;\
+		rm -rf ./log/$$svc ;\
 	done
 
 .PHONY: $(addprefix aster-remove-,$(DOCKER))
 $(addprefix aster-remove-,$(DOCKER)): aster-remove-%:
 	docker stop aster-$* ;\
-	docker rm aster-$*
+	docker rm aster-$*;\
+	rm -rf ./log/$*
 
 # -----------------------
 .PHONY: api-go

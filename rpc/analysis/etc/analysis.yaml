@@ -18,7 +18,7 @@ Log:
   ServiceName: analysis.rpc
   Mode: file
   Encoding: json
-  Path: log/analysis_rpc/
+  Path: log/analysis/
 
 # 链路追踪​
 Telemetry:
