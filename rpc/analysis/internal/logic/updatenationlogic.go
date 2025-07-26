@@ -143,7 +143,7 @@ func (l *UpdateNationLogic) getNationWithConfidenceByScript(login string) (natio
 
 	out, err = cmd.CombinedOutput()
 
-	logx.Infof("Python script stdout for %s: %s", login, out)
+	logx.Infof("Python Script Stdout For %s: %s", login, out)
 	if err != nil {
 		err = errno.InternalScriptError.WithError(err)
 		return

@@ -8,7 +8,7 @@ import pycountry  # 国家信息库
 
 def guess_by_profile_timezone(handle: str):
     url = f"https://github.com/{handle}"
-    html_content = httpx.get(url).text
+    html_content = httpx.get(url, timeout=(10.0, 30.0)).text
     soup = BeautifulSoup(html_content, 'html.parser')
 
     profile_timezone = soup.find('profile-timezone')
@@ -25,7 +25,7 @@ def guess_by_profile_timezone(handle: str):
 
 def guess_by_profile_country_name(handle: str):
     url = f"https://github.com/{handle}"
-    html_content = httpx.get(url).text
+    html_content = httpx.get(url, timeout=(10.0, 30.0)).text
     soup = BeautifulSoup(html_content, 'html.parser')
 
     profile_name = soup.find('span', class_='p-name vcard-fullname d-block overflow-hidden')

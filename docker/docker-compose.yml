@@ -243,20 +243,23 @@ services:
     ports:
       - 9121:9121
     command:
-      - "--redis.addr=redis://127.0.0.1:6379"
+      - "--redis.addr=redis://redis:6379"
     networks:
       - aster
 
-  mysql_xporter:
+  mysql_exporter:
     image: prom/mysqld-exporter
     container_name: aster-mysql-exporter
     restart: always
     ports:
       - 9104:9104
+    command:
+      - "--mysqld.username=aster:aster"
+      - "--mysqld.address=mysql:3306"
     environment:
-      DATA_SOURCE_NAME: 'exporter:123456@(127.0.0.1:3306)'
-    volumes:
-      - ../config/mysql-exporter/.my.cnf:/.my.cnf  # 关键挂载
+      DATA_SOURCE_NAME: 'aster:aster@(mysql:3306)/'
+    depends_on:
+      - mysql
     networks:
       - aster
 
