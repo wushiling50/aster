@@ -247,7 +247,7 @@ services:
     networks:
       - aster
 
-  mysql_exporter:
+  mysql-exporter:
     image: prom/mysqld-exporter
     container_name: aster-mysql-exporter
     restart: always
