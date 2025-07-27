@@ -109,7 +109,7 @@ gen-base:
 		--go-grpc_out=. \
 		--go-grpc_opt=module=$(GO_MODULE)
 
-# 格式化代码，我们使用 gofumpt，是 fmt 的严格超集
+# 格式化代码使用 gofumpt，是 fmt 的严格超集
 .PHONY: fmt
 fmt:
 	gofumpt -l -w .

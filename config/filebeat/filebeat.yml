@@ -1,0 +1,53 @@
+# # Filebeat 输入配置
+# filebeat.inputs:
+#   - type: log
+#     id: "aster"
+#     paths:
+#       - /usr/share/filebeat/logs/**/*.log
+#     json.keys_under_root: true
+#     json.add_error_key: true
+#     json.overwrite_keys: true
+#     fields:
+#       data_stream.dataset: "aster"
+#       data_stream.namespace: "default"
+#       data_stream.type: "logs"
+
+# # Filebeat 输出配置
+# output.elasticsearch:
+#   hosts: ["http://elasticsearch:9200"]
+#   index: "logs"
+#   retry:
+#     max_retries: 5  # 最大重试次数
+#     backoff: 5s     # 重试间隔
+
+# # 模板配置
+# setup.template:
+#   name: "aster-logs"  # 模板名称
+#   pattern: "logs-*"        # 模板匹配模式
+#   enabled: true              # 必须启用模板
+#   overwrite: true            # 允许覆盖旧模板
+#   append_fields:
+#     - name: stacktrace
+#       type: text
+#       index: false
+#   settings:
+#     index:
+#       number_of_shards: 1   # 分片数
+#       number_of_replicas: 1 # 副本数
+
+setup.ilm.enabled: false
+setup.template.enabled: false
+
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /usr/share/filebeat/logs/**/*.log
+
+output.elasticsearch:
+  hosts: ["http://openobserve:5080"]
+  timeout: 10
+  path: "/api/default/"
+  index: "default"
+  username: "aster@example.com"
+  password: "Bh35jyeoT5npYedo"
