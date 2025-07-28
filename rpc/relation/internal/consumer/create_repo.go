@@ -45,8 +45,8 @@ func (c *CreateRepoConsumer) Consume(ctx context.Context, key string, value stri
 			return
 		}
 
-		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockCreatedRepo, newCreateRepo.DeveloperId)
-		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		blocksKey := c.svcCtx.Locks.GetNewLocksKey(constants.BlockCreatedRepo, newCreateRepo.DeveloperId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, blocksKey)
 		if err != nil {
 			logx.Error(err)
 			return

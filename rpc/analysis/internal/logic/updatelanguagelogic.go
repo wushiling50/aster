@@ -144,6 +144,18 @@ func (l *UpdateLanguageLogic) checkIfNeedUpdate(developerId int64) (bool, error)
 }
 
 func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCreatedRepo, developerId)
+	getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+	if err != nil {
+		return err
+	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
+	if !getLock {
+		return nil
+	}
+
 	createdRepoUpdatedAt, err := l.svcCtx.CreatedRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_relation.ErrNotFound) {
 		err = errno.InternalDatabaseError.WithError(err)
@@ -154,9 +166,9 @@ func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
 		return nil
 	}
 
-	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCreatedRepo, developerId)
+	blocksKey := l.svcCtx.Locks.GetNewLocksKey(constants.BlockCreatedRepo, developerId)
 
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
+	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, blocksKey)
 	if err != nil {
 		return err
 	}
@@ -166,7 +178,7 @@ func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
 		return err
 	}
 
-	err = l.svcCtx.Locks.Block(l.ctx, locksKey)
+	err = l.svcCtx.Locks.Block(l.ctx, blocksKey)
 	if err != nil {
 		return err
 	}

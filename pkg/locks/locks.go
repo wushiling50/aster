@@ -2,6 +2,7 @@ package locks
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -23,9 +24,9 @@ func NewBLock(client *redis.Redis, expire int64) *BLock {
 	}
 }
 
-func (b *BLock) GetNewLocksKey(updateType string, id int64) string {
+func (b *BLock) GetNewLocksKey(lockType string, id int64) string {
 	return constants.LockKeyPrefix + constants.LockSeparator +
-		updateType + constants.LockSeparator + strconv.Itoa(int(id))
+		lockType + constants.LockSeparator + strconv.Itoa(int(id))
 }
 
 func (b *BLock) DelOldLocksKey(ctx context.Context, key string) error {
@@ -34,6 +35,42 @@ func (b *BLock) DelOldLocksKey(ctx context.Context, key string) error {
 		err = errno.InternalLockError.WithError(err)
 		return err
 	}
+
+	return nil
+}
+
+func (b *BLock) TryLock(ctx context.Context, key string) (bool, error) {
+	result, err := b.client.SetnxExCtx(ctx, key, "", int(20*constants.ONE_SECOND))
+	if err != nil {
+		err = errno.InternalLockError.WithError(err)
+		return false, err
+	}
+	return result, nil
+}
+
+func (b *BLock) TryUnLock(ctx context.Context, key string) error {
+	// 使用Lua脚本确保原子性操作
+	script := `
+	if redis.call("get", KEYS[1]) == ARGV[1] then
+		return redis.call("del", KEYS[1])
+	else
+		return 0
+	end
+	`
+
+	res, err := b.client.EvalCtx(ctx, script, []string{key})
+	fmt.Println(res)
+	if err != nil {
+		err = errno.InternalLockError.WithError(err)
+		return err
+	}
+
+	if res != 1 {
+		err = errno.InternalLockError.WithMessage("Release Lock Fail")
+		return err
+	}
+
+	logx.Infof("Release Lock: %s", key)
 
 	return nil
 }

@@ -45,8 +45,8 @@ func (c *FollowConsumer) Consume(ctx context.Context, key string, value string) 
 			return
 		}
 
-		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockFollowing, newFollow.FollowerId)
-		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		blocksKey := c.svcCtx.Locks.GetNewLocksKey(constants.BlockFollowing, newFollow.FollowerId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, blocksKey)
 		if err != nil {
 			logx.Error(err)
 			return
@@ -57,8 +57,8 @@ func (c *FollowConsumer) Consume(ctx context.Context, key string, value string) 
 			return
 		}
 
-		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockFollower, newFollow.FollowingId)
-		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		blocksKey := c.svcCtx.Locks.GetNewLocksKey(constants.BlockFollower, newFollow.FollowingId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, blocksKey)
 		if err != nil {
 			logx.Error(err)
 			return

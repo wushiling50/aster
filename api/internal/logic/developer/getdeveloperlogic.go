@@ -60,6 +60,18 @@ func (l *GetDeveloperLogic) GetDeveloper(req *types.GetDeveloperReq) (resp *type
 }
 
 func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, developerId)
+	getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+	if err != nil {
+		return err
+	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
+	if !getLock {
+		return nil
+	}
+
 	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_developer.ErrNotFound) {
 		return err
@@ -69,9 +81,9 @@ func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
 		return nil
 	}
 
-	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, developerId)
+	blocksKey := l.svcCtx.Locks.GetNewLocksKey(constants.BlockDeveloper, developerId)
 
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
+	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, blocksKey)
 	if err != nil {
 		return err
 	}
@@ -81,7 +93,7 @@ func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
 		return
 	}
 
-	err = l.svcCtx.Locks.Block(l.ctx, locksKey)
+	err = l.svcCtx.Locks.Block(l.ctx, blocksKey)
 	if err != nil {
 		return
 	}

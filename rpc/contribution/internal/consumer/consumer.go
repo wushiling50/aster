@@ -54,8 +54,8 @@ func (c *ContributionConsumer) Consume(ctx context.Context, key string, value st
 			return
 		}
 
-		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, newContribution.DeveloperId)
-		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		blocksKey := c.svcCtx.Locks.GetNewLocksKey(constants.BlockIssuePROfUser, newContribution.DeveloperId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, blocksKey)
 		if err != nil {
 			logx.Error(err)
 			return
@@ -66,8 +66,8 @@ func (c *ContributionConsumer) Consume(ctx context.Context, key string, value st
 			return
 		}
 
-		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, newContribution.DeveloperId)
-		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		blocksKey := c.svcCtx.Locks.GetNewLocksKey(constants.BlockCommentOfUser, newContribution.DeveloperId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, blocksKey)
 		if err != nil {
 			logx.Error(err)
 			return
@@ -78,8 +78,8 @@ func (c *ContributionConsumer) Consume(ctx context.Context, key string, value st
 			return
 		}
 
-		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, newContribution.DeveloperId)
-		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		blocksKey := c.svcCtx.Locks.GetNewLocksKey(constants.BlockReviewOfUser, newContribution.DeveloperId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, blocksKey)
 		if err != nil {
 			logx.Error(err)
 			return

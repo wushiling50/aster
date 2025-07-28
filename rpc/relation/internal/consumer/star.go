@@ -45,8 +45,8 @@ func (c *StarConsumer) Consume(ctx context.Context, key string, value string) (e
 			return
 		}
 
-		locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockStarredRepo, newStar.DeveloperId)
-		err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+		blocksKey := c.svcCtx.Locks.GetNewLocksKey(constants.BlockStarredRepo, newStar.DeveloperId)
+		err = c.svcCtx.Locks.Unblock(c.ctx, blocksKey)
 		if err != nil {
 			logx.Error(err)
 			return

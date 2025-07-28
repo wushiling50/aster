@@ -226,6 +226,18 @@ func (l *UpdateNationLogic) getNationWithConfidenceByLLModel(developerId int64) 
 }
 
 func (l *UpdateNationLogic) pushDeveloperTask(developerId int64) (err error) {
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, developerId)
+	getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+	if err != nil {
+		return err
+	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
+	if !getLock {
+		return nil
+	}
+
 	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_developer.ErrNotFound) {
 		return err
@@ -235,9 +247,9 @@ func (l *UpdateNationLogic) pushDeveloperTask(developerId int64) (err error) {
 		return nil
 	}
 
-	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, developerId)
+	blocksKey := l.svcCtx.Locks.GetNewLocksKey(constants.BlockDeveloper, developerId)
 
-	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksKey)
+	err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, blocksKey)
 	if err != nil {
 		return err
 	}
@@ -247,7 +259,7 @@ func (l *UpdateNationLogic) pushDeveloperTask(developerId int64) (err error) {
 		return err
 	}
 
-	err = l.svcCtx.Locks.Block(l.ctx, locksKey)
+	err = l.svcCtx.Locks.Block(l.ctx, blocksKey)
 	if err != nil {
 		return err
 	}
@@ -287,6 +299,18 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 	eg.Go(func() error {
 		var err error
 
+		locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
+		getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+		if err != nil {
+			return err
+		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
+		if !getLock {
+			return nil
+		}
+
 		commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 			return err
@@ -296,9 +320,9 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return nil
 		}
 
-		locksCommentOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
+		blocksCommentOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.BlockCommentOfUser, developerId)
 
-		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksCommentOfUserKey)
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, blocksCommentOfUserKey)
 		if err != nil {
 			return err
 		}
@@ -308,7 +332,7 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		err = l.svcCtx.Locks.Block(l.ctx, locksCommentOfUserKey)
+		err = l.svcCtx.Locks.Block(l.ctx, blocksCommentOfUserKey)
 		if err != nil {
 			return err
 		}
@@ -320,6 +344,18 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 	eg.Go(func() error {
 		var err error
 
+		locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, developerId)
+		getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+		if err != nil {
+			return err
+		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
+		if !getLock {
+			return nil
+		}
+
 		issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 			return err
@@ -329,9 +365,9 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return nil
 		}
 
-		locksIssuePROfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockIssuePROfUser, developerId)
+		blocksIssuePROfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.BlockIssuePROfUser, developerId)
 
-		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksIssuePROfUserKey)
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, blocksIssuePROfUserKey)
 		if err != nil {
 			return err
 		}
@@ -341,7 +377,7 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		err = l.svcCtx.Locks.Block(l.ctx, locksIssuePROfUserKey)
+		err = l.svcCtx.Locks.Block(l.ctx, blocksIssuePROfUserKey)
 		if err != nil {
 			return err
 		}
@@ -353,6 +389,18 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 	eg.Go(func() error {
 		var err error
 
+		locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
+		getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+		if err != nil {
+			return err
+		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
+		if !getLock {
+			return nil
+		}
+
 		reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
 			return err
@@ -362,9 +410,9 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return nil
 		}
 
-		locksReviewOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
+		blocksReviewOfUserKey := l.svcCtx.Locks.GetNewLocksKey(constants.BlockReviewOfUser, developerId)
 
-		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, locksReviewOfUserKey)
+		err = l.svcCtx.Locks.DelOldLocksKey(l.ctx, blocksReviewOfUserKey)
 		if err != nil {
 			return err
 		}
@@ -374,7 +422,7 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		err = l.svcCtx.Locks.Block(l.ctx, locksReviewOfUserKey)
+		err = l.svcCtx.Locks.Block(l.ctx, blocksReviewOfUserKey)
 		if err != nil {
 			return err
 		}

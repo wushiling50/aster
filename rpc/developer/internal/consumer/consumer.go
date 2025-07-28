@@ -67,8 +67,8 @@ func (c *DeveloperConsumer) Consume(ctx context.Context, key string, value strin
 		}
 	}
 
-	locksKey := c.svcCtx.Locks.GetNewLocksKey(constants.LockDeveloper, newDeveloper.Id)
-	err = c.svcCtx.Locks.Unblock(c.ctx, locksKey)
+	blocksKey := c.svcCtx.Locks.GetNewLocksKey(constants.BlockDeveloper, newDeveloper.Id)
+	err = c.svcCtx.Locks.Unblock(c.ctx, blocksKey)
 	if err != nil {
 		logx.Error(err)
 		return
