@@ -6,7 +6,8 @@ create table `aster`.`languages` (
     `updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     `deleted_at`            timestamp       null     default null,
     constraint `pk_data_id`
-        primary key (`data_id`)
+        primary key (`data_id`),
+    index `idx_developer_id` (`developer_id`)
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`nation` (
@@ -18,19 +19,20 @@ create table `aster`.`nation` (
     `updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     `deleted_at`            timestamp       null     default null,
     constraint `pk_data_id`
-        primary key (`data_id`)
+        primary key (`data_id`),
+    index `idx_developer_id` (`developer_id`)
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`score` (
     `data_id`                    bigint          not null  unique     comment 'Generated Primary Key, Must Not Be Changed',
-    `contribution_id`            bigint          not null       comment 'Unique Contribution ID',
     `developer_id`               bigint          not null  unique     comment 'Unique GitHub User ID',
     `score`                      double          not null       comment 'score',
     `created_at`            timestamp       not null default  current_timestamp,
     `updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     `deleted_at`            timestamp       null     default null,
     constraint `pk_data_id`
-        primary key (`data_id`)
+        primary key (`data_id`),
+    index `idx_developer_id` (`developer_id`)
 ) engine=InnoDB default charset=utf8mb4;
 
 create table `aster`.`summary` (
@@ -41,5 +43,6 @@ create table `aster`.`summary` (
     `updated_at`            timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     `deleted_at`            timestamp       null     default null,
     constraint `pk_data_id`
-        primary key (`data_id`)
+        primary key (`data_id`),
+    index `idx_developer_id` (`developer_id`)
 ) engine=InnoDB default charset=utf8mb4;

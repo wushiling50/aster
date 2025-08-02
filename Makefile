@@ -63,14 +63,17 @@ aster-remove-all:
 	for svc in $(DOCKER); do \
 		docker stop aster-$$svc ;\
 		docker rm aster-$$svc ;\
-		rm -rf ./log/$$svc ;\
 	done
 
 .PHONY: $(addprefix aster-remove-,$(DOCKER))
 $(addprefix aster-remove-,$(DOCKER)): aster-remove-%:
 	docker stop aster-$* ;\
 	docker rm aster-$*;\
-	rm -rf ./log/$*
+
+.PHONY: aster-clear
+aster-clear:
+	rm -rf ./log
+	rm -rf ./docker/data
 
 # -----------------------
 .PHONY: api-go

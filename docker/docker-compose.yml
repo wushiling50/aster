@@ -23,6 +23,8 @@ services:
     volumes:
       - ../config/sql:/docker-entrypoint-initdb.d
       - ./data/mysql:/var/lib/mysql
+      - ../config/mysql/mysql.cnf:/etc/mysql/conf.d/slowlog.cnf
+      - ../log/sql:/var/log/mysql
     networks:
       - aster
 

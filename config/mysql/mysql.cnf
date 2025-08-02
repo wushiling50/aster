@@ -1,0 +1,5 @@
+[mysqld]
+slow-query-log = 1                 # 开启慢查询日志
+slow-query-log-file = /var/log/mysql/mysql-slow.log # 设置日志文件路径
+long-query-time = 2                # 设置查询阈值，单位为秒
+log_queries_not_using_indexes = 1  # 记录没有使用索引的查询
