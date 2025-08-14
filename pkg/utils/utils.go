@@ -2,11 +2,13 @@ package utils
 
 import (
 	"strings"
+	"time"
 
 	"github.com/wushiling50/aster/config"
 	"github.com/wushiling50/aster/gen/analysis"
 	"github.com/wushiling50/aster/gen/contribution"
 	"github.com/wushiling50/aster/gen/developer"
+	"github.com/wushiling50/aster/pkg/constants"
 )
 
 // GetMysqlDSN 会拼接 Mysql 的 DSN
@@ -53,4 +55,12 @@ func GetTextFromLanguages(languages *analysis.Languages) string {
 	text := "|Language Usage Start|" + languages.Languages + "|Language Usage End|"
 
 	return text
+}
+
+func CheckIfDataExpired(lastUpdate time.Time) bool {
+	return time.Since(lastUpdate) > constants.DataExpiredTime
+}
+
+func CustomizeCheckIfDataExpired(lastUpdate time.Time, duration time.Duration) bool {
+	return time.Since(lastUpdate) > duration
 }

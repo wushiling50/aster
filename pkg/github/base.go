@@ -7,7 +7,6 @@ import (
 
 	"github.com/google/go-github/v66/github"
 	"github.com/wushiling50/aster/config"
-	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -94,8 +93,4 @@ func GetRepoByUrl(ctx context.Context, repoUrl string) (repo *github.Repository,
 
 func DefaultUpdateAfterTime() string {
 	return time.Unix(time.Now().AddDate(0, -3, 0).Unix(), 0).Format("2006-01-02")
-}
-
-func CheckIfDataExpired(lastUpdate time.Time) bool {
-	return time.Since(lastUpdate) > constants.DataExpiredTime
 }

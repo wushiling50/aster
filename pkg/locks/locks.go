@@ -2,6 +2,8 @@ package locks
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"strconv"
 	"time"
 
@@ -39,7 +41,10 @@ func (b *BLock) DelOldLocksKey(ctx context.Context, key string) error {
 }
 
 func (b *BLock) TryLock(ctx context.Context, key string) (bool, error) {
-	result, err := b.client.SetnxExCtx(ctx, key, "", 20)
+	hostname, _ := os.Hostname()
+	pid := os.Getpid()
+	val := fmt.Sprintf("%s:%d", hostname, pid)
+	result, err := b.client.SetnxExCtx(ctx, key, val, 20)
 	if err != nil {
 		err = errno.InternalLockError.WithError(err)
 		return false, err
@@ -56,8 +61,10 @@ func (b *BLock) TryUnLock(ctx context.Context, key string) error {
 		return 0
 	end
 	`
-
-	res, err := b.client.EvalCtx(ctx, script, []string{key})
+	hostname, _ := os.Hostname()
+	pid := os.Getpid()
+	val := fmt.Sprintf("%s:%d", hostname, pid)
+	res, err := b.client.EvalCtx(ctx, script, []string{key}, val)
 
 	if err != nil {
 		err = errno.InternalLockError.WithError(err)

@@ -20,7 +20,7 @@ create table `aster`.`issue_pr_of_user_updated_at` (
     `created_at`                 timestamp       not null default  current_timestamp,
     `updated_at`                 timestamp       not null default  current_timestamp on update current_timestamp comment 'update data time',
     constraint `pk_data_id`
-        primary key (`data_id`)
+        primary key (`data_id`),
     index `idx_developer_id` (`developer_id`)
 ) engine=InnoDB default charset=utf8mb4;
 

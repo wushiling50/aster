@@ -8,4 +8,6 @@ const (
 	ONE_HOUR   = time.Hour
 	ONE_DAY    = 24 * ONE_HOUR
 	ONE_WEEK   = 7 * ONE_DAY
+
+	DataExpiredTime time.Duration = 24 * time.Hour
 )

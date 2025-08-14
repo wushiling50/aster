@@ -1,10 +1,7 @@
 package constants
 
-import "time"
-
 const (
-	DefaultSearchLimit int64         = 150
-	DataExpiredTime    time.Duration = 24 * time.Hour
+	DefaultSearchLimit int64 = 150
 )
 
 const (

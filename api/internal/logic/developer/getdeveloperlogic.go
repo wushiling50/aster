@@ -77,7 +77,7 @@ func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
 		return err
 	}
 
-	if developer != nil && !github.CheckIfDataExpired(developer.UpdatedAt) {
+	if developer != nil && !utils.CheckIfDataExpired(developer.UpdatedAt) {
 		return nil
 	}
 

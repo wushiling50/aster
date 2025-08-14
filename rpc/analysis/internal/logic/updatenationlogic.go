@@ -126,7 +126,7 @@ func (l *UpdateNationLogic) checkIfNeedUpdate(developerId int64) (bool, error) {
 		}
 	}
 
-	if github.CheckIfDataExpired(nation.UpdatedAt) {
+	if utils.CustomizeCheckIfDataExpired(nation.UpdatedAt, 7*constants.ONE_DAY) {
 		return true, nil
 	} else {
 		return false, nil
@@ -243,7 +243,7 @@ func (l *UpdateNationLogic) pushDeveloperTask(developerId int64) (err error) {
 		return err
 	}
 
-	if developer != nil && !github.CheckIfDataExpired(developer.UpdatedAt) {
+	if developer != nil && !utils.CheckIfDataExpired(developer.UpdatedAt) {
 		return nil
 	}
 
@@ -316,7 +316,7 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		if commentOfUserUpdatedAt != nil && !github.CheckIfDataExpired(commentOfUserUpdatedAt.UpdatedAt) {
+		if commentOfUserUpdatedAt != nil && !utils.CheckIfDataExpired(commentOfUserUpdatedAt.UpdatedAt) {
 			return nil
 		}
 
@@ -361,7 +361,7 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		if issuePROfUserUpdatedAt != nil && !github.CheckIfDataExpired(issuePROfUserUpdatedAt.UpdatedAt) {
+		if issuePROfUserUpdatedAt != nil && !utils.CheckIfDataExpired(issuePROfUserUpdatedAt.UpdatedAt) {
 			return nil
 		}
 
@@ -406,7 +406,7 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		if reviewOfUserUpdatedAt != nil && !github.CheckIfDataExpired(reviewOfUserUpdatedAt.UpdatedAt) {
+		if reviewOfUserUpdatedAt != nil && !utils.CheckIfDataExpired(reviewOfUserUpdatedAt.UpdatedAt) {
 			return nil
 		}
 

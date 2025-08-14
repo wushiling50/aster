@@ -10,7 +10,6 @@ import (
 	"github.com/wushiling50/aster/gen/repo"
 	"github.com/wushiling50/aster/pkg/constants"
 	"github.com/wushiling50/aster/pkg/errno"
-	"github.com/wushiling50/aster/pkg/github"
 	model_analysis "github.com/wushiling50/aster/pkg/model/analysis"
 	model_relation "github.com/wushiling50/aster/pkg/model/relation"
 	"github.com/wushiling50/aster/pkg/tasks"
@@ -136,7 +135,7 @@ func (l *UpdateLanguageLogic) checkIfNeedUpdate(developerId int64) (bool, error)
 		}
 	}
 
-	if github.CheckIfDataExpired(langauge.UpdatedAt) {
+	if utils.CustomizeCheckIfDataExpired(langauge.UpdatedAt, 3*constants.ONE_DAY) {
 		return true, nil
 	} else {
 		return false, nil
@@ -162,7 +161,7 @@ func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
 		return err
 	}
 
-	if createdRepoUpdatedAt != nil && !github.CheckIfDataExpired(createdRepoUpdatedAt.UpdatedAt) {
+	if createdRepoUpdatedAt != nil && !utils.CheckIfDataExpired(createdRepoUpdatedAt.UpdatedAt) {
 		return nil
 	}
 
