@@ -109,3 +109,20 @@ func (b *BLock) Unblock(ctx context.Context, key string) error {
 	logx.Infof("Unblock: %s", key)
 	return nil
 }
+
+func (b *BLock) Check(ctx context.Context, key string) {
+	checkInterval := 1 * time.Second // 轮询间隔
+
+	for {
+		// 检查锁是否存在
+		exists, err := b.client.ExistsCtx(ctx, key)
+		if err != nil {
+			logx.Errorf("检查锁状态失败: %v", err)
+			continue
+		}
+		if !exists {
+			return // 锁已释放
+		}
+		time.Sleep(checkInterval)
+	}
+}

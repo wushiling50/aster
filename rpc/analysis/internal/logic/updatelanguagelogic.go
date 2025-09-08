@@ -55,6 +55,31 @@ func (l *UpdateLanguageLogic) UpdateLanguage(in *analysis.UpdateAnalysisReq) (*a
 		return resp, nil
 	}
 
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockLanguage, in.DeveloperId)
+	getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+	if err != nil {
+		logx.Errorf("service.UpdateLanguage: Get Lock Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	if !getLock {
+		_, err = l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, in.DeveloperId)
+		if err != nil {
+			switch {
+			case errors.Is(err, model_analysis.ErrNotFound):
+				l.svcCtx.Locks.Check(l.ctx, locksKey)
+			default:
+				resp.Base = pack.BuildBaseResp(err)
+				return resp, nil
+			}
+		}
+		resp.Base = pack.BuildSuccessResp()
+		return resp, nil
+	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
 	err = l.pushCreatedRepoTask(in.DeveloperId)
 	if err != nil {
 		logx.Errorf("service.UpdateLanguage: Failed To Enqueue Task: %v", err.Error())
@@ -149,11 +174,12 @@ func (l *UpdateLanguageLogic) pushCreatedRepoTask(developerId int64) error {
 		return err
 	}
 
-	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
-
 	if !getLock {
+		l.svcCtx.Locks.Check(l.ctx, locksKey)
 		return nil
 	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 	createdRepoUpdatedAt, err := l.svcCtx.CreatedRepoUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_relation.ErrNotFound) {

@@ -69,6 +69,7 @@ func (l *GetDeveloperLogic) pushDeveloperTask(developerId int64) (err error) {
 	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 	if !getLock {
+		l.svcCtx.Locks.Check(l.ctx, locksKey)
 		return nil
 	}
 

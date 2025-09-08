@@ -64,6 +64,31 @@ func (l *UpdateNationLogic) UpdateNation(in *analysis.UpdateAnalysisReq) (*analy
 		return resp, nil
 	}
 
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockNation, in.DeveloperId)
+	getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+	if err != nil {
+		logx.Errorf("service.UpdateNation: Get Lock Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	if !getLock {
+		_, err = l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, in.DeveloperId)
+		if err != nil {
+			switch {
+			case errors.Is(err, model_analysis.ErrNotFound):
+				l.svcCtx.Locks.Check(l.ctx, locksKey)
+			default:
+				resp.Base = pack.BuildBaseResp(err)
+				return resp, nil
+			}
+		}
+		resp.Base = pack.BuildSuccessResp()
+		return resp, nil
+	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
 	login, err = github.GetLoginById(l.ctx, in.DeveloperId)
 	if err != nil {
 		logx.Errorf("service.UpdateNation: Failed To Get Login By Id :%v", err.Error())
@@ -232,11 +257,12 @@ func (l *UpdateNationLogic) pushDeveloperTask(developerId int64) (err error) {
 		return err
 	}
 
-	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
-
 	if !getLock {
+		l.svcCtx.Locks.Check(l.ctx, locksKey)
 		return nil
 	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_developer.ErrNotFound) {
@@ -305,11 +331,12 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
-
 		if !getLock {
+			l.svcCtx.Locks.Check(l.ctx, locksKey)
 			return nil
 		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 		commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
@@ -350,11 +377,12 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
-
 		if !getLock {
+			l.svcCtx.Locks.Check(l.ctx, locksKey)
 			return nil
 		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 		issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
@@ -395,11 +423,12 @@ func (l *UpdateNationLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
-
 		if !getLock {
+			l.svcCtx.Locks.Check(l.ctx, locksKey)
 			return nil
 		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 		reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {

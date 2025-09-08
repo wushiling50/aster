@@ -19,6 +19,11 @@ const (
 	LockIssuePROfUser = "lock_issue_pr_of_user"
 	LockCommentOfUser = "lock_comment_of_user"
 	LockReviewOfUser  = "lock_review_of_user"
+
+	LockLanguage = "lock_language"
+	LockNation   = "lock_nation"
+	LockScore    = "lock_score"
+	LockSummary  = "lock_summary"
 )
 
 const (

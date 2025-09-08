@@ -65,6 +65,31 @@ func (l *UpdateScoreLogic) UpdateScore(in *analysis.UpdateAnalysisReq) (*analysi
 		return resp, nil
 	}
 
+	locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockScore, in.DeveloperId)
+	getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
+	if err != nil {
+		logx.Errorf("service.UpdateScore: Get Lock Failed: %w", err)
+		resp.Base = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	if !getLock {
+		_, err = l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, in.DeveloperId)
+		if err != nil {
+			switch {
+			case errors.Is(err, model_analysis.ErrNotFound):
+				l.svcCtx.Locks.Check(l.ctx, locksKey)
+			default:
+				resp.Base = pack.BuildBaseResp(err)
+				return resp, nil
+			}
+		}
+		resp.Base = pack.BuildSuccessResp()
+		return resp, nil
+	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
+
 	err = l.pushContributionTask(in.DeveloperId)
 	if err != nil {
 		logx.Errorf("service.UpdateScore: Failed To Enqueue Task: %v", err.Error())
@@ -262,14 +287,15 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) error {
 		locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockCommentOfUser, developerId)
 		getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
 		if err != nil {
+			l.svcCtx.Locks.Check(l.ctx, locksKey)
 			return err
 		}
-
-		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 		if !getLock {
 			return nil
 		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 		commentOfUserUpdatedAt, err := l.svcCtx.CommentOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
@@ -310,11 +336,12 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) error {
 			return err
 		}
 
-		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
-
 		if !getLock {
+			l.svcCtx.Locks.Check(l.ctx, locksKey)
 			return nil
 		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 		issuePROfUserUpdatedAt, err := l.svcCtx.IssuePROfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
@@ -352,14 +379,15 @@ func (l *UpdateScoreLogic) pushContributionTask(developerId int64) error {
 		locksKey := l.svcCtx.Locks.GetNewLocksKey(constants.LockReviewOfUser, developerId)
 		getLock, err := l.svcCtx.Locks.TryLock(l.ctx, locksKey)
 		if err != nil {
+			l.svcCtx.Locks.Check(l.ctx, locksKey)
 			return err
 		}
-
-		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 		if !getLock {
 			return nil
 		}
+
+		defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 		reviewOfUserUpdatedAt, err := l.svcCtx.ReviewOfUserUpdatedAtModel.FindOneByDeveloperId(l.ctx, developerId)
 		if err != nil && !errors.Is(err, model_contribution.ErrNotFound) {
@@ -427,11 +455,12 @@ func (l *UpdateScoreLogic) pushRepoTask(repoId int64) (err error) {
 		return err
 	}
 
-	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
-
 	if !getLock {
+		l.svcCtx.Locks.Check(l.ctx, locksKey)
 		return nil
 	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 	repo, err := l.svcCtx.RepoModel.FindOneById(l.ctx, repoId)
 	if err != nil && !errors.Is(err, model_repo.ErrNotFound) {
@@ -494,11 +523,12 @@ func (l *UpdateScoreLogic) pushDeveloperTask(developerId int64) (err error) {
 		return err
 	}
 
-	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
-
 	if !getLock {
+		l.svcCtx.Locks.Check(l.ctx, locksKey)
 		return nil
 	}
+
+	defer l.svcCtx.Locks.TryUnLock(l.ctx, locksKey)
 
 	developer, err := l.svcCtx.DeveloperModel.FindOneById(l.ctx, developerId)
 	if err != nil && !errors.Is(err, model_developer.ErrNotFound) {
