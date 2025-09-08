@@ -61,7 +61,7 @@ func (l *UpdateSummaryLogic) UpdateSummary(in *analysis.UpdateAnalysisReq) (*ana
 	}
 
 	if !getLock {
-		_, err = l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, in.DeveloperId)
+		_, err = l.svcCtx.SummaryModel.FindOneByDeveloperId(l.ctx, in.DeveloperId)
 		if err != nil {
 			switch {
 			case errors.Is(err, model_analysis.ErrNotFound):

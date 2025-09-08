@@ -73,7 +73,7 @@ func (l *UpdateNationLogic) UpdateNation(in *analysis.UpdateAnalysisReq) (*analy
 	}
 
 	if !getLock {
-		_, err = l.svcCtx.LanguagesModel.FindOneByDeveloperId(l.ctx, in.DeveloperId)
+		_, err = l.svcCtx.NationModel.FindOneByDeveloperId(l.ctx, in.DeveloperId)
 		if err != nil {
 			switch {
 			case errors.Is(err, model_analysis.ErrNotFound):
